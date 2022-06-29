@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/app_theme.dart';
 
 import '../utils/routes.dart';
 
@@ -26,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
                     height: 44,
                   ),
                   CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppTheme.whiteColor,
                     radius: 36,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -42,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     child: const Text(
-                      "Get your groceries delivered to your home",
+                      "Get your food delivered to your door",
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -54,12 +55,12 @@ class WelcomeScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 32),
                     child: const Text(
-                      "The best delivery app in town for delivering your daily fresh groceries",
+                      "The best food delivery app in town for delivering your daily fresh foods",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
-                          color: Color(0xff979899)),
+                          color: AppTheme.secondaryColor),
                     ),
                   ),
                   const SizedBox(
@@ -77,7 +78,7 @@ class WelcomeScreen extends StatelessWidget {
                           textStyle: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                           shape: const StadiumBorder(),
-                          backgroundColor: const Color(0xff23AA49),
+                          backgroundColor: AppTheme.primaryColor,
                         ),
                         child: const Text("Shop now")),
                   )

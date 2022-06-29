@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/app_theme.dart';
 
 class VegetableCardWidget extends StatelessWidget {
   final String imagePath;
@@ -20,7 +21,7 @@ class VegetableCardWidget extends StatelessWidget {
     return InkWell(
       onTap: () => onTapCallback(),
       child: Card(
-          color: const Color(0xffF3F5F7),
+          color: AppTheme.lightColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -44,7 +45,7 @@ class VegetableCardWidget extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                        color: AppTheme.darkColor),
                   ),
                 ),
                 Row(
@@ -53,7 +54,7 @@ class VegetableCardWidget extends StatelessWidget {
                     Text(
                       price,
                       style: const TextStyle(
-                          color: Color(0xffFF324B),
+                          color: AppTheme.redColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),

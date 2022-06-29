@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/app_theme.dart';
 
 import '../utils/routes.dart';
 
@@ -15,13 +16,13 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.whiteColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: const Color(0xffF3F5F7),
+                  color: AppTheme.lightColor,
                   borderRadius: BorderRadius.vertical(
                       bottom: Radius.elliptical(
                           MediaQuery.of(context).size.width, 140.0))),
@@ -84,7 +85,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                         child: Text(
                           "Arabic Ginger",
                           style: TextStyle(
-                              color: Colors.black,
+                              color: AppTheme.darkColor,
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
@@ -95,11 +96,11 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                             InkWell(
                               onTap: (() {
                                 setState(() {
-                                  itemCount++;
+                                  itemCount--;
                                 });
                               }),
                               child: Image.asset(
-                                "assets/images/add_icon.png",
+                                "assets/images/remove_icon.png",
                                 width: 32,
                                 height: 32,
                               ),
@@ -112,7 +113,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                               style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                                  color: AppTheme.darkColor),
                             ),
                             const SizedBox(
                               width: 12,
@@ -120,11 +121,11 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (itemCount > 0) itemCount--;
+                                  if (itemCount > 0) itemCount++;
                                 });
                               },
                               child: Image.asset(
-                                "assets/images/remove_icon.png",
+                                "assets/images/add_icon.png",
                                 width: 32,
                                 height: 32,
                               ),
@@ -139,7 +140,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                   ),
                   const Text("1kg, 4\$",
                       style: TextStyle(
-                          color: Color(0xffFF324B),
+                          color: AppTheme.redColor,
                           fontSize: 20,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(
@@ -148,7 +149,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                   const Text(
                     "Ginger is a flowering plant whose rhizome, ginger root or ginger, is widely used as a spice and a folk medicine.",
                     style: TextStyle(
-                        color: Color(0xff979899),
+                        color: AppTheme.secondaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w500),
                   ),
@@ -194,7 +195,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                           textStyle: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                           shape: const StadiumBorder(),
-                          backgroundColor: const Color(0xff23AA49),
+                          backgroundColor: AppTheme.primaryColor,
                         ),
                         child: const Text("Add to cart")),
                   ),
@@ -234,13 +235,14 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff23AA49)),
+                      color: AppTheme.primaryColor),
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 Text(desc,
-                    style: const TextStyle(fontSize: 14, color: Color(0xff979899))),
+                    style: const TextStyle(
+                        fontSize: 14, color: AppTheme.secondaryColor)),
               ],
             )
           ],

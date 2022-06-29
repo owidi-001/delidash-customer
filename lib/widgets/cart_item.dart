@@ -55,11 +55,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 InkWell(
                   onTap: (() {
                     setState(() {
-                      itemCount++;
+                      itemCount--;
                     });
                   }),
                   child: Image.asset(
-                    "assets/images/add_icon.png",
+                    "assets/images/remove_icon.png",
                     width: 24,
                     height: 24,
                   ),
@@ -80,11 +80,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      if (itemCount > 0) itemCount--;
+                      if (itemCount > 0) itemCount++;
                     });
                   },
                   child: Image.asset(
-                    "assets/images/remove_icon.png",
+                    "assets/images/add_icon.png",
                     width: 24,
                     height: 24,
                   ),
