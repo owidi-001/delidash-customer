@@ -29,6 +29,7 @@ class VegetableCardWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+
               children: [
                 Image.asset(
                   imagePath,
@@ -36,7 +37,7 @@ class VegetableCardWidget extends StatelessWidget {
                   height: 120,
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 12,
                 ),
                 Container(
                   alignment: Alignment.centerLeft,

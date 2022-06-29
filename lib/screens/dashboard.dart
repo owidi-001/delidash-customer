@@ -27,16 +27,18 @@ class DashboardScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
+                  flex: 1,
                   child: Image.asset(
                     "assets/images/user.png",
                     scale: 3.6,
                   ),
                 ),
-                
                 Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
@@ -82,7 +84,7 @@ class DashboardScreen extends StatelessWidget {
                           ),
                           // TODO! Insert user saved address
                           Text(
-                            "My location",
+                            "My Location",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
@@ -132,10 +134,12 @@ class DashboardScreen extends StatelessWidget {
           //     scale: 4.0,
           //   ),
           // ),
-          FittedBox(
-            alignment: Alignment.center,
-            child: Image.asset("assets/images/banner.png"),
-            fit: BoxFit.fill,
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset(
+              "assets/images/banner.png",
+              scale: 4.0,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -166,46 +170,64 @@ class DashboardScreen extends StatelessWidget {
                 GridView.count(
                   primary: false,
                   padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  // mainAxisSpacing: 10,
+                  // crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                   crossAxisCount: 2,
                   // maxCrossAxisExtent: 2,
                   shrinkWrap: true,
                   children: <Widget>[
-                    Expanded(
+                    Container(
                       child: VegetableCardWidget(
                         imagePath: "assets/images/bell_pepper_red.png",
                         name: "Bell Pepper Red",
-                        price: "1kg, 4\$",
+                        price: "1kg, \$4",
                         onTapCallback: () {
                           Navigator.pushNamed(
                               context, MyRoutes.vegetableDetailRoute);
                         },
                       ),
                     ),
-                    Expanded(
+                    Container(
                       child: VegetableCardWidget(
                           imagePath: "assets/images/lamb_meat.png",
                           name: "Bell Pepper Red",
-                          price: "1kg, 4\$",
+                          price: "1kg, \$4",
                           onTapCallback: () {}),
                     ),
-                    Expanded(
+                    Container(
                       child: VegetableCardWidget(
                         imagePath: "assets/images/carrots.png",
                         name: "Carrots",
-                        price: "1.5kg, 2\$",
+                        price: "1.5kg, \$2",
                         onTapCallback: () {
                           Navigator.pushNamed(
                               context, MyRoutes.vegetableDetailRoute);
                         },
                       ),
                     ),
-                    Expanded(
+                    Container(
                       child: VegetableCardWidget(
                           imagePath: "assets/images/butternut.png",
                           name: "Butter Nut",
-                          price: "1kg, 4\$",
+                          price: "1kg, \$4",
+                          onTapCallback: () {}),
+                    ),
+                    Container(
+                      child: VegetableCardWidget(
+                        imagePath: "assets/images/carrots.png",
+                        name: "Carrots",
+                        price: "1.5kg, \$2",
+                        onTapCallback: () {
+                          Navigator.pushNamed(
+                              context, MyRoutes.vegetableDetailRoute);
+                        },
+                      ),
+                    ),
+                    Container(
+                      child: VegetableCardWidget(
+                          imagePath: "assets/images/butternut.png",
+                          name: "Butter Nut",
+                          price: "1kg, \$4",
                           onTapCallback: () {}),
                     ),
                   ],
