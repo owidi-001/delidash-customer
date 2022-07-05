@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
+import '../models/food.model.dart';
 import '../utils/routes.dart';
 
-class VegetableDetailScreen extends StatefulWidget {
-  const VegetableDetailScreen({Key? key}) : super(key: key);
+class FoodDetailScreen extends StatefulWidget {
+  final Food food;
+  static const routeName = '/food_detail';
+  const FoodDetailScreen({Key? key, required this.food}) : super(key: key);
 
   @override
-  State<VegetableDetailScreen> createState() => _VegetableDetailScreenState();
+  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
 }
 
-class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
+class _FoodDetailScreenState extends State<FoodDetailScreen> {
   int itemCount = 0;
 
   @override
@@ -59,7 +62,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                   alignment: Alignment.center,
                   widthFactor: 0.6,
                   child: Image.asset(
-                    "assets/images/ginger.png",
+                    widget.food.imagePath,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -80,11 +83,11 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Expanded(
+                      Expanded(
                         flex: 2,
                         child: Text(
-                          "Arabic Ginger",
-                          style: TextStyle(
+                          widget.food.name,
+                          style: const TextStyle(
                               color: AppTheme.darkColor,
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
@@ -96,7 +99,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                             InkWell(
                               onTap: (() {
                                 setState(() {
-                                  itemCount--;
+                                  if (itemCount > 0) itemCount--;
                                 });
                               }),
                               child: Image.asset(
@@ -121,7 +124,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  if (itemCount > 0) itemCount++;
+                                  itemCount++;
                                 });
                               },
                               child: Image.asset(

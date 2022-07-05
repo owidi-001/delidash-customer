@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import '../models/vegetable_data.dart';
-import '../widgets/vegetable_card.dart';
+import 'package:greens_veges/utils/routes.dart';
+import '../models/food.model.dart';
+import '../widgets/food_card.dart';
 
-class VegetablesScreen extends StatelessWidget {
-  const VegetablesScreen({Key? key}) : super(key: key);
+class FoodListScreen extends StatefulWidget {
+  const FoodListScreen({Key? key}) : super(key: key);
+
+  @override
+  State<FoodListScreen> createState() => _FoodListScreenState();
+}
+
+class _FoodListScreenState extends State<FoodListScreen> {
+  List<Food> allFoods = getFoods();
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +20,7 @@ class VegetablesScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Vegetables",
+          "All Foods",
           style: TextStyle(
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
@@ -36,14 +44,17 @@ class VegetablesScreen extends StatelessWidget {
             mainAxisExtent: 225,
           ),
           itemBuilder: (context, index) {
-            return VegetableCardWidget(
-              imagePath: VegetableItemModel.vegetableItemList[index].imagePath,
-              name: VegetableItemModel.vegetableItemList[index].name,
-              price: VegetableItemModel.vegetableItemList[index].price,
-              onTapCallback: () {},
+            return FoodCardWidget(
+              imagePath: allFoods[index].imagePath,
+              name: allFoods[index].name,
+              price: allFoods[index].price,
+              onTapCallback: () {
+                Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
+                    arguments: allFoods[index]);
+              },
             );
           },
-          itemCount: VegetableItemModel.vegetableItemList.length,
+          itemCount: allFoods.length,
         ),
       ),
     );

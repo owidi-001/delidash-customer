@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^3.0.1
   # location: ^4.2.0
+  geolocator: ^9.0.0 # Getting lat,long
+  geocoding: ^2.0.4 # getting addr from lat, long
 
 dev_dependencies:
   flutter_test:
