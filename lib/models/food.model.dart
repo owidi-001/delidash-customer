@@ -1,12 +1,12 @@
 import 'package:greens_veges/services/http.service.dart';
 
-class Category {
+class FoodCategory {
   // attr
   late final String imagePath;
   late final String label;
 
   // Constructor
-  Category({required this.imagePath, required this.label});
+  FoodCategory({required this.imagePath, required this.label});
 
   // methods
 
@@ -22,14 +22,14 @@ class Category {
   }
 }
 
-List<Category> getCategories() {
-  List<Category> categories = [
-    Category(imagePath: "${baseUrl}fruits.png", label: "Fruits"),
-    Category(imagePath: "${baseUrl}vegetables.png", label: "Vegetables"),
-    Category(imagePath: "${baseUrl}diary.png", label: "Diary"),
-    Category(imagePath: "${baseUrl}meat.png", label: "Meat"),
-    Category(imagePath: "${baseUrl}meat.png", label: "Beef"),
-    Category(imagePath: "${baseUrl}meat.png", label: "Chicken")
+List<FoodCategory> getCategories() {
+  List<FoodCategory> categories = [
+    FoodCategory(imagePath: "${baseUrl}fruits.png", label: "Fruits"),
+    FoodCategory(imagePath: "${baseUrl}vegetables.png", label: "Vegetables"),
+    FoodCategory(imagePath: "${baseUrl}diary.png", label: "Diary"),
+    FoodCategory(imagePath: "${baseUrl}meat.png", label: "Meat"),
+    FoodCategory(imagePath: "${baseUrl}meat.png", label: "Beef"),
+    FoodCategory(imagePath: "${baseUrl}meat.png", label: "Chicken")
   ];
 
   return categories;
@@ -40,7 +40,7 @@ class Food {
   late final String imagePath;
   late final String name;
   late final String price;
-  late final Category? category;
+  late final FoodCategory? category;
 
   // Constructor
   Food(

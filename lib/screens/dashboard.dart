@@ -29,7 +29,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Future<String> location = getAddress();
 
     if (kDebugMode) {
-      print("object Location");
       print(location);
     }
 
@@ -164,15 +163,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(
                   height: 24,
                 ),
+                // Show categories
                 // SizedBox(
-                //   height: 100,
-                //   width: double.infinity,
-                //   child: ListView(
-                //     scrollDirection: Axis.horizontal,
-                //     children: categoryView(),
-                //   ),
+                //   height: 80,
+                //   width: double.maxFinite,
+                //   child: categoryView(),
                 // ),
-
+                // padding below
                 const SizedBox(
                   height: 32,
                 ),
@@ -190,16 +187,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
 
 // Tabbed category views
-  List<Widget> categoryView() {
-    List<Widget> categories = [];
-    for (var category in getCategories()) {
-      categories.add(categoriesView(category.imagePath, category.label));
-    }
-
-    return categories;
-  }
+Widget categoryView() {
+  List<FoodCategory> categories = getCategories();
+  return Expanded(
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      itemCount: categories.length,
+      itemBuilder: (BuildContext context, int index) {
+        return categoriesView(
+            categories[index].imagePath, categories[index].label);
+      },
+    ),
+  );
 }
 
 // Products card grid view
