@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/models/food.model.dart';
 import 'package:greens_veges/screens/cart.dart';
-import 'package:greens_veges/screens/foods.dart';
+import 'package:greens_veges/screens/products.dart';
+import 'package:greens_veges/services/http.service.dart';
 import 'screens/dashboard.dart';
 import 'screens/registration.dart';
 import 'screens/splash.dart';
-import 'screens/food_detail.dart';
+import 'screens/product_detail.dart';
 import 'screens/welcome.dart';
 import 'utils/routes.dart';
 
@@ -19,8 +20,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-  
     return MaterialApp(
       title: "Mealio",
       theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
@@ -38,7 +37,9 @@ class MyApp extends StatelessWidget {
               food: Food(
                   imagePath: "assets/images/carrots.png",
                   name: "name",
-                  price: "price"),
+                  price: "price",
+                  category: FoodCategory(
+                      imagePath: "${baseUrl}fruits.png", label: "Fruits")),
             ),
         MyRoutes.cartRoute: (context) => const CartScreen(),
       },

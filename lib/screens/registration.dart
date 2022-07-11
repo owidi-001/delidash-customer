@@ -72,7 +72,7 @@ class RegistrationScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 32),
                   child: TextField(
                       textAlign: TextAlign.center,
-                      maxLength: 10,
+                      maxLength: 9,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       style: const TextStyle(
@@ -82,14 +82,14 @@ class RegistrationScreen extends StatelessWidget {
                       textAlignVertical: TextAlignVertical.center,
                       decoration: const InputDecoration(
                         // border: InputBorder.none,
-                        hintText: " 700 000 000",
+                        hintText: "700 000 000",
                         hintStyle: TextStyle(
                             fontSize: 24,
                             color: Color(0xffE0E0E0),
                             fontWeight: FontWeight.bold),
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),
                         prefix: Text(
-                          "+254",
+                          "+254 ",
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,

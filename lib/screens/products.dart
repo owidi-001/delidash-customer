@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/utils/routes.dart';
 import '../models/food.model.dart';
-import '../widgets/food_card.dart';
+import '../widgets/product_card.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class FoodListScreen extends StatefulWidget {
 }
 
 class _FoodListScreenState extends State<FoodListScreen> {
-  List<Food> allFoods = getFoods();
+  List<Food> allFoods = getAllFoods();
 
   @override
   Widget build(BuildContext context) {

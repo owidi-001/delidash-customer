@@ -6,14 +6,13 @@ import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import '../models/food.model.dart';
 import '../models/user.model.dart';
-import '../widgets/category_card.dart';
-import '../widgets/food_card.dart';
+import '../widgets/category_view.dart';
 import '../widgets/menu_minimal_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key? key}) : super(key: key);
-  List<Food> foods = getFoods();
-  User user = login();
+  final List<Food> foods = getAllFoods();
+  final User user = login();
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -26,7 +25,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     // var location = () async => getAddressFromLatLong(await getGeoLocationPosition());
 
-    Future<String> location = getAddress();
+    // Future<String> location = getAddress();
+    Size size = MediaQuery.of(context).size;
+    String location = getAddress();
 
     if (kDebugMode) {
       print(location);
@@ -98,9 +99,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: AppTheme.primaryColor,
                             size: 16,
                           ),
-                          // TODO! Set state on change
                           Text(
-                            "$location",
+                            location,
                             softWrap: false,
                             overflow: TextOverflow.clip,
                             style: const TextStyle(
@@ -154,6 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               scale: 4.0,
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -163,23 +164,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                // Show categories
-                // SizedBox(
-                //   height: 80,
-                //   width: double.maxFinite,
-                //   child: categoryView(),
-                // ),
-                // padding below
-                const SizedBox(
-                  height: 32,
-                ),
-                seeAllView(context, "Best Selling"),
-                const SizedBox(
-                  height: 24,
-                ),
 
-                // Grid box
-                // productGrids(foods: foods)
+                // Show categories
+                SizedBox(
+                    height: 100,
+                    width: double.maxFinite,
+                    child: categoryListView(getAllCategories())),
+
+                // const SizedBox(
+                //   height: 32,
+                // ),
+
+                //  Categorical views
+                SizedBox(
+                    height: double.maxFinite,
+                    width: double.maxFinite,
+                    child: categoryView(foodCategories()))
               ],
             ),
           ),
@@ -187,52 +187,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-}
-
-// Tabbed category views
-Widget categoryView() {
-  List<FoodCategory> categories = getCategories();
-  return Expanded(
-    child: ListView.builder(
-      scrollDirection: Axis.horizontal,
-      shrinkWrap: true,
-      itemCount: categories.length,
-      itemBuilder: (BuildContext context, int index) {
-        return categoriesView(
-            categories[index].imagePath, categories[index].label);
-      },
-    ),
-  );
-}
-
-// Products card grid view
-Widget productGrids({required List<Food> foods}) {
-  if (kDebugMode) {
-    print("The number of items");
-    print(foods.length);
-  }
-  return GridView.builder(
-    shrinkWrap: true,
-    scrollDirection: Axis.vertical,
-    itemCount: foods.length,
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
-      mainAxisExtent: 225,
-    ),
-    itemBuilder: (context, index) {
-      return Flexible(
-        child: FoodCardWidget(
-          imagePath: foods[index].imagePath,
-          name: foods[index].name,
-          price: foods[index].price,
-          onTapCallback: () {
-            // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
-            //     arguments: foods[index]);
-          },
-        ),
-      );
-    },
-  );
 }
