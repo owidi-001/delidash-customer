@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
-class FoodCardWidget extends StatelessWidget {
+class DashboardFoodCardWidget extends StatelessWidget {
   final String imagePath;
   final String name;
   final String price;
   final VoidCallback onTapCallback;
-  const FoodCardWidget(
+  const DashboardFoodCardWidget(
       {Key? key,
       required this.imagePath,
       required this.name,
@@ -28,8 +28,8 @@ class FoodCardWidget extends StatelessWidget {
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-
+            child: Flex(
+              direction: Axis.vertical,
               children: [
                 Flexible(
                   flex: 2,
@@ -43,7 +43,7 @@ class FoodCardWidget extends StatelessWidget {
                   height: 12,
                 ),
                 Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     name,
                     style: const TextStyle(
@@ -52,23 +52,6 @@ class FoodCardWidget extends StatelessWidget {
                         color: AppTheme.darkColor),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      price,
-                      style: const TextStyle(
-                          color: AppTheme.redColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Image.asset(
-                      "assets/images/add_icon.png",
-                      width: 32,
-                      height: 32,
-                    )
-                  ],
-                )
               ],
             ),
           )),

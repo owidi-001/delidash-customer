@@ -10,7 +10,7 @@ class CartItemWidget extends StatefulWidget {
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
-  int itemCount = 0;
+  int itemCount = 1;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +55,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 InkWell(
                   onTap: (() {
                     setState(() {
-                      itemCount--;
+                      if (itemCount > 1){
+                        itemCount--;
+                      } else{
+                        // TODO! remove item from cart menu
+                      }
                     });
                   }),
                   child: Image.asset(
@@ -80,7 +84,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      if (itemCount > 0) itemCount++;
+                      itemCount++;
                     });
                   },
                   child: Image.asset(

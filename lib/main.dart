@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
         MyRoutes.welcomeRoute: (context) => const WelcomeScreen(),
         MyRoutes.registrationRoute: (context) => RegistrationScreen(),
         MyRoutes.dashboardRoute: (context) => DashboardScreen(),
-        MyRoutes.foodListRoute: (context) => const FoodListScreen(),
+        
+        MyRoutes.foodListRoute: (context) => const FoodListScreen(foods: [],),
         // MyRoutes.foodDetailRoute: (context){
         //   return ModalRoute.of(context)!.settings.arguments as FoodDetailScreen;
         //   },

@@ -39,19 +39,11 @@ class FoodCardWidget extends StatelessWidget {
                     height: 120,
                   ),
                 ),
-                // Flexible(
-                //   flex: 2,
-                //   child: Image.asset(
-                //     imagePath,
-                //     width: 120,
-                //     height: 120,
-                //   ),
-                // ),
                 const SizedBox(
                   height: 12,
                 ),
                 Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     name,
                     style: const TextStyle(

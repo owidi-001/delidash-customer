@@ -4,14 +4,15 @@ import '../models/food.model.dart';
 import '../widgets/product_card.dart';
 
 class FoodListScreen extends StatefulWidget {
-  const FoodListScreen({Key? key}) : super(key: key);
+  final List<Food> foods;
+  const FoodListScreen({Key? key, required this.foods}) : super(key: key);
 
   @override
   State<FoodListScreen> createState() => _FoodListScreenState();
 }
 
 class _FoodListScreenState extends State<FoodListScreen> {
-  List<Food> allFoods = getAllFoods();
+  // List<Food> allFoods = getAllFoods();
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +46,16 @@ class _FoodListScreenState extends State<FoodListScreen> {
           ),
           itemBuilder: (context, index) {
             return FoodCardWidget(
-              imagePath: allFoods[index].imagePath,
-              name: allFoods[index].name,
-              price: allFoods[index].price,
+              imagePath: widget.foods[index].imagePath,
+              name: widget.foods[index].name,
+              price: widget.foods[index].price,
               onTapCallback: () {
                 Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
-                    arguments: allFoods[index]);
+                    arguments: widget.foods[index]);
               },
             );
           },
-          itemCount: allFoods.length,
+          itemCount: widget.foods.length,
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-// import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../utils/routes.dart';
 
 class RegistrationScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class RegistrationScreen extends StatelessWidget {
 
   final TextEditingController controller = TextEditingController();
   final String initialCountry = 'KE';
-  // final PhoneNumber number = PhoneNumber(isoCode: 'KE');
+  final PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   @override
   Widget build(BuildContext context) {
@@ -76,59 +76,59 @@ class RegistrationScreen extends StatelessWidget {
                   height: 64,
                 ),
 
-                const Center(
-                  child: Text("Phone input"),
-                )
-
-                // Container(
-                //   padding: const EdgeInsets.symmetric(horizontal: 24),
-                //   child: InternationalPhoneNumberInput(
-                //     onInputChanged: (PhoneNumber number) {
-                //       if (kDebugMode) {
-                //         print(number.phoneNumber);
-                //       }
-                //     },
-                //     onInputValidated: (bool value) {
-                //       if (kDebugMode) {
-                //         print(value);
-                //       }
-                //     },
-                //     selectorConfig: const SelectorConfig(
-                //       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                //     ),
-                //     ignoreBlank: false,
-                //     autoValidateMode: AutovalidateMode.disabled,
-                //     selectorTextStyle: const TextStyle(
-                //         color: Colors.black,
-                //         fontSize: 24,
-                //         fontWeight: FontWeight.bold),
-                //     initialValue: number,
-                //     textFieldController: controller,
-                //     formatInput: false,
-                //     keyboardType: const TextInputType.numberWithOptions(
-                //         signed: true, decimal: true),
-                //     inputBorder: const OutlineInputBorder(),
-                //     onSaved: (PhoneNumber number) {
-                //       if (kDebugMode) {
-                //         print('On Saved: $number');
-                //       }
-                //     },
-                //     inputDecoration: const InputDecoration(
-                //       border: InputBorder.none,
-                //       hintText: "700 000 000",
-                //       hintStyle: TextStyle(
-                //           fontSize: 24,
-                //           color: Color(0xffE0E0E0),
-                //           fontWeight: FontWeight.bold),
-                //     ),
-                //     textStyle: const TextStyle(
-                //       color: Colors.black,
-                //         fontSize: 24,
-                //         fontWeight: FontWeight.bold
-                //     ),
-                //     maxLength: 9,
-                //   ),
+                // const Center(
+                //   child: Text("Phone input"),
                 // )
+
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      if (kDebugMode) {
+                        print(number.phoneNumber);
+                      }
+                    },
+                    onInputValidated: (bool value) {
+                      if (kDebugMode) {
+                        print(value);
+                      }
+                    },
+                    selectorConfig: const SelectorConfig(
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                    ),
+                    ignoreBlank: false,
+                    autoValidateMode: AutovalidateMode.disabled,
+                    selectorTextStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                    initialValue: number,
+                    textFieldController: controller,
+                    formatInput: false,
+                    keyboardType: const TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    inputBorder: const OutlineInputBorder(),
+                    onSaved: (PhoneNumber number) {
+                      if (kDebugMode) {
+                        print('On Saved: $number');
+                      }
+                    },
+                    inputDecoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "700 000 000",
+                      hintStyle: TextStyle(
+                          fontSize: 24,
+                          color: Color(0xffE0E0E0),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold
+                    ),
+                    maxLength: 9,
+                  ),
+                )
               ],
             ),
           ),

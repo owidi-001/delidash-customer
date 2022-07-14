@@ -1,6 +1,7 @@
 // Products card grid view
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greens_veges/screens/product_detail.dart';
 
 import '../models/food.model.dart';
 import 'product_card.dart';
@@ -29,6 +30,7 @@ Widget productGrids({required List<Food> foods}) {
           onTapCallback: () {
             // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
             //     arguments: foods[index]);
+            // Navigator.push(context, FoodDetailScreen(food:foods[index]));
           },
         ),
       );

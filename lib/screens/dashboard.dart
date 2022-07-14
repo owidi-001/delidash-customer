@@ -158,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         
             Padding(
               padding: const EdgeInsets.all(16),
-              child: seeAllView(context, "Categories"),
+              child: seeAllView(context, "Categories",getAllFoods()),
             ),
             SizedBox(
                 height: 100,

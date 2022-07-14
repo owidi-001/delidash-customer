@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/app_theme.dart';
 import '../models/cart.model.dart';
 import '../widgets/cart_item.dart';
 
@@ -42,6 +43,11 @@ class CartScreen extends StatelessWidget {
               },
             ),
           ),
+          // TODO! Cart summary
+          // const Divider(),
+          // const Padding(padding: EdgeInsets.all(16.0),
+          //   child: Text("data"),
+          // ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -56,7 +62,7 @@ class CartScreen extends StatelessWidget {
                       shape: const StadiumBorder(),
                       backgroundColor: const Color(0xff23AA49),
                     ),
-                    child: const Text("Checkout")),
+                    child: const Text("Pay Now")),
               )
             ]),
           )
