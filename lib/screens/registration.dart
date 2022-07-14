@@ -1,10 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+// import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../utils/routes.dart';
 
 class RegistrationScreen extends StatelessWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+  RegistrationScreen({Key? key}) : super(key: key);
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController controller = TextEditingController();
+  final String initialCountry = 'KE';
+  // final PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   @override
   Widget build(BuildContext context) {
@@ -68,35 +75,60 @@ class RegistrationScreen extends StatelessWidget {
                 const SizedBox(
                   height: 64,
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
-                  child: TextField(
-                      textAlign: TextAlign.center,
-                      maxLength: 9,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: const InputDecoration(
-                        // border: InputBorder.none,
-                        hintText: "700 000 000",
-                        hintStyle: TextStyle(
-                            fontSize: 24,
-                            color: Color(0xffE0E0E0),
-                            fontWeight: FontWeight.bold),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                        prefix: Text(
-                          "+254 ",
-                          style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      )),
+
+                const Center(
+                  child: Text("Phone input"),
                 )
+
+                // Container(
+                //   padding: const EdgeInsets.symmetric(horizontal: 24),
+                //   child: InternationalPhoneNumberInput(
+                //     onInputChanged: (PhoneNumber number) {
+                //       if (kDebugMode) {
+                //         print(number.phoneNumber);
+                //       }
+                //     },
+                //     onInputValidated: (bool value) {
+                //       if (kDebugMode) {
+                //         print(value);
+                //       }
+                //     },
+                //     selectorConfig: const SelectorConfig(
+                //       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                //     ),
+                //     ignoreBlank: false,
+                //     autoValidateMode: AutovalidateMode.disabled,
+                //     selectorTextStyle: const TextStyle(
+                //         color: Colors.black,
+                //         fontSize: 24,
+                //         fontWeight: FontWeight.bold),
+                //     initialValue: number,
+                //     textFieldController: controller,
+                //     formatInput: false,
+                //     keyboardType: const TextInputType.numberWithOptions(
+                //         signed: true, decimal: true),
+                //     inputBorder: const OutlineInputBorder(),
+                //     onSaved: (PhoneNumber number) {
+                //       if (kDebugMode) {
+                //         print('On Saved: $number');
+                //       }
+                //     },
+                //     inputDecoration: const InputDecoration(
+                //       border: InputBorder.none,
+                //       hintText: "700 000 000",
+                //       hintStyle: TextStyle(
+                //           fontSize: 24,
+                //           color: Color(0xffE0E0E0),
+                //           fontWeight: FontWeight.bold),
+                //     ),
+                //     textStyle: const TextStyle(
+                //       color: Colors.black,
+                //         fontSize: 24,
+                //         fontWeight: FontWeight.bold
+                //     ),
+                //     maxLength: 9,
+                //   ),
+                // )
               ],
             ),
           ),
@@ -110,6 +142,8 @@ class RegistrationScreen extends StatelessWidget {
                 widthFactor: 1,
                 child: ElevatedButton(
                     onPressed: () {
+                      // formKey.currentState.save();
+
                       Navigator.pushNamed(context, MyRoutes.dashboardRoute);
                     },
                     style: TextButton.styleFrom(

@@ -28,8 +28,8 @@ class FoodCardWidget extends StatelessWidget {
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-
+            child: Flex(
+              direction: Axis.vertical,
               children: [
                 Flexible(
                   flex: 2,
@@ -39,6 +39,14 @@ class FoodCardWidget extends StatelessWidget {
                     height: 120,
                   ),
                 ),
+                // Flexible(
+                //   flex: 2,
+                //   child: Image.asset(
+                //     imagePath,
+                //     width: 120,
+                //     height: 120,
+                //   ),
+                // ),
                 const SizedBox(
                   height: 12,
                 ),
