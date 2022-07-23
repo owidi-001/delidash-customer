@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.greens_veges">
+    package="com.example.green_veges">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
-        android:label="greens_veges"
+        android:label="green_veges"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -35,10 +35,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts: ^3.0.1
-  # location: ^4.2.0
   geolocator: ^9.0.0 # Getting lat,long
-  geocoding: ^2.0.4 # getting addr from lat, long
-  intl_phone_number_input: ^0.7.0+2 # International phone number intergration
+  geocoding: ^2.0.4 # getting address from lat, long
+  intl_phone_number_input: ^0.7.0+2 # International phone number integration
 
 dev_dependencies:
   flutter_test:

@@ -1,58 +1,64 @@
-// import 'package:flutter/foundation.dart';
-// import 'package:geocoding/geocoding.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
-String location = 'My Location';
-String address = 'My Location';
+class Location {
+  late String address;
+  // double latitude;
+  // double longitude;
 
-// Future<Position> getGeoLocationPosition() async {
-//   bool serviceEnabled;
-//   LocationPermission permission;
-//   // Test if location services are enabled.
-//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   if (!serviceEnabled) {
-//     await Geolocator.openLocationSettings();
-//     return Future.error('Location services are disabled.');
-//   }
-//   permission = await Geolocator.checkPermission();
-//   if (permission == LocationPermission.denied) {
-//     permission = await Geolocator.requestPermission();
-//     if (permission == LocationPermission.denied) {
-//       return Future.error('Location permissions are denied');
-//     }
-//   }
-//   if (permission == LocationPermission.deniedForever) {
-//     return Future.error(
-//         'Location permissions are permanently denied, we cannot request permissions.');
-//   }
-//   return await Geolocator.getCurrentPosition(
-//     desiredAccuracy: LocationAccuracy.best,
-//     // timeLimit: const Duration(seconds: 5)
-//   );
-// }
+  // Location(
+  //     {required this.address, required this.latitude, required this.longitude});
 
-// Future<String> getAddressFromLatLong(Position position) async {
-//   List<Placemark> placemarks =
-//       await placemarkFromCoordinates(position.latitude, position.longitude);
+  Future<Position> getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+      // timeLimit: const Duration(seconds: 5)
+    );
+  }
 
-//   if (kDebugMode) {
-//     print("The placemarks are: ");
-//     print(placemarks[0].name);
-//   }
-//   Placemark place = placemarks[0];
-//   // address ='${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-//   address = '${place.name}';
+  Future<String> getAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
-//   return address;
-// }
+    if (kDebugMode) {
+      print("The placemarks are: ");
+      print(placemarks[0].name);
+    }
+    Placemark place = placemarks[0];
+    // address ='${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    address = '${place.name}';
 
-// Future<String> getAddress() async {
-//   Location location = Location();
-//   location.getAddressFromLatLong(await location.getGeoLocationPosition());
+    return address;
+  }
 
-//   return location.address;
-// }
+  Future<String> getAddress() async {
+    return getAddressFromLatLong(await getGeoLocationPosition());
+  }
+}
 
-String getAddress() {
-  return location;
+Future<String> getAddress() {
+  return Future.delayed(const Duration(seconds: 5),(){
+    return Location().getAddress();
+  });
 }

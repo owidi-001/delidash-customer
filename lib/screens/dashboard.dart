@@ -22,16 +22,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     var greetings = greetingMessage();
-
-    // var location = () async => getAddressFromLatLong(await getGeoLocationPosition());
-
-    // Future<String> location = getAddress();
+    
     Size size = MediaQuery.of(context).size;
-    String location = getAddress();
-
-    if (kDebugMode) {
-      print(location);
-    }
 
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
@@ -90,7 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             horizontal: 12, vertical: 8),
                         decoration: const BoxDecoration(
                             color: AppTheme.lightColor,
-                            borderRadius: BorderRadius.all(Radius.circular(24))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(24))),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,15 +93,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               color: AppTheme.primaryColor,
                               size: 16,
                             ),
-                            Text(
-                              location,
-                              softWrap: false,
-                              overflow: TextOverflow.clip,
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
+                            FutureBuilder(
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.hasError) {
+                                    if (kDebugMode) {
+                                      print(
+                                          "The snapshot has error ${snapshot.error}");
+                                    }
+                                    return const Text(
+                                      "My Location",
+                                      softWrap: false,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    );
+                                  } else if (snapshot.hasData) {
+                                    if (kDebugMode) {
+                                      print(
+                                          "The snapshot data found ${snapshot.data}");
+                                    }
+                                    return Text(
+                                      snapshot.data as String,
+                                      softWrap: false,
+                                      overflow: TextOverflow.clip,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    );
+                                  }
+                                }
+                                return const Text(
+                                  "My location",
+                                  softWrap: false,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                );
+                              },
+                              future: getAddress(),
                             ),
+                            // Text(
+                            //   "location",
+                            //   softWrap: false,
+                            //   overflow: TextOverflow.clip,
+                            //   style: const TextStyle(
+                            //       color: Colors.black,
+                            //       fontSize: 12,
+                            //       fontWeight: FontWeight.w500),
+                            // ),
                             const Icon(
                               CupertinoIcons.chevron_down,
                               color: AppTheme.primaryColor,
@@ -146,7 +185,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       )),
                 )),
-        
+
             // hero
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -155,10 +194,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 scale: 4.0,
               ),
             ),
-        
+
             Padding(
               padding: const EdgeInsets.all(16),
-              child: seeAllView(context, "Categories",getAllFoods()),
+              child: seeAllView(context, "Categories", getAllFoods()),
             ),
             SizedBox(
                 height: 100,
@@ -167,12 +206,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(
               height: 24,
             ),
-        
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: categoryView(foodCategories()),
             )
-        
           ]),
         ),
       ),
