@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:greens_veges/widgets/form_field_maker.dart';
 import '../utils/routes.dart';
 
-class RegistrationScreen extends StatelessWidget {
-  RegistrationScreen({Key? key}) : super(key: key);
+class FirstRegistrationScreen extends StatelessWidget {
+  FirstRegistrationScreen({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController controller = TextEditingController();
-  final String initialCountry = 'KE';
-  final PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   @override
   Widget build(BuildContext context) {
@@ -53,82 +50,25 @@ class RegistrationScreen extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   child: const Text(
-                    "Enter your mobile number",
+                    "Fill in your details",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
-                  child: const Text(
-                    "We will send you a verification code",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: AppTheme.secondaryColor),
-                  ),
-                ),
-                const SizedBox(
                   height: 64,
                 ),
-
-                // const Center(
-                //   child: Text("Phone input"),
-                // )
-
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: InternationalPhoneNumberInput(
-                    onInputChanged: (PhoneNumber number) {
-                      if (kDebugMode) {
-                        print(number.phoneNumber);
-                      }
-                    },
-                    onInputValidated: (bool value) {
-                      if (kDebugMode) {
-                        print(value);
-                      }
-                    },
-                    selectorConfig: const SelectorConfig(
-                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      children: [
+                        makeInput(label: "First name",),
+                        makeInput(label: "Last Name",),
+                        makeInput(label: "Email",),
+                      ],
                     ),
-                    ignoreBlank: false,
-                    autoValidateMode: AutovalidateMode.disabled,
-                    selectorTextStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
-                    initialValue: number,
-                    textFieldController: controller,
-                    formatInput: false,
-                    keyboardType: const TextInputType.numberWithOptions(
-                        signed: true, decimal: true),
-                    inputBorder: const OutlineInputBorder(),
-                    onSaved: (PhoneNumber number) {
-                      if (kDebugMode) {
-                        print('On Saved: $number');
-                      }
-                    },
-                    inputDecoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "700 000 000",
-                      hintStyle: TextStyle(
-                          fontSize: 24,
-                          color: Color(0xffE0E0E0),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    textStyle: const TextStyle(
-                      color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold
-                    ),
-                    maxLength: 9,
-                  ),
-                )
+                  )
               ],
             ),
           ),
@@ -144,7 +84,7 @@ class RegistrationScreen extends StatelessWidget {
                     onPressed: () {
                       // formKey.currentState.save();
 
-                      Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+                      Navigator.pushNamed(context, MyRoutes.secondRegistrationRoute);
                     },
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -153,7 +93,7 @@ class RegistrationScreen extends StatelessWidget {
                       shape: const StadiumBorder(),
                       backgroundColor: AppTheme.primaryColor,
                     ),
-                    child: const Text("Continue")),
+                    child: const Text("Next")),
               ),
               const SizedBox(
                 height: 16,

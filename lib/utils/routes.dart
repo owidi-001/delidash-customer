@@ -1,7 +1,8 @@
 class MyRoutes {
   // auth routes
   static const String welcomeRoute = "/welcome";
-  static const String registrationRoute = "/registration";
+  static const String firstRegistrationRoute = "/registration";
+  static const String secondRegistrationRoute = "/registration_final";
   // Dashboard,list,detail routes
   static const String dashboardRoute = "/dashboard";
   static const String foodListRoute = "/foods";
@@ -9,4 +10,6 @@ class MyRoutes {
   // cart routes
   static const String cartRoute = "/cart";
   // profile, history
+  static const String profileRoute = "/profile";
+  static const String profileEditRoute = "/profileEdit";
 }

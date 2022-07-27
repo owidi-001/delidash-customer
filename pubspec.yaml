@@ -38,6 +38,9 @@ dependencies:
   geolocator: ^9.0.0 # Getting lat,long
   geocoding: ^2.0.4 # getting address from lat, long
   intl_phone_number_input: ^0.7.0+2 # International phone number integration
+  provider: ^6.0.3
+  dio: ^4.0.6
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

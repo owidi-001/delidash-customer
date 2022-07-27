@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/utils/routes.dart';
 
-import '../utils/routes.dart';
+class Profile extends StatefulWidget {
+  Profile({Key? key}) : super(key: key);
+  final User user = login();
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  @override
+  State<Profile> createState() => _ProfileState();
+}
 
+class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
+          const SizedBox(
+              height: 36,
+            ),
           Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-            image: AssetImage("assets/images/welcome_bg.png"),
-            fit: BoxFit.cover,
-          ))),
-          Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+               color: AppTheme.lightColor,
+                      borderRadius: BorderRadius.all(Radius.circular(24))
+            ),
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -28,12 +36,11 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   CircleAvatar(
                     backgroundColor: AppTheme.whiteColor,
-                    radius: 36,
+                    radius: 50,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Image.asset(
-                        "assets/images/app_logo.png",
-                        scale: 4.0,
+                        widget.user.profileImage,
                       ),
                     ),
                   ),
@@ -42,11 +49,11 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: const Text(
-                      "Get your food delivered to your door",
+                    child: Text(
+                      "${widget.user.firstName} ${widget.user.lastName}",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(
@@ -54,10 +61,10 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 32),
-                    child: const Text(
-                      "The best food delivery app in town for delivering your daily fresh foods",
+                    child: Text(
+                      widget.user.email,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
                           color: AppTheme.secondaryColor),
@@ -70,10 +77,8 @@ class WelcomeScreen extends StatelessWidget {
                     widthFactor: 0.5,
                     child: ElevatedButton(
                         onPressed: () {
-                          // Navigator.pushNamed(
-                          //     context, MyRoutes.registrationRoute);
                           Navigator.pushReplacementNamed(
-                              context, MyRoutes.firstRegistrationRoute);
+                              context, MyRoutes.profileEditRoute);
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -82,7 +87,7 @@ class WelcomeScreen extends StatelessWidget {
                           shape: const StadiumBorder(),
                           backgroundColor: AppTheme.primaryColor,
                         ),
-                        child: const Text("Shop now")),
+                        child: const Text("Edit Profile")),
                   )
                 ],
               ),

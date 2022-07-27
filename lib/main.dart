@@ -3,9 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/models/food.model.dart';
 import 'package:greens_veges/screens/cart.dart';
 import 'package:greens_veges/screens/products.dart';
+import 'package:greens_veges/screens/profile.dart';
+import 'package:greens_veges/screens/profileEdit.dart';
+import 'package:greens_veges/screens/registration_second.dart';
 import 'package:greens_veges/services/http.service.dart';
 import 'screens/dashboard.dart';
-import 'screens/registration.dart';
+import 'screens/registration_first.dart';
 import 'screens/splash.dart';
 import 'screens/product_detail.dart';
 import 'screens/welcome.dart';
@@ -27,7 +30,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const SplashScreen(),
         MyRoutes.welcomeRoute: (context) => const WelcomeScreen(),
-        MyRoutes.registrationRoute: (context) => RegistrationScreen(),
+        MyRoutes.firstRegistrationRoute: (context) => FirstRegistrationScreen(),
+        MyRoutes.secondRegistrationRoute: (context) => SecondRegistrationScreen(),
         MyRoutes.dashboardRoute: (context) => DashboardScreen(),
         
         MyRoutes.foodListRoute: (context) => const FoodListScreen(foods: [],),
@@ -43,6 +47,8 @@ class MyApp extends StatelessWidget {
                       imagePath: "${baseUrl}fruits.png", label: "Fruits")),
             ),
         MyRoutes.cartRoute: (context) => const CartScreen(),
+        MyRoutes.profileRoute: (context) =>  Profile(),
+        MyRoutes.profileEditRoute: (context) => ProfileEdit(),
       },
     );
   }

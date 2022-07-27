@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
+import 'package:greens_veges/utils/routes.dart';
 import '../models/food.model.dart';
 import '../models/user.model.dart';
 import '../widgets/category_view.dart';
@@ -22,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     var greetings = greetingMessage();
-    
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -42,9 +44,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Image.asset(
-                      "assets/images/user.png",
-                      scale: 3.6,
+                    child: InkWell(
+                      onTap: () => {
+                        Navigator.pushReplacementNamed(
+                            context, MyRoutes.profileRoute)
+                      },
+                      child: Image.asset(
+                        widget.user.profileImage,
+                        scale: 3.6,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -66,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               height: 4,
                             ),
                             Text(
-                              "${widget.user.firstName} ${widget.user.lastName}",
+                              widget.user.firstName,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -117,7 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           "The snapshot data found ${snapshot.data}");
                                     }
                                     return Text(
-                                      snapshot.data as String,
+                                      (snapshot.data as String).length > 11 ? (snapshot.data as String).substring(0,10) : snapshot.data as String,
                                       softWrap: false,
                                       overflow: TextOverflow.clip,
                                       style: const TextStyle(
