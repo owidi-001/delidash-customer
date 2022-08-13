@@ -6,7 +6,7 @@ import 'package:greens_veges/screens/products.dart';
 import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/screens/profileEdit.dart';
 import 'package:greens_veges/screens/registration_second.dart';
-import 'package:greens_veges/services/http.service.dart';
+import 'package:greens_veges/services/food.service.dart';
 import 'screens/dashboard.dart';
 import 'screens/registration_first.dart';
 import 'screens/splash.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const SplashScreen(),
         MyRoutes.welcomeRoute: (context) => const WelcomeScreen(),
-        MyRoutes.firstRegistrationRoute: (context) => FirstRegistrationScreen(),
+        MyRoutes.firstRegistrationRoute: (context) => RegistrationScreen(),
         MyRoutes.secondRegistrationRoute: (context) => SecondRegistrationScreen(),
         MyRoutes.dashboardRoute: (context) => DashboardScreen(),
         
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
                   name: "name",
                   price: "price",
                   category: FoodCategory(
-                      imagePath: "${baseUrl}fruits.png", label: "Fruits")),
+                      imagePath: "${baseUrl}fruits.png", label: "Fruits"), description: ''),
             ),
         MyRoutes.cartRoute: (context) => const CartScreen(),
         MyRoutes.profileRoute: (context) =>  Profile(),

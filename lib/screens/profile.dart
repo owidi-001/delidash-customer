@@ -5,7 +5,7 @@ import 'package:greens_veges/utils/routes.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
-  final User user = login();
+  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
 
   @override
   State<Profile> createState() => _ProfileState();

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
@@ -92,7 +91,7 @@ class SecondRegistrationScreen extends StatelessWidget {
                       shape: const StadiumBorder(),
                       backgroundColor: AppTheme.primaryColor,
                     ),
-                    child: const Text("Next")),
+                    child: const Text("Finish")),
               ),
               const SizedBox(
                 height: 16,

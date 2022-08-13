@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import 'package:greens_veges/utils/routes.dart';
@@ -14,7 +13,7 @@ import '../widgets/menu_minimal_view.dart';
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key? key}) : super(key: key);
   final List<Food> foods = getAllFoods();
-  final User user = login();
+  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();

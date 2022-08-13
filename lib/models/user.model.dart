@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   final int userId;
   final String email;
@@ -36,14 +38,35 @@ class User {
       "profile_image": user.profileImage
     };
   }
+
+  @override
+  String toString() {
+    return jsonEncode(
+      toJson(this),
+    );
+  }
 }
 
-User login() {
-  return User(
-      userId: 1,
-      email: "email@gmail.com",
-      firstName: "Tabby",
-      lastName: "Tabs",
-      profileImage: "assets/images/user.png",
-      phoneNumber: "phoneNumber");
+class Client {
+  User user;
+  String? gender;
+
+  Client({required this.user, gender});
+
+  factory Client.fromJson(Map<String, dynamic> json) {
+    User user = User.fromJson(json['user']);
+    return Client(
+      user: user,
+      gender: json['gender'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"user": user.toJson(user), "gender": gender};
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }

@@ -1,7 +1,6 @@
 // Products card grid view
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:greens_veges/screens/product_detail.dart';
 
 import '../models/food.model.dart';
 import 'product_card.dart';

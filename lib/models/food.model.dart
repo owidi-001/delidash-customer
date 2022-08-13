@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 // import 'package:flutter/foundation.dart';
-import 'package:greens_veges/services/http.service.dart';
+import 'package:greens_veges/services/food.service.dart';
 
 class FoodCategory {
   // attr
@@ -10,6 +10,11 @@ class FoodCategory {
 
   // Constructor
   FoodCategory({required this.imagePath, required this.label});
+
+  factory FoodCategory.fromJson(Map<String, dynamic> json,
+      {required imagePath, required label}) {
+    return FoodCategory(imagePath: json['icon'], label: 'name');
+  }
 }
 
 List<FoodCategory> getAllCategories() {
@@ -44,16 +49,12 @@ Map<FoodCategory, List<Food>> foodCategories() {
 
   for (FoodCategory category in categories) {
     categoryFoods[category] = getFoodsOfCategory(category);
-    
+
     // Remove categories with empty food list
     if (getFoodsOfCategory(category).isEmpty) {
       categoryFoods.remove(category);
     }
   }
-  // if (kDebugMode) {
-  //   print("The food categories length is:");
-  //   print(categoryFoods.keys.length);
-  // }
   return categoryFoods;
 }
 
@@ -62,6 +63,7 @@ class Food {
   late final String imagePath;
   late final String name;
   late final String price;
+  late final String description;
   late final FoodCategory category;
 
   // Constructor
@@ -69,7 +71,20 @@ class Food {
       {required this.imagePath,
       required this.name,
       required this.price,
+      required this.description,
       required this.category});
+
+  // Convert response data to dart object
+  factory Food.fromJson(Map<String, dynamic> json) {
+    return Food(
+      name: json['label'],
+      price: json['price'],
+      imagePath: json['image'],
+      description: json['description'],
+      category: FoodCategory(
+          imagePath: json['category']['icon'], label: json['category']['name']),
+    );
+  }
 }
 
 List<Food> getAllFoods() {
@@ -78,55 +93,72 @@ List<Food> getAllFoods() {
         imagePath: "assets/images/pepper_red.png",
         name: "Bell Pepper Red",
         price: "1kg, 6\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}fruits.png", label: "Fruits")),
     Food(
         imagePath: "assets/images/butternut.png",
         name: "Butternut Squash ",
         price: "1kg, 6\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}fruits.png", label: "Fruits")),
     Food(
         imagePath: "assets/images/ginger.png",
         name: "Arabic Ginger",
         price: "1kg, 4\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}fruits.png", label: "Fruits")),
     Food(
         imagePath: "assets/images/carrots.png",
         name: "Organic Carrots",
         price: "1kg, 4\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category: FoodCategory(
             imagePath: "${baseUrl}vegetables.png", label: "Vegetables")),
     Food(
         imagePath: "assets/images/pepper_red.png",
         name: "Bell Pepper Red",
         price: "1kg, 6\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category: FoodCategory(
             imagePath: "${baseUrl}vegetables.png", label: "Vegetables")),
     Food(
         imagePath: "assets/images/butternut.png",
         name: "Butternut Squash ",
         price: "1kg, 6\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category: FoodCategory(
             imagePath: "${baseUrl}vegetables.png", label: "Vegetables")),
     Food(
         imagePath: "assets/images/ginger.png",
         name: "Arabic Ginger",
         price: "1kg, 4\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}diary.png", label: "Diary")),
-
     Food(
         imagePath: "assets/images/ginger.png",
         name: "Arabic Ginger",
         price: "1kg, 4\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}diary.png", label: "Diary")),
     Food(
         imagePath: "assets/images/carrots.png",
         name: "Organic Carrots",
         price: "1kg, 4\$",
+        description:
+            "XYZ is a flowering plant whose rhizome roots is something something",
         category:
             FoodCategory(imagePath: "${baseUrl}diary.png", label: "Diary")),
   ];

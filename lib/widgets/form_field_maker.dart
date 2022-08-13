@@ -1,9 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
-Widget makeInput({label, obsureText = false,currentValue=""}) {
+Widget makeInput({label, obsureText =   false, currentValue = "",icon}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -17,8 +15,9 @@ Widget makeInput({label, obsureText = false,currentValue=""}) {
       ),
       TextFormField(
         obscureText: obsureText,
-        initialValue:currentValue,
-        decoration:  const InputDecoration(
+        initialValue: currentValue,
+        autocorrect: true,
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(

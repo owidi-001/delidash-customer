@@ -4,7 +4,6 @@ import 'package:greens_veges/models/food.model.dart';
 import 'package:greens_veges/utils/routes.dart';
 
 import '../constants/app_theme.dart';
-import 'package:greens_veges/screens/products.dart';
 // import '../utils/routes.dart';
 
 Widget seeAllView(BuildContext context, String name, List<Food> foods) {

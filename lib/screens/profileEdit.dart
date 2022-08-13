@@ -6,7 +6,7 @@ import 'package:greens_veges/widgets/form_field_maker.dart';
 
 class ProfileEdit extends StatefulWidget {
   ProfileEdit({Key? key}) : super(key: key);
-  final User user = login();
+  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
 
   @override
   State<ProfileEdit> createState() => _ProfileEditState();
