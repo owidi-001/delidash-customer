@@ -1,30 +1,30 @@
 import 'dart:convert';
 
 class User {
-  final int userId;
   final String email;
+  final String phoneNumber;
   final String firstName;
   final String lastName;
-  final String phoneNumber;
-  final String profileImage;
+  final int userId;
+  final String token;
 
   User({
-    required this.userId,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.profileImage,
-    required this.phoneNumber,
+    this.userId,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.token,
+    this.phoneNumber,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json["user"]['id'],
-      email: json["user"]["email"],
-      lastName: json["user"]["last_name"],
-      firstName: json["user"]["first_name"],
+      userId: json['id'],
+      email: json["email"],
+      lastName: json["last_name"],
+      firstName: json["first_name"],
       phoneNumber: (json["phone_number"] as String).replaceAll("+254", "0"),
-      profileImage: json["profile_image"],
+      token: json["auth_token"],
     );
   }
 
@@ -35,7 +35,7 @@ class User {
       "last_name": user.lastName,
       "first_name": user.firstName,
       "phone_number": user.phoneNumber,
-      "profile_image": user.profileImage
+      "auth_token": user.token
     };
   }
 
@@ -47,26 +47,26 @@ class User {
   }
 }
 
-class Client {
-  User user;
-  String? gender;
+// class Client {
+//   User user;
+//   String? gender;
 
-  Client({required this.user, gender});
+//   Client({required this.user, gender});
 
-  factory Client.fromJson(Map<String, dynamic> json) {
-    User user = User.fromJson(json['user']);
-    return Client(
-      user: user,
-      gender: json['gender'],
-    );
-  }
+//   factory Client.fromJson(Map<String, dynamic> json) {
+//     User user = User.fromJson(json['user']);
+//     return Client(
+//       user: user,
+//       gender: json['gender'],
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {"user": user.toJson(user), "gender": gender};
-  }
+//   Map<String, dynamic> toJson() {
+//     return {"user": user.toJson(user), "gender": gender};
+//   }
 
-  @override
-  String toString() {
-    return jsonEncode(toJson());
-  }
-}
+//   @override
+//   String toString() {
+//     return jsonEncode(toJson());
+//   }
+// }

@@ -1,128 +1,122 @@
+import 'package:flutter/foundation.dart';
+import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/provider/user.provider.dart';
+import 'package:greens_veges/utils/routes.dart';
+import 'package:http/http.dart';
+
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:greens_veges/models/user.model.dart';
-import 'package:greens_veges/services/exceptions.service.dart';
-import 'package:greens_veges/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class UserAuthentication {
-  static Dio dio =
-      Dio(BaseOptions(connectTimeout: timeout, receiveTimeout: timeout));
+enum Status {
+  NotLoggedIn,
+  NotRegistered,
+  LoggedIn,
+  Registered,
+  Authenticating,
+  Registering,
+  LoggedOut
+}
 
-  static Future<void> loginUser(Map data) async {
-    try {
-      final response = await dio.post(
-        "$baseURL/auth/login/",
-        data: data,
-        options: Options(sendTimeout: timeout),
-      );
-      final _prefs = await SharedPreferences.getInstance();
-      _prefs.setString(
-        "token",
-        response.data['token'],
-      );
-    } catch (e) {
-      throw getException(e);
+class AuthProvider with ChangeNotifier {
+  Status _loggedInStatus = Status.NotLoggedIn;
+  Status _registeredInStatus = Status.NotRegistered;
+
+  Status get loggedInStatus => _loggedInStatus;
+  Status get registeredInStatus => _registeredInStatus;
+
+  // login
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    Map<String, dynamic> result;
+
+    final Map<String, dynamic> loginData = {
+      'user': {'email': email, 'password': password}
+    };
+
+    _loggedInStatus = Status.Authenticating;
+    notifyListeners();
+
+    Response response = await post(Uri.parse(AppUrl.login),
+        body: json.encode(loginData),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      var userData = responseData['data'];
+
+      User authUser = User.fromJson(userData);
+      UserPreferences().saveUser(authUser);
+      _loggedInStatus = Status.LoggedIn;
+      notifyListeners();
+
+      result = {'status': true, 'message': "Successful", 'user': authUser};
+    } else {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
     }
+    return result;
   }
 
-  // static Future<String> getAuthToken() async {
-  //   final _prefs = await SharedPreferences.getInstance();
-  //   return _prefs.getString("token");
-  // }
+  // register
+  Future<FutureOr> register(String first_name, String last_name,
+      String email, String phone, String password, bool is_vendor) async {
+    final Map<String, dynamic> registrationData = {
+      'user': {
+        'first_name': first_name,
+        'last_name': last_name,
+        'email': email,
+        'phone_number': phone,
+        'password': password,
+        'is_vendor': is_vendor
+      }
+    };
 
-  static Future<void> registerUser(String data) async {
-    try {
-      await dio.post("$baseURL/auth/register/",
-          data: data, options: Options(sendTimeout: timeout));
-    } catch (e) {
-      throw getException(e);
-    }
+    _registeredInStatus = Status.Registering;
+    notifyListeners();
+
+    return await post(Uri.parse(AppUrl.register),
+            body: json.encode(registrationData),
+            headers: {'Content-Type': 'application/json'})
+        .then(onValue)
+        .catchError(onError);
   }
 
+  // helper methods
+  Future<FutureOr> onValue(Response response) async {
+    Map<String, Object> result;
 
-  // static Future<User> updateProfile(String data) async {
-  //   final _prefs = await SharedPreferences.getInstance();
-  //   try {
-  //     String authToken = _prefs.getString("token");
-  //     var _profile = await dio.put("${baseURL}/customer/profile/",
-  //         options: Options(
-  //             headers: {'Authorization': 'Token $authToken'},
-  //             sendTimeout: timeout),
-  //         data: data);
-  //     print(_profile.data);
-  //     _prefs.setString("user", jsonEncode(_profile.data));
-  //     return User.fromJson(_profile.data);
-  //   } catch (e) {
-  //     throw getException(e);
-  //   }
-  // }
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
-  // static Future<Map<String, dynamic>> resetPassword({Map data}) async {
-  //   try {
-  //     final res = await dio.post("${baseURL}api/auth/reset/", data: data);
-  //     return res.data;
-  //   } catch (e) {
-  //     throw getException(e);
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      var userData = responseData['data'];
+      User authUser = User.fromJson(userData);
+      UserPreferences().saveUser(authUser);
 
-  // static Future<Map<String, dynamic>> setNewPassword({Map data}) async {
-  //   try {
-  //     final res = await dio.put(
-  //       "${baseURL}api/auth/reset/",
-  //       data: data,
-  //       options: Options(sendTimeout: timeout),
-  //     );
-  //     return res.data;
-  //   } catch (e) {
-  //     throw getException(e);
-  //   }
-  // }
+      result = {
+        'status': true,
+        'message': 'Registration successful',
+        'data': authUser
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': 'Registration failed',
+        'data': responseData
+      };
+    }
 
-  // static Future<User> refreshUserProfile() async {
-  //   final _prefs = await SharedPreferences.getInstance();
-  //   try {
-  //     String authToken = _prefs.getString("token");
-  //     var profile = await dio.get(
-  //       "${baseURL}api/customer/profile/",
-  //       options: Options(
-  //           headers: {'Authorization': 'Token $authToken'},
-  //           sendTimeout: timeout),
-  //     );
-  //     _prefs.setString(
-  //       "user",
-  //       jsonEncode(profile.data),
-  //     );
-  //     return User.fromJson(profile.data);
-  //   } catch (e) {
-  //     throw getException(e);
-  //   }
-  // }
+    return result;
+  }
 
-  // static Future<User> getUserProfile() async {
-  //   final _prefs = await SharedPreferences.getInstance();
-  //   String _userData = _prefs.get("user");
-  //   if (_userData != null) {
-  //     return User.fromJson(jsonDecode(_userData));
-  //   } else {
-  //     try {
-  //       String authToken = _prefs.getString("token");
-  //       var profile = await dio.get(
-  //         "${baseURL}api/customer/profile/",
-  //         options: Options(
-  //             headers: {'Authorization': 'Token $authToken'},
-  //             sendTimeout: timeout),
-  //       );
-  //       _prefs.setString(
-  //         "user",
-  //         jsonEncode(profile.data),
-  //       );
-  //       return User.fromJson(profile.data);
-  //     } catch (e) {
-  //       throw getException(e);
-  //     }
-  //   }
-  // }
+  static onError(error) {
+    if (kDebugMode) {
+      print("The error is ${error.detail}");
+    }
+    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+  }
 }

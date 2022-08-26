@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/services/user.service.dart';
-import '../utils/routes.dart';
 
 class RegistrationScreen extends StatefulWidget {
   RegistrationScreen({Key? key}) : super(key: key);
@@ -136,8 +134,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           decoration: formInputDecoration(),
                           validator: (str) {
                             if (str!.contains(RegExp(
-                                r"^(?:254|\+254|0)?(7(?:(?:[129][0–9])|(?:0[0–8])|(4[0–1]))[0–9]{6})$"))) {
-                              return "Not a valid phone!";
+                                r"^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$"))) {
+                              return "Enter a valid phone!";
                             }
                             return null;
                           },
@@ -161,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           initialValue: '',
                           autocorrect: true,
                           decoration: formInputDecoration(),
-                          validator: (str) => str!.length <= 8
+                          validator: (str) => str!.length < 8
                               ? "Input a strong Password!"
                               : null,
                           onSaved: (str) => _password = str!,
@@ -242,7 +240,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       form.save();
       setState(() {});
 
-      Map data = {'first_name':"John",'last_name':"Doe",'email': _email, 'phone': _phone, 'password': _password};
+      Map data = {
+        'first_name': "John",
+        'last_name': "Doe",
+        'email': _email,
+        'phone': _phone,
+        'password': _password
+      };
       // var data = FormData.fromMap(
       //     {'email': _email, 'phone': _phone, 'password': _password});
       await UserAuthentication.registerUser(jsonEncode(data));

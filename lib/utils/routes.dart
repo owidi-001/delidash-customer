@@ -13,3 +13,20 @@ class MyRoutes {
   static const String profileRoute = "/profile";
   static const String profileEditRoute = "/profileEdit";
 }
+
+
+class AppUrl {
+  static const String baseURL = "liveBaseURL";
+
+  // user auth
+  static const String login = "${baseURL}auth/login/";
+  static const String register = "$baseURL/auth/register/";
+  static const String forgotPassword = "$baseURL/forgot-password";
+
+  // products
+  static const String listProducts = "${baseURL}product/";
+
+  // order
+  static const String placeOrder = "${baseURL}order/";
+
+}
