@@ -7,7 +7,6 @@ import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 
-
 enum Status {
   NotLoggedIn,
   NotRegistered,
@@ -30,21 +29,32 @@ class AuthProvider with ChangeNotifier {
     Map<String, dynamic> result;
 
     final Map<String, dynamic> loginData = {
-      'user': {'email': email, 'password': password}
+      'email': email,
+      'password': password
     };
 
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
-    Response response = await post(Uri.parse(AppUrl.login),
-        body: json.encode(loginData),
-        headers: {'Content-Type': 'application/json'});
+    Response response = await post(
+      Uri.parse(AppUrl.login),
+      // body: json.encode(loginData),
+      body: loginData,
+      // headers: {'Content-Type': 'application/json'}
+    );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      var userData = responseData['data'];
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-      User authUser = User.fromJson(userData);
+      if (kDebugMode) {
+        print(responseData);
+      }
+
+      User authUser = User.fromJson(responseData);
+
+      if (kDebugMode) {
+        print(authUser);
+      }
       UserPreferences().saveUser(authUser);
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
@@ -63,8 +73,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   // register
-  Future<FutureOr> register(String first_name, String last_name,
-      String email, String phone, String password, bool is_vendor) async {
+  Future<FutureOr> register(String first_name, String last_name, String email,
+      String phone, String password, bool is_vendor) async {
     final Map<String, dynamic> registrationData = {
       'user': {
         'first_name': first_name,

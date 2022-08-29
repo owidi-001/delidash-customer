@@ -5,7 +5,7 @@ import 'package:greens_veges/models/food.model.dart';
 import 'package:http/http.dart' as http;
 
 // Test base url
-String baseUrl = "https://veges-server.heroku.com";
+String baseUrl = "assets/images/";
 
 // // USER AUTH AND ACCOUNTS
 // // Register service

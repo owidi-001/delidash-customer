@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/models/food.model.dart';
+import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/screens/cart.dart';
 import 'package:greens_veges/screens/products.dart';
 import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/screens/profileEdit.dart';
-import 'package:greens_veges/screens/registration_second.dart';
+import 'package:greens_veges/screens/login_screen.dart';
 import 'package:greens_veges/services/food.service.dart';
+import 'package:greens_veges/services/user.service.dart';
+import 'package:provider/provider.dart';
 import 'screens/dashboard.dart';
-import 'screens/registration_first.dart';
+import 'screens/registration_screen.dart';
 import 'screens/splash.dart';
 import 'screens/product_detail.dart';
 import 'screens/welcome.dart';
@@ -23,33 +27,62 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Mealio",
-      theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
-      initialRoute: "/",
-      routes: {
-        "/": (context) => const SplashScreen(),
-        MyRoutes.welcomeRoute: (context) => const WelcomeScreen(),
-        MyRoutes.firstRegistrationRoute: (context) => RegistrationScreen(),
-        MyRoutes.secondRegistrationRoute: (context) => SecondRegistrationScreen(),
-        MyRoutes.dashboardRoute: (context) => DashboardScreen(),
-        
-        MyRoutes.foodListRoute: (context) => const FoodListScreen(foods: [],),
-        // MyRoutes.foodDetailRoute: (context){
-        //   return ModalRoute.of(context)!.settings.arguments as FoodDetailScreen;
-        //   },
-        MyRoutes.foodDetailRoute: (context) => FoodDetailScreen(
-              food: Food(
-                  imagePath: "assets/images/carrots.png",
-                  name: "name",
-                  price: "price",
-                  category: FoodCategory(
-                      imagePath: "${baseUrl}fruits.png", label: "Fruits"), description: ''),
-            ),
-        MyRoutes.cartRoute: (context) => const CartScreen(),
-        MyRoutes.profileRoute: (context) =>  Profile(),
-        MyRoutes.profileEditRoute: (context) => ProfileEdit(),
-      },
-    );
+    Future<User?> getUserData() => UserPreferences().getUser();
+
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => UserProvider())
+        ],
+        child: MaterialApp(
+          title: "Mealio",
+          theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
+          // initialRoute: "/",
+          home: FutureBuilder(
+              future: getUserData(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return const CircularProgressIndicator();
+                  default:
+                    if (snapshot.hasError) {
+                      return Text("Error ${snapshot.error}");
+                    } else if (snapshot.data == null) {
+                      return const LoginScreen();
+                    } else {
+                      UserPreferences().removeUser();
+                    }
+                    return DashboardScreen();
+                }
+              }),
+          routes: {
+            // "/": (context) => const SplashScreen(),
+            MyRoutes.welcome: (context) => const WelcomeScreen(),
+            MyRoutes.register: (context) => const RegistrationScreen(),
+            MyRoutes.login: (context) => const LoginScreen(),
+            
+            MyRoutes.dashboardRoute: ((context) => DashboardScreen()),
+
+            MyRoutes.foodListRoute: (context) => const FoodListScreen(
+                  foods: [],
+                ),
+            // MyRoutes.foodDetailRoute: (context){
+            //   return ModalRoute.of(context)!.settings.arguments as FoodDetailScreen;
+            //   },
+            MyRoutes.foodDetailRoute: (context) => FoodDetailScreen(
+                  food: Food(
+                      imagePath: "assets/images/carrots.png",
+                      name: "name",
+                      price: "price",
+                      category: FoodCategory(
+                          imagePath: "${baseUrl}fruits.png", label: "Fruits"),
+                      description: ''),
+                ),
+            MyRoutes.cartRoute: (context) => const CartScreen(),
+            MyRoutes.profileRoute: (context) => const Profile(),
+            MyRoutes.profileEditRoute: (context) => const ProfileEdit(),
+          },
+        ));
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/utils/routes.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
-  Profile({Key? key}) : super(key: key);
-  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
+  const Profile({Key? key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -14,18 +15,19 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<UserProvider>(context).user;
+    
     return Scaffold(
       body: Column(
         children: [
           const SizedBox(
-              height: 36,
-            ),
+            height: 36,
+          ),
           Container(
             margin: const EdgeInsets.all(8.0),
             decoration: const BoxDecoration(
-               color: AppTheme.lightColor,
-                      borderRadius: BorderRadius.all(Radius.circular(24))
-            ),
+                color: AppTheme.lightColor,
+                borderRadius: BorderRadius.all(Radius.circular(24))),
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -40,8 +42,8 @@ class _ProfileState extends State<Profile> {
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Image.asset(
-                        widget.user.profileImage,
-                      ),
+                          // widget.user.profileImage,
+                          "assets/images/user.png"),
                     ),
                   ),
                   const SizedBox(
@@ -50,7 +52,7 @@ class _ProfileState extends State<Profile> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      "${widget.user.firstName} ${widget.user.lastName}",
+                      "${user!.firstName} ${user.lastName}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold),
@@ -62,7 +64,7 @@ class _ProfileState extends State<Profile> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 32),
                     child: Text(
-                      widget.user.email,
+                      user.email,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontWeight: FontWeight.w500,

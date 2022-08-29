@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
 import '../models/cart.model.dart';
 import '../widgets/cart_item.dart';
 

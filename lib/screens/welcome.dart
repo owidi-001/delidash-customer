@@ -70,10 +70,8 @@ class WelcomeScreen extends StatelessWidget {
                     widthFactor: 0.5,
                     child: ElevatedButton(
                         onPressed: () {
-                          // Navigator.pushNamed(
-                          //     context, MyRoutes.registrationRoute);
                           Navigator.pushReplacementNamed(
-                              context, MyRoutes.firstRegistrationRoute);
+                              context, MyRoutes.login);
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),

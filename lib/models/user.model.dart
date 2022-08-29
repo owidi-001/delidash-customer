@@ -9,22 +9,23 @@ class User {
   final String token;
 
   User({
-    this.userId,
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.token,
-    this.phoneNumber,
+    required this.userId,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.token,
+    required this.phoneNumber,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['id'],
+      // userId: json['id'],
+      userId: 1,
       email: json["email"],
       lastName: json["last_name"],
       firstName: json["first_name"],
       phoneNumber: (json["phone_number"] as String).replaceAll("+254", "0"),
-      token: json["auth_token"],
+      token: json["token"],
     );
   }
 
@@ -35,7 +36,7 @@ class User {
       "last_name": user.lastName,
       "first_name": user.firstName,
       "phone_number": user.phoneNumber,
-      "auth_token": user.token
+      "token": user.token
     };
   }
 
@@ -46,27 +47,3 @@ class User {
     );
   }
 }
-
-// class Client {
-//   User user;
-//   String? gender;
-
-//   Client({required this.user, gender});
-
-//   factory Client.fromJson(Map<String, dynamic> json) {
-//     User user = User.fromJson(json['user']);
-//     return Client(
-//       user: user,
-//       gender: json['gender'],
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {"user": user.toJson(user), "gender": gender};
-//   }
-
-//   @override
-//   String toString() {
-//     return jsonEncode(toJson());
-//   }
-// }

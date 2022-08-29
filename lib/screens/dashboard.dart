@@ -2,18 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import 'package:greens_veges/utils/routes.dart';
+import 'package:provider/provider.dart';
 import '../models/food.model.dart';
 import '../models/user.model.dart';
 import '../widgets/category_view.dart';
 import '../widgets/menu_minimal_view.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key? key}) : super(key: key);
+  
+
+  DashboardScreen({
+    Key? key
+  }) : super(key: key);
   final List<Food> foods = getAllFoods();
-  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -22,6 +27,10 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
+    
+    User? user = Provider.of<UserProvider>(context).user;
+
+
     var greetings = greetingMessage();
 
     Size size = MediaQuery.of(context).size;
@@ -49,7 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             context, MyRoutes.profileRoute)
                       },
                       child: Image.asset(
-                        widget.user.profileImage,
+                        // widget.user.profileImage,
+                        "assets/images/user.png",
                         scale: 3.6,
                       ),
                     ),
@@ -73,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               height: 4,
                             ),
                             Text(
-                              widget.user.firstName,
+                              "${user?.firstName}",
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -124,7 +134,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           "The snapshot data found ${snapshot.data}");
                                     }
                                     return Text(
-                                      (snapshot.data as String).length > 11 ? (snapshot.data as String).substring(0,10) : snapshot.data as String,
+                                      (snapshot.data as String).length > 11
+                                          ? (snapshot.data as String)
+                                              .substring(0, 10)
+                                          : snapshot.data as String,
                                       softWrap: false,
                                       overflow: TextOverflow.clip,
                                       style: const TextStyle(

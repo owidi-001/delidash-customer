@@ -1,8 +1,9 @@
 class MyRoutes {
   // auth routes
-  static const String welcomeRoute = "/welcome";
-  static const String firstRegistrationRoute = "/registration";
-  static const String secondRegistrationRoute = "/registration_final";
+  static const String welcome = "/welcome";
+  static const String register = "/register";
+  static const String login = "/login";
+
   // Dashboard,list,detail routes
   static const String dashboardRoute = "/dashboard";
   static const String foodListRoute = "/foods";
@@ -16,17 +17,17 @@ class MyRoutes {
 
 
 class AppUrl {
-  static const String baseURL = "liveBaseURL";
+  static const String baseURL = "https://75c6-102-68-78-175.ap.ngrok.io";
 
   // user auth
-  static const String login = "${baseURL}auth/login/";
+  static const String login = "$baseURL/auth/login/";
   static const String register = "$baseURL/auth/register/";
   static const String forgotPassword = "$baseURL/forgot-password";
 
   // products
-  static const String listProducts = "${baseURL}product/";
+  static const String listProducts = "$baseURL/product/";
 
   // order
-  static const String placeOrder = "${baseURL}order/";
+  static const String placeOrder = "$baseURL/order/";
 
 }

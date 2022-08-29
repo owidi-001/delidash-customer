@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
+import 'package:provider/provider.dart';
 
 class ProfileEdit extends StatefulWidget {
-  ProfileEdit({Key? key}) : super(key: key);
-  final User user = User(userId: 1, email: "email", firstName: "firstName", lastName: "lastName", profileImage: "profileImage", phoneNumber: "phoneNumber");
+  const ProfileEdit({Key? key}) : super(key: key);
 
   @override
   State<ProfileEdit> createState() => _ProfileEditState();
@@ -15,6 +16,7 @@ class ProfileEdit extends StatefulWidget {
 class _ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<UserProvider>(context).user;
     return Scaffold(
         backgroundColor: AppTheme.whiteColor,
         body: SingleChildScrollView(
@@ -34,8 +36,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Image.asset(
-                      widget.user.profileImage,
-                    ),
+                        "assets/images/user.png"),
                   ),
                 ),
                 const SizedBox(
@@ -64,10 +65,17 @@ class _ProfileEditState extends State<ProfileEdit> {
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: [
-                          makeInput(label: "First name",currentValue:widget.user.firstName),
-                          makeInput(label: "Last Name",currentValue:widget.user.lastName),
-                          makeInput(label: "Email",currentValue:widget.user.email),
-                          makeInput(label: "Phone",currentValue:widget.user.phoneNumber),
+                          makeInput(
+                              label: "First name",
+                              currentValue: user?.firstName),
+                          makeInput(
+                              label: "Last Name",
+                              currentValue: user?.lastName),
+                          makeInput(
+                              label: "Email", currentValue: user?.email),
+                          makeInput(
+                              label: "Phone",
+                              currentValue: user?.phoneNumber),
                           // makeInput(label: "Password", obsureText: true),
                           // makeInput(label: "Confirm Pasword", obsureText: true)
                         ],
@@ -80,8 +88,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                         child: ElevatedButton(
                             onPressed: () {
                               // formKey.currentState.save();
-                      
-                              Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+
+                              Navigator.pushNamed(
+                                  context, MyRoutes.dashboardRoute);
                             },
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
