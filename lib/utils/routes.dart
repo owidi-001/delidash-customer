@@ -27,6 +27,8 @@ class AppUrl {
   // products
   static const String listProducts = "$baseURL/product/";
 
+  static const String listCategories = "$baseURL/categories/";
+
   // order
   static const String placeOrder = "$baseURL/order/";
 

@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // login button
     final loginButton = Material(
       elevation: 5,
-      borderRadius: const BorderRadius.all(const Radius.circular(10)),
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
       color: AppTheme.primaryColor,
       child: MaterialButton(
         onPressed: () {

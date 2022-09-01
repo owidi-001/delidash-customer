@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-import 'package:greens_veges/models/user.model.dart';
-import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +28,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
-
     // email field
     final emailField = TextFormField(
       autofocus: false,
@@ -79,6 +75,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             .hasMatch(value)) {
           return "Enter a valid kenyan number";
         }
+        return null;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -103,6 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (!RegExp(r"^.{8,}$").hasMatch(value)) {
           return "Enter a strong password (> 8 characters)";
         }
+        return null;
       },
       onSaved: (value) {
         _passwordController.value;
@@ -131,6 +129,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (value != _passwordController.text) {
           return "Passwords do not match";
         }
+        return null;
       },
       decoration: InputDecoration(
           prefixIcon: const Icon(Icons.lock),
@@ -147,7 +146,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       borderRadius: const BorderRadius.all(const Radius.circular(10)),
       color: AppTheme.primaryColor,
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          doRegister();
+        },
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         child: const Text(
@@ -159,57 +160,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
-
-    void doRegister() {
-      final form = _formkey.currentState;
-
-      if (form!.validate()) {
-        form.save();
-        auth
-            .register("John", "Doe", _emailController.text,
-                _passwordConfirmController.text, _phoneController.text, false)
-            .then((response) {
-          if (response != null) {
-            if (kDebugMode) {
-              print(response);
-            }
-            // User user = response['data'];
-            // Provider.of<UserProvider>(context, listen: false).setUser(user);
-            
-            Fluttertoast.showToast(
-              msg: "Account creation Successful",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: AppTheme.primaryColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
-            Navigator.pushNamed(context, MyRoutes.dashboardRoute);
-          } else {
-            Fluttertoast.showToast(
-              msg: "Account creation Failed",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: AppTheme.redColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(response.toString()),
-              duration: const Duration(seconds: 3),
-            ));
-          }
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Invalid Form Please Complete the form properly'),
-          duration: Duration(seconds: 3),
-        ));
-      }
-    }
-
-    ;
 
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
@@ -338,5 +288,55 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       )),
     );
+  }
+
+  void doRegister() {
+    AuthProvider auth = Provider.of<AuthProvider>(context);
+    final form = _formkey.currentState;
+
+    if (form!.validate()) {
+      form.save();
+      auth
+          .register("John", "Doe", _emailController.text,
+              _passwordConfirmController.text, _phoneController.text, false)
+          .then((response) {
+        if (response != null) {
+          if (kDebugMode) {
+            print(response);
+          }
+          // User user = response['data'];
+          // Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+          Fluttertoast.showToast(
+              msg: "Account creation Successful",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: AppTheme.primaryColor,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+        } else {
+          Fluttertoast.showToast(
+              msg: "Account creation Failed",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: AppTheme.redColor,
+              textColor: Colors.white,
+              fontSize: 16.0);
+
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(response.toString()),
+            duration: const Duration(seconds: 3),
+          ));
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Invalid Form Please Complete the form properly'),
+        duration: Duration(seconds: 3),
+      ));
+    }
   }
 }

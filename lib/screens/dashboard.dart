@@ -18,7 +18,7 @@ class DashboardScreen extends StatefulWidget {
   DashboardScreen({
     Key? key
   }) : super(key: key);
-  final List<Food> foods = getAllFoods();
+
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -159,15 +159,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               },
                               future: getAddress(),
                             ),
-                            // Text(
-                            //   "location",
-                            //   softWrap: false,
-                            //   overflow: TextOverflow.clip,
-                            //   style: const TextStyle(
-                            //       color: Colors.black,
-                            //       fontSize: 12,
-                            //       fontWeight: FontWeight.w500),
-                            // ),
                             const Icon(
                               CupertinoIcons.chevron_down,
                               color: AppTheme.primaryColor,

@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
                     } else {
                       UserPreferences().removeUser();
                     }
+                    // TODO: Set to splash screen ie new user intro
                     return DashboardScreen();
                 }
               }),
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
             MyRoutes.welcome: (context) => const WelcomeScreen(),
             MyRoutes.register: (context) => const RegistrationScreen(),
             MyRoutes.login: (context) => const LoginScreen(),
-            
+
             MyRoutes.dashboardRoute: ((context) => DashboardScreen()),
 
             MyRoutes.foodListRoute: (context) => const FoodListScreen(
