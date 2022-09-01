@@ -5,9 +5,9 @@ import '../models/food.model.dart';
 import '../utils/routes.dart';
 
 class FoodDetailScreen extends StatefulWidget {
-  final Food food;
-  static const routeName = '/food_detail';
-  const FoodDetailScreen({Key? key, required this.food}) : super(key: key);
+  
+  final Product product;
+  const FoodDetailScreen({Key? key, required this.product}) : super(key: key);
 
   @override
   State<FoodDetailScreen> createState() => _FoodDetailScreenState();
@@ -62,7 +62,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   alignment: Alignment.center,
                   widthFactor: 0.6,
                   child: Image.asset(
-                    widget.food.imagePath,
+                    widget.product.image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -86,7 +86,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          widget.food.name,
+                          widget.product.label,
                           style: const TextStyle(
                               color: AppTheme.darkColor,
                               fontSize: 24,
@@ -141,17 +141,17 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text("1kg, 4\$",
-                      style: TextStyle(
+                  Text("\$ ${widget.product.unit_price}/Kg",
+                      style: const TextStyle(
                           color: AppTheme.redColor,
                           fontSize: 20,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 12,
                   ),
-                  const Text(
-                    "Ginger is a flowering plant whose rhizome, ginger root or ginger, is widely used as a spice and a folk medicine.",
-                    style: TextStyle(
+                  Text(
+                    widget.product.description,
+                    style: const TextStyle(
                         color: AppTheme.secondaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w500),

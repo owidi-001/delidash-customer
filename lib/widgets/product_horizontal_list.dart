@@ -1,26 +1,31 @@
 // Products card grid view
 import 'package:flutter/material.dart';
-import 'package:greens_veges/utils/routes.dart';
+import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/widgets/product_card_dashboard.dart';
 
 import '../models/food.model.dart';
 
-Widget productHorizontalList({required List<Food> foods}) {
-  
+Widget productHorizontalList({required List<Product> products}) {
   return ListView.builder(
     shrinkWrap: true,
     scrollDirection: Axis.horizontal,
-    itemCount: foods.length,
+    itemCount: products.length,
     itemBuilder: (context, index) {
       return DashboardFoodCardWidget(
-              imagePath: foods[index].imagePath,
-              name: foods[index].name,
-              price: foods[index].price,
-              onTapCallback: () {
-                Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
-                    arguments: foods[index]);
-              },
-            );
+        imagePath: products[index].image,
+        name: products[index].label,
+        price: products[index].unit_price,
+        onTapCallback: () {
+          // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
+          //     arguments: products[index]);
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      FoodDetailScreen(product: products[index])));
+        },
+      );
     },
   );
 }

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
 class FoodCardWidget extends StatelessWidget {
-  final String imagePath;
+  final String image;
   final String name;
-  final String price;
+  final double price;
   final VoidCallback onTapCallback;
   const FoodCardWidget(
       {Key? key,
-      required this.imagePath,
+      required this.image,
       required this.name,
       required this.price,
       required this.onTapCallback})
@@ -34,7 +34,7 @@ class FoodCardWidget extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: Image.asset(
-                    imagePath,
+                    image,
                     width: 120,
                     height: 120,
                   ),
@@ -56,7 +56,7 @@ class FoodCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      price,
+                      "$price",
                       style: const TextStyle(
                           color: AppTheme.redColor,
                           fontSize: 16,

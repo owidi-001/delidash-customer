@@ -1,19 +1,20 @@
 // Products card grid view
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greens_veges/screens/product_detail.dart';
 
 import '../models/food.model.dart';
 import 'product_card.dart';
 
-Widget productGrids({required List<Food> foods}) {
+Widget productGrids({required List<Product> products}) {
   if (kDebugMode) {
     print("The number of items");
-    print(foods.length);
+    print(products.length);
   }
   return GridView.builder(
     shrinkWrap: true,
     scrollDirection: Axis.vertical,
-    itemCount: foods.length,
+    itemCount: products.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
       crossAxisSpacing: 4,
@@ -23,13 +24,18 @@ Widget productGrids({required List<Food> foods}) {
     itemBuilder: (context, index) {
       return Flexible(
         child: FoodCardWidget(
-          imagePath: foods[index].imagePath,
-          name: foods[index].name,
-          price: foods[index].price,
+          image: products[index].image,
+          name: products[index].label,
+          price: products[index].unit_price,
           onTapCallback: () {
             // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
-            //     arguments: foods[index]);
-            // Navigator.push(context, FoodDetailScreen(food:foods[index]));
+            //     arguments: products[index]);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      FoodDetailScreen(product: products[index])));
           },
         ),
       );

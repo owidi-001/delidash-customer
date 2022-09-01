@@ -7,7 +7,7 @@ import 'column_builder.dart';
 import 'menu_minimal_view.dart';
 
 // Tabbed category list views
-Widget categoryCardListView(List<FoodCategory> categories) {
+Widget categoryCardListView(List<ProductCategory?> categories) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,
     shrinkWrap: true,
@@ -16,24 +16,22 @@ Widget categoryCardListView(List<FoodCategory> categories) {
     itemBuilder: (BuildContext context, int index) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: categoryCardView(
-            categories[index].imagePath, categories[index].label),
+        child: categoryCardView(categories[index]!.icon, categories[index]!.name),
       );
     },
   );
 }
 
-
 // Product per category view
-Widget categoryView(Map<FoodCategory, List<Food>> categoricalFoods) {
+Widget categoryView(Map<String, List<Product>> categoricalFoods) {
   return ColumnBuilder(
     itemCount: categoricalFoods.keys.length,
     itemBuilder: (BuildContext context, int index) {
-      FoodCategory category = categoricalFoods.keys.elementAt(index);
-      String categoryLabel = category.label;
+      String category = categoricalFoods.keys.elementAt(index);
+
       return Column(
         children: [
-          seeAllView(context, categoryLabel,getFoodsOfCategory(category)),
+          seeAllView(context, category, categoricalFoods[category] ),
           const SizedBox(
             height: 24,
           ),
@@ -41,7 +39,7 @@ Widget categoryView(Map<FoodCategory, List<Food>> categoricalFoods) {
             height: 200,
             width: double.maxFinite,
             child: productHorizontalList(
-                foods: categoricalFoods.values.elementAt(index)),
+                products: categoricalFoods.values.elementAt(index)),
           ),
           const SizedBox(
             height: 24,

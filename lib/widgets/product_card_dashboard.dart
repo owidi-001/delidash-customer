@@ -4,7 +4,7 @@ import 'package:greens_veges/constants/app_theme.dart';
 class DashboardFoodCardWidget extends StatelessWidget {
   final String imagePath;
   final String name;
-  final String price;
+  final double price;
   final VoidCallback onTapCallback;
   const DashboardFoodCardWidget(
       {Key? key,

@@ -6,7 +6,7 @@ import 'package:greens_veges/utils/routes.dart';
 import '../constants/app_theme.dart';
 // import '../utils/routes.dart';
 
-Widget seeAllView(BuildContext context, String name, List<Food> foods) {
+Widget seeAllView(BuildContext context, String name, List<Product>? products) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -17,7 +17,7 @@ Widget seeAllView(BuildContext context, String name, List<Food> foods) {
       InkWell(
         onTap: () {
           Navigator.pushNamed(context, MyRoutes.foodListRoute);
-          // Navigator.pushNamed(context, FoodListScreen(foods:foods));
+          // Navigator.pushNamed(context, FoodListScreen(products:products));
         },
         child: const Text(
           "See All",

@@ -5,6 +5,7 @@ import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/provider/user.provider.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
+import 'package:greens_veges/services/product.service.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:provider/provider.dart';
 import '../models/food.model.dart';
@@ -13,12 +14,7 @@ import '../widgets/category_view.dart';
 import '../widgets/menu_minimal_view.dart';
 
 class DashboardScreen extends StatefulWidget {
-  
-
-  DashboardScreen({
-    Key? key
-  }) : super(key: key);
-
+  DashboardScreen({Key? key}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -27,9 +23,14 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    
     User? user = Provider.of<UserProvider>(context).user;
 
+    List<Product>? products = Provider.of<ProductProvider>(context).products.cast<Product>();
+    List<ProductCategory?> categories =
+        Provider.of<ProductProvider>(context).categories;
+
+    Map<String, List<Product>> productCategories =
+        Provider.of<ProductProvider>(context).productCategories;
 
     var greetings = greetingMessage();
 
@@ -208,19 +209,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             Padding(
               padding: const EdgeInsets.all(16),
-              child: seeAllView(context, "Categories", getAllFoods()),
+              child: seeAllView(context, "Categories", products),
             ),
             SizedBox(
                 height: 100,
                 width: size.width,
-                child: categoryCardListView(getAllCategories())),
+                child: categoryCardListView(categories)),
             const SizedBox(
               height: 24,
             ),
 
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: categoryView(foodCategories()),
+              child: categoryView(productCategories),
             )
           ]),
         ),

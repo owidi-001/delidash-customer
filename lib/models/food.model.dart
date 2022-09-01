@@ -6,8 +6,8 @@ class Product {
   final String image;
   final String description;
   final int quantity;
-  final String category; // Change to return category name
-  final String vendor; // Change to return vendor email
+  final int category; // Change to return category name
+  final int vendor; // Change to return vendor email
 
   // constructor
   Product(
@@ -22,14 +22,14 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-        id: json["id"],
+        id: int.parse(json["id"]),
         label: json["name"],
-        unit_price: json["unit_price"],
+        unit_price: double.parse(json["unit_price"]),
         image: json["image"],
         description: json["description"],
-        quantity: json["quantity"],
-        category: json["category"],
-        vendor: json["vendor"]);
+        quantity: int.parse(json["quantity"]),
+        category: int.parse(json["category"]),
+        vendor: int.parse(json["vendor"]));
   }
 }
 

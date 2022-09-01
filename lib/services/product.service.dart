@@ -16,6 +16,31 @@ enum Status {
 }
 
 class ProductProvider with ChangeNotifier {
+  late List<Product?> _products;
+  late List<ProductCategory?> _categories;
+  late Map<String, List<Product>>
+      _productCategories; // Products list per category
+
+  List<Product?> get products => _products;
+  List<ProductCategory?> get categories => _categories;
+  Map<String, List<Product>> get productCategories => _productCategories;
+
+  void setProducts(List<Product> products) {
+    _products = products;
+    notifyListeners();
+  }
+
+  void setCategories(List<ProductCategory> categories) {
+    _categories = categories;
+    notifyListeners();
+  }
+
+  // Not neccessary
+  void setProductCategories(Map<String, List<Product>> productCategories) {
+    _productCategories = productCategories;
+    notifyListeners();
+  }
+
   Status _productLoadedStatus = Status.ProductsNotLoaded;
   Status _categoryLoadedStatus = Status.CategoriesNotLoaded;
 
@@ -106,7 +131,7 @@ class ProductProvider with ChangeNotifier {
 
       result = {
         'status': true,
-        'message': "Successfully Loaded",
+        'message': "Products Loaded",
         'products': products
       };
     } else {
@@ -119,5 +144,53 @@ class ProductProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<Map<String, List<Product>>> loadProductCategorically() async {
+    Map<String, List<Product>> results = {};
+
+    for (var category in categories) {
+      List<Product> products = [];
+
+      for (var product in products) {
+        if (product.category == category!.id) {
+          products.add(product);
+        }
+      }
+      results[category!.name] = products;
+    }
+
+    // validate results
+    for (var item in results.keys) {
+      if (results[item]!.isEmpty) {
+        results.remove(item);
+      }
+    }
+
+    return results;
+  }
+}
+
+// get all products
+Future<List<Product>> fetchProduct() async {
+  final response = await get(Uri.parse(AppUrl.listProducts));
+
+  if (response.statusCode == 200) {
+    final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+
+    var products =
+        parsed.map<Product>((json) => Product.fromJson(json)).toList();
+
+    if (kDebugMode) {
+      print("The loaded Products");
+    }
+    for (var product in products) {
+      if (kDebugMode) {
+        print(product);
+      }
+    }
+    return products;
+  } else {
+    throw Exception('Failed to load foods');
   }
 }
