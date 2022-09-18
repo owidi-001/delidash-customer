@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:greens_veges/widgets/product_horizontal_list.dart';
 
-// import '../models/food.model.dart';
+// import '../models/product.model.dart';
 // import 'category_card.dart';
 // import 'menu_minimal_view.dart';
 

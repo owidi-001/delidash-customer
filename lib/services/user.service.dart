@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/models/user.model.dart';
-import 'package:greens_veges/provider/user.provider.dart';
+import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:http/http.dart';
 
@@ -8,20 +8,21 @@ import 'dart:async';
 import 'dart:convert';
 
 enum Status {
-  NotLoggedIn,
-  NotRegistered,
-  LoggedIn,
-  Registered,
-  Authenticating,
-  Registering,
-  LoggedOut
+  notLoggedIn,
+  notRegistered,
+  loggedIn,
+  registered,
+  authenticating,
+  registering,
+  loggedOut
 }
 
 class AuthProvider with ChangeNotifier {
-  Status _loggedInStatus = Status.NotLoggedIn;
-  Status _registeredInStatus = Status.NotRegistered;
+  Status _loggedInStatus = Status.notLoggedIn;
+  Status _registeredInStatus = Status.notRegistered;
 
   Status get loggedInStatus => _loggedInStatus;
+
   Status get registeredInStatus => _registeredInStatus;
 
   // login
@@ -33,35 +34,34 @@ class AuthProvider with ChangeNotifier {
       'password': password
     };
 
-    _loggedInStatus = Status.Authenticating;
+    _loggedInStatus = Status.authenticating;
     notifyListeners();
 
     Response response = await post(
       Uri.parse(AppUrl.login),
-      // body: json.encode(loginData),
       body: loginData,
-      // headers: {'Content-Type': 'application/json'}
     );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-      if (kDebugMode) {
-        print(responseData);
-      }
-
       User authUser = User.fromJson(responseData);
 
-      if (kDebugMode) {
-        print(authUser);
-      }
       UserPreferences().saveUser(authUser);
-      _loggedInStatus = Status.LoggedIn;
+      
+      if (kDebugMode) {
+        print("User saved to preferences");
+      }
+      UserProvider().setUser(authUser);
+      if (kDebugMode) {
+        print("User set to provider");
+      }
+      _loggedInStatus = Status.loggedIn;
       notifyListeners();
 
       result = {'status': true, 'message': "Successful", 'user': authUser};
     } else {
-      _loggedInStatus = Status.NotLoggedIn;
+      _loggedInStatus = Status.notLoggedIn;
       notifyListeners();
 
       result = {
@@ -72,60 +72,64 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
+  // end login
+
   // register
-  Future<FutureOr> register(String first_name, String last_name, String email,
-      String phone, String password, bool is_vendor) async {
-    final Map<String, dynamic> registrationData = {
-      'user': {
-        'first_name': first_name,
-        'last_name': last_name,
-        'email': email,
-        'phone_number': phone,
-        'password': password,
-        'is_vendor': is_vendor
-      }
+
+  Future<FutureOr> register(String email, String phone, String password) async {
+    final Map<String, dynamic> apiBodyData = {
+      'email': email,
+      'phone_number': phone,
+      'password1': password
     };
 
-    _registeredInStatus = Status.Registering;
-    notifyListeners();
+    _loggedInStatus = Status.authenticating;
+    notify();
 
     return await post(Uri.parse(AppUrl.register),
-            body: json.encode(registrationData),
+            body: json.encode(apiBodyData),
             headers: {'Content-Type': 'application/json'})
         .then(onValue)
         .catchError(onError);
   }
 
-  // helper methods
-  Future<FutureOr> onValue(Response response) async {
+  notify() {
+    notifyListeners();
+  }
+
+  static Future<FutureOr> onValue(Response response) async {
     Map<String, Object> result;
 
     final Map<String, dynamic> responseData = json.decode(response.body);
 
+    if (kDebugMode) {
+      print(responseData);
+    }
+
     if (response.statusCode == 200) {
-      var userData = responseData['data'];
-      User authUser = User.fromJson(userData);
+      User authUser = User.fromJson(responseData);
+
+      // now we will create shared preferences and save data
       UserPreferences().saveUser(authUser);
 
       result = {
         'status': true,
-        'message': 'Registration successful',
+        'message': 'Successfully registered',
         'data': authUser
       };
     } else {
       result = {
         'status': false,
-        'message': 'Registration failed',
+        'message': 'Successfully registered',
         'data': responseData
       };
     }
-
     return result;
   }
 
   static onError(error) {
     if (kDebugMode) {
-      print("The error is ${error.detail}");
+      print('the error is ${error.detail}');
     }
     return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
   }

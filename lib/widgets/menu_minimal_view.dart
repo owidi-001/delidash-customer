@@ -1,6 +1,6 @@
 // Returns widget view for see all belonging to best selling
 import 'package:flutter/material.dart';
-import 'package:greens_veges/models/food.model.dart';
+import 'package:greens_veges/models/product.model.dart';
 import 'package:greens_veges/utils/routes.dart';
 
 import '../constants/app_theme.dart';

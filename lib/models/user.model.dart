@@ -1,41 +1,42 @@
 import 'dart:convert';
 
 class User {
+  final String? first_name;
+  final String? last_name;
+  final String phone_number;
   final String email;
-  final String phoneNumber;
-  final String firstName;
-  final String lastName;
-  final int userId;
+  final bool is_vendor;
   final String token;
 
+
   User({
-    required this.userId,
+    this.first_name,
+    this.last_name,
+    required this.phone_number,
     required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.is_vendor,
     required this.token,
-    required this.phoneNumber,
+
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      // userId: json['id'],
-      userId: 1,
+      last_name: json["last_name"],
+      first_name: json["first_name"],
+      phone_number: (json["phone_number"] as String).replaceAll("+254", "0"),
       email: json["email"],
-      lastName: json["last_name"],
-      firstName: json["first_name"],
-      phoneNumber: (json["phone_number"] as String).replaceAll("+254", "0"),
+      is_vendor: json["is_vendor"],
       token: json["token"],
     );
   }
 
   Map<String, dynamic> toJson(User user) {
     return <String, dynamic>{
-      "id": user.userId,
+      "last_name": user.last_name,
+      "first_name": user.first_name,
+      "phone_number": user.phone_number,
       "email": user.email,
-      "last_name": user.lastName,
-      "first_name": user.firstName,
-      "phone_number": user.phoneNumber,
+      "is_vendor": user.is_vendor,
       "token": user.token
     };
   }

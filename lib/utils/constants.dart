@@ -1,2 +1,2 @@
-String baseURL = "https://7017-197-232-61-199.eu.ngrok.io";
+const String baseURL = "http://owidi.pythonanywhere.com/";
 int timeout = 100000;

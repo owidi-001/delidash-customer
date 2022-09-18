@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greens_veges/providers/user.provider.dart';
+import 'package:greens_veges/utils/routes.dart';
 import 'welcome.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,9 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(seconds: 3),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const WelcomeScreen())));
+        const Duration(seconds: 1),
+        initializeApp
+        );
   }
 
   @override
@@ -35,5 +38,27 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       )),
     );
+  }
+
+  initializeApp() async {
+    Future<String?> token = UserPreferences().getToken();
+
+    token.then(
+        (value) => {
+              if (value != null)
+                {
+                  // user authenticated
+                  Navigator.pushNamed(context, MyRoutes.dashboardRoute)
+                }
+              else
+                {
+                  // Route to first time use
+                  Navigator.pushNamed(context, MyRoutes.welcome)
+                }
+            }, onError: (error) {
+      if (kDebugMode) {
+        print("Splash error $error");
+      }
+    });
   }
 }

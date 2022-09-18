@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-import 'package:greens_veges/provider/user.provider.dart';
+import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import 'package:greens_veges/services/product.service.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:provider/provider.dart';
-import '../models/food.model.dart';
+import '../models/product.model.dart';
 import '../models/user.model.dart';
 import '../widgets/category_view.dart';
 import '../widgets/menu_minimal_view.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -25,7 +25,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     User? user = Provider.of<UserProvider>(context).user;
 
-    List<Product>? products = Provider.of<ProductProvider>(context).products.cast<Product>();
+    if (kDebugMode) {
+      print(user);
+    }
+
+    List<Product>? products =
+        Provider.of<ProductProvider>(context).products.cast<Product>();
     List<ProductCategory?> categories =
         Provider.of<ProductProvider>(context).categories;
 
@@ -84,12 +89,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               height: 4,
                             ),
                             Text(
-                              "${user?.firstName}",
+                              user.first_name ?? user.email.split("@")[0],
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600),
-                            ),
+                            )
                           ],
                         ),
                       )),
@@ -211,6 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(16),
               child: seeAllView(context, "Categories", products),
             ),
+            
             SizedBox(
                 height: 100,
                 width: size.width,

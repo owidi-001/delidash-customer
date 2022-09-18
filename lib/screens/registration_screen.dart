@@ -71,10 +71,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (value!.isEmpty) {
           return "Mobile number required";
         }
-        if (!RegExp(r"^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
-            .hasMatch(value)) {
-          return "Enter a valid kenyan number";
-        }
+        // if (!RegExp(r"^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
+        //     .hasMatch(value)) {
+        //   return "Enter a valid kenyan number";
+        // }
         return null;
       },
       textInputAction: TextInputAction.next,
@@ -143,7 +143,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     // register button
     final registerButton = Material(
       elevation: 5,
-      borderRadius: const BorderRadius.all(const Radius.circular(10)),
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
       color: AppTheme.primaryColor,
       child: MaterialButton(
         onPressed: () {
@@ -291,21 +291,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void doRegister() {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
+    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
     final form = _formkey.currentState;
 
     if (form!.validate()) {
       form.save();
+
       auth
-          .register("John", "Doe", _emailController.text,
-              _passwordConfirmController.text, _phoneController.text, false)
+          .register(
+        _emailController.text,
+        _phoneController.text,
+        _passwordConfirmController.text,
+      )
           .then((response) {
         if (response != null) {
           if (kDebugMode) {
             print(response);
           }
-          // User user = response['data'];
-          // Provider.of<UserProvider>(context, listen: false).setUser(user);
 
           Fluttertoast.showToast(
               msg: "Account creation Successful",
@@ -315,7 +317,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               backgroundColor: AppTheme.primaryColor,
               textColor: Colors.white,
               fontSize: 16.0);
-          Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+
+          // Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+          Future.delayed(const Duration(seconds: 5)).then((_) {
+            // Navigator.pushReplacementNamed(context, '/login');
+            Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
+
+            // auth.loggedInStatus = Status.LoggedIn;
+            auth.notify();
+          });
+
         } else {
           Fluttertoast.showToast(
               msg: "Account creation Failed",

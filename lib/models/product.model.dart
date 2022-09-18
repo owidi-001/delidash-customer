@@ -2,7 +2,7 @@
 class Product {
   final int id;
   final String label;
-  final double unit_price;
+  final double unitPrice;
   final String image;
   final String description;
   final int quantity;
@@ -13,7 +13,7 @@ class Product {
   Product(
       {required this.id,
       required this.label,
-      required this.unit_price,
+      required this.unitPrice,
       required this.image,
       required this.description,
       required this.quantity,
@@ -24,7 +24,7 @@ class Product {
     return Product(
         id: int.parse(json["id"]),
         label: json["name"],
-        unit_price: double.parse(json["unit_price"]),
+        unitPrice: double.parse(json["unit_price"]),
         image: json["image"],
         description: json["description"],
         quantity: int.parse(json["quantity"]),

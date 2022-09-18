@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/models/user.model.dart';
-import 'package:greens_veges/provider/user.provider.dart';
+import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/screens/cart.dart';
 import 'package:greens_veges/screens/products.dart';
 import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/screens/profileEdit.dart';
 import 'package:greens_veges/screens/login_screen.dart';
+import 'package:greens_veges/screens/splash.dart';
+import 'package:greens_veges/services/product.service.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:provider/provider.dart';
 import 'screens/dashboard.dart';
@@ -23,57 +26,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<User?> getUserData() => UserPreferences().getUser();
 
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => AuthProvider()),
-          ChangeNotifierProvider(create: (_) => UserProvider())
+          ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => ProductProvider()),
+          ChangeNotifierProvider(create: (_) => CartModel()),
         ],
         child: MaterialApp(
           title: "Mealio",
           theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
-          // initialRoute: "/",
-          home: FutureBuilder(
-              future: getUserData(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator();
-                  default:
-                    if (snapshot.hasError) {
-                      return Text("Error ${snapshot.error}");
-                    } else if (snapshot.data == null) {
-                      return const LoginScreen();
-                    } else {
-                      UserPreferences().removeUser();
-                    }
-                    // TODO: Set to splash screen ie new user intro
-                    return DashboardScreen();
-                }
-              }),
+          initialRoute: "/",
           routes: {
-            // "/": (context) => const SplashScreen(),
+            "/": (context) => const SplashScreen(),
             MyRoutes.welcome: (context) => const WelcomeScreen(),
             MyRoutes.register: (context) => const RegistrationScreen(),
             MyRoutes.login: (context) => const LoginScreen(),
 
-            MyRoutes.dashboardRoute: ((context) => DashboardScreen()),
+            MyRoutes.dashboardRoute: ((context) => const DashboardScreen()),
 
             MyRoutes.foodListRoute: (context) => const FoodListScreen(),
-            // MyRoutes.foodDetailRoute: (context) => FoodDetailScreen(
-            //       food: Food(
-            //           imagePath: "assets/images/carrots.png",
-            //           name: "name",
-            //           price: "price",
-            //           category: FoodCategory(
-            //               imagePath: "${baseUrl}fruits.png", label: "Fruits"),
-            //           description: ''),
-            //     ),
             MyRoutes.cartRoute: (context) => const CartScreen(),
-            MyRoutes.profileRoute: (context) => const Profile(),
-            MyRoutes.profileEditRoute: (context) => const ProfileEdit(),
+            // MyRoutes.profileRoute: (context) => const Profile(),
+            // MyRoutes.profileEditRoute: (context) => const ProfileEdit(),
           },
         ));
   }

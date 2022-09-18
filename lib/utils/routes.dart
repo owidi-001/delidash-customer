@@ -1,3 +1,5 @@
+import 'package:greens_veges/utils/constants.dart';
+
 class MyRoutes {
   // auth routes
   static const String welcome = "/welcome";
@@ -17,7 +19,6 @@ class MyRoutes {
 
 
 class AppUrl {
-  static const String baseURL = "https://75c6-102-68-78-175.ap.ngrok.io";
 
   // user auth
   static const String login = "$baseURL/auth/login/";

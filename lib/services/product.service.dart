@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:greens_veges/models/food.model.dart';
+import 'package:greens_veges/models/product.model.dart';
 import 'package:greens_veges/utils/routes.dart';
 import 'package:http/http.dart';
 
@@ -7,19 +7,20 @@ import 'dart:async';
 import 'dart:convert';
 
 enum Status {
-  ProductsNotLoaded,
-  ProductsLoading,
-  ProductsLoaded,
-  CategoriesNotLoaded,
-  CategoriesLoading,
-  CategoriesLoaded
+  productsNotLoaded,
+  productsLoading,
+  productsLoaded,
+  categoriesNotLoaded,
+  categoriesLoading,
+  categoriesLoaded
 }
 
 class ProductProvider with ChangeNotifier {
-  late List<Product?> _products;
-  late List<ProductCategory?> _categories;
-  late Map<String, List<Product>>
-      _productCategories; // Products list per category
+
+  List<Product?> _products=[];
+  List<ProductCategory?> _categories=[];
+  Map<String, List<Product>>
+      _productCategories={}; // Products list per category
 
   List<Product?> get products => _products;
   List<ProductCategory?> get categories => _categories;
@@ -41,8 +42,8 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Status _productLoadedStatus = Status.ProductsNotLoaded;
-  Status _categoryLoadedStatus = Status.CategoriesNotLoaded;
+  Status _productLoadedStatus = Status.productsNotLoaded;
+  Status _categoryLoadedStatus = Status.categoriesNotLoaded;
 
   Status get productLoadedStatus => _productLoadedStatus;
   Status get categoryLoadedStatus => _categoryLoadedStatus;
@@ -51,7 +52,7 @@ class ProductProvider with ChangeNotifier {
   Future<Map<String, dynamic>> loadCategories() async {
     Map<String, dynamic> result;
 
-    _categoryLoadedStatus = Status.CategoriesLoading;
+    _categoryLoadedStatus = Status.categoriesLoading;
     notifyListeners();
 
     Response response = await get(Uri.parse(AppUrl.listCategories));
@@ -74,7 +75,7 @@ class ProductProvider with ChangeNotifier {
         categories.add(category);
       }
 
-      _categoryLoadedStatus = Status.CategoriesLoaded;
+      _categoryLoadedStatus = Status.categoriesLoaded;
       notifyListeners();
 
       result = {
@@ -83,7 +84,7 @@ class ProductProvider with ChangeNotifier {
         'categories': categories
       };
     } else {
-      _categoryLoadedStatus = Status.CategoriesNotLoaded;
+      _categoryLoadedStatus = Status.categoriesNotLoaded;
       notifyListeners();
 
       result = {
@@ -99,7 +100,7 @@ class ProductProvider with ChangeNotifier {
   Future<Map<String, dynamic>> loadProducts() async {
     Map<String, dynamic> result;
 
-    _productLoadedStatus = Status.ProductsLoading;
+    _productLoadedStatus = Status.productsLoading;
     notifyListeners();
 
     Response response = await get(Uri.parse(AppUrl.listProducts));
@@ -126,7 +127,7 @@ class ProductProvider with ChangeNotifier {
         print(products);
       }
 
-      _productLoadedStatus = Status.ProductsLoaded;
+      _productLoadedStatus = Status.productsLoaded;
       notifyListeners();
 
       result = {
@@ -135,7 +136,7 @@ class ProductProvider with ChangeNotifier {
         'products': products
       };
     } else {
-      _productLoadedStatus = Status.ProductsNotLoaded;
+      _productLoadedStatus = Status.productsNotLoaded;
       notifyListeners();
 
       result = {

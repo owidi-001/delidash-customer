@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/services/product.service.dart';
 import 'package:provider/provider.dart';
-import '../models/food.model.dart';
+import '../models/product.model.dart';
 import '../widgets/product_card.dart';
 
 class FoodListScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
             return FoodCardWidget(
               image: products[index]!.image,
               name: products[index]!.label,
-              price: products[index]!.unit_price,
+              price: products[index]!.unitPrice,
               onTapCallback: () {
                 // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
                 //     arguments: products[index]);

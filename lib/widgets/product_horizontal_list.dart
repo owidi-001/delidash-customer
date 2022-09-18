@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/widgets/product_card_dashboard.dart';
 
-import '../models/food.model.dart';
+import '../models/product.model.dart';
 
 Widget productHorizontalList({required List<Product> products}) {
   return ListView.builder(
@@ -14,7 +14,7 @@ Widget productHorizontalList({required List<Product> products}) {
       return DashboardFoodCardWidget(
         imagePath: products[index].image,
         name: products[index].label,
-        price: products[index].unit_price,
+        price: products[index].unitPrice,
         onTapCallback: () {
           // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
           //     arguments: products[index]);

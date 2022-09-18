@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 
-import '../models/food.model.dart';
+import '../models/product.model.dart';
 import 'product_card.dart';
 
 Widget productGrids({required List<Product> products}) {
@@ -26,7 +26,7 @@ Widget productGrids({required List<Product> products}) {
         child: FoodCardWidget(
           image: products[index].image,
           name: products[index].label,
-          price: products[index].unit_price,
+          price: products[index].unitPrice,
           onTapCallback: () {
             // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
             //     arguments: products[index]);

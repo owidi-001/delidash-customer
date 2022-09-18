@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/models/user.model.dart';
-import 'package:greens_veges/provider/user.provider.dart';
+import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:provider/provider.dart';
 import '../utils/routes.dart';
@@ -200,11 +200,14 @@ class _LoginScreenState extends State<LoginScreen> {
           auth.login(_emailController.text, _passwordController.text);
 
       successfulMessage.then((response) {
-        if (response['status']) {
+        if (response['status'] == true) {
           User user = response['user'];
           Provider.of<UserProvider>(context, listen: false).setUser(user);
-
+          if (kDebugMode) {
+            print("logged user $user");
+          }
           Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+
           if (kDebugMode) {
             print("Dashboard pushed");
           }
@@ -227,6 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fontSize: 16.0);
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            elevation: 2,
             content: Text(response['message']['message'].toString()),
             duration: const Duration(seconds: 3),
           ));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
-import '../models/food.model.dart';
+import '../models/product.model.dart';
 import '../utils/routes.dart';
 
 class FoodDetailScreen extends StatefulWidget {
@@ -141,7 +141,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Text("\$ ${widget.product.unit_price}/Kg",
+                  Text("\$ ${widget.product.unitPrice}/Kg",
                       style: const TextStyle(
                           color: AppTheme.redColor,
                           fontSize: 20,
