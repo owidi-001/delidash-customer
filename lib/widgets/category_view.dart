@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/widgets/product_horizontal_list.dart';
 
-import '../models/product.model.dart';
 import 'category_card.dart';
 import 'column_builder.dart';
 import 'menu_minimal_view.dart';
 
 // Tabbed category list views
-Widget categoryCardListView(List<ProductCategory?> categories) {
+Widget categoryCardListView(List<ProductCategory> categories) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,
     shrinkWrap: true,

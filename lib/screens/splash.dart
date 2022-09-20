@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/user.provider.dart';
-import 'package:greens_veges/utils/routes.dart';
+import 'package:greens_veges/utility/routes.dart';
 import 'welcome.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     token.then(
         (value) => {
-              if (value != null)
+              if (value!.isNotEmpty)
                 {
                   // user authenticated
                   Navigator.pushNamed(context, MyRoutes.dashboardRoute)

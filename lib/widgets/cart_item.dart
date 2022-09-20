@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/cart.model.dart';
+import 'package:greens_veges/domain/cart.model.dart';
+
 
 class CartItemWidget extends StatefulWidget {
   final CartItemModel item;

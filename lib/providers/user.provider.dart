@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:greens_veges/models/user.model.dart';
-import 'package:http/retry.dart';
+import 'package:greens_veges/domain/user.model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
@@ -29,7 +28,6 @@ class UserPreferences {
     await prefs.then((value) => value.setString("token", token));
   }
 
-
   Future<User?> getUser() async {
     final data = await prefs.then((value) => value.getString('USER'));
 
@@ -42,8 +40,11 @@ class UserPreferences {
     return null;
   }
 
-  Future<String?> getToken() async {
-    final data = await prefs.then((value) => value.getString("token"));
+  Future<String> getToken() async {
+    String data = await prefs.then((value) => value.getString("token")) ?? "";
+    if (kDebugMode) {
+      print("Retrieved token is $data");
+    }
     return data;
   }
 

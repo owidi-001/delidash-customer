@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/screens/product_detail.dart';
-import 'package:greens_veges/services/product.service.dart';
+import 'package:greens_veges/widgets/product_card.dart';
 import 'package:provider/provider.dart';
-import '../models/product.model.dart';
-import '../widgets/product_card.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({Key? key}) : super(key: key);

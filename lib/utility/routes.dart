@@ -1,4 +1,4 @@
-import 'package:greens_veges/utils/constants.dart';
+import 'package:greens_veges/utility/constants.dart';
 
 class MyRoutes {
   // auth routes

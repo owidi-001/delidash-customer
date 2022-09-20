@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
 
-import '../utils/routes.dart';
+import '../utility/routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:greens_veges/models/product.model.dart';
+import 'package:greens_veges/domain/product.model.dart';
 
 class CartModel extends ChangeNotifier {
   /// Internal, private state of the cart.

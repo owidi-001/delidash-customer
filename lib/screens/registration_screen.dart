@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/domain/user.model.dart';
+import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
-import 'package:greens_veges/utils/routes.dart';
+import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/utility/validators.dart';
+import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -36,25 +40,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onSaved: (value) {
         _emailController.value;
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Email field required!";
-        }
-        if (!RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(value)) {
-          return "Enter a valid email address";
-        }
-        return null;
-      },
+      validator: ((value) => validEmail(_emailController.text)),
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.mail),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Enter your email address",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
+      decoration: buildInputDecoration("Enter your email address", Icons.mail),
     );
 
     // Phone field
@@ -67,24 +55,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onSaved: (value) {
         _phoneController.value;
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Mobile number required";
-        }
-        // if (!RegExp(r"^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
-        //     .hasMatch(value)) {
-        //   return "Enter a valid kenyan number";
-        // }
-        return null;
-      },
+      validator: ((value) => validPhone(_phoneController.text)),
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.phone),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Enter your mobile number",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
+      decoration: buildInputDecoration("Enter your mobile number", Icons.phone),
     );
 
     // password field
@@ -93,26 +66,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       obscureText: true,
       controller: _passwordController,
       keyboardType: TextInputType.visiblePassword,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Password field required!";
-        }
-        if (!RegExp(r"^.{8,}$").hasMatch(value)) {
-          return "Enter a strong password (> 8 characters)";
-        }
-        return null;
-      },
+      validator: ((value) => validPassword(_passwordController.text)),
       onSaved: (value) {
         _passwordController.value;
       },
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Enter your password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
+      decoration: buildInputDecoration("Enter your password", Icons.lock),
     );
 
     // password field
@@ -125,40 +84,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         _passwordConfirmController.value;
       },
       textInputAction: TextInputAction.done,
-      validator: (value) {
-        if (value != _passwordController.text) {
-          return "Passwords do not match";
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Confirm your password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
-
-    // register button
-    final registerButton = Material(
-      elevation: 5,
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      color: AppTheme.primaryColor,
-      child: MaterialButton(
-        onPressed: () {
-          doRegister();
-        },
-        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        minWidth: MediaQuery.of(context).size.width,
-        child: const Text(
-          "Sign Up",
-          style: TextStyle(
-              color: AppTheme.whiteColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-        ),
-      ),
+      validator: ((value) => passwordMatch(
+          _passwordController.text, _passwordConfirmController.text)),
+      decoration: buildInputDecoration("Confirm your password", Icons.lock),
     );
 
     return Scaffold(
@@ -255,7 +183,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  registerButton,
+                  submitButton("Register", doRegister),
                   const SizedBox(
                     height: 24,
                   ),
@@ -292,6 +220,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void doRegister() {
     AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
+
     final form = _formkey.currentState;
 
     if (form!.validate()) {
@@ -304,49 +233,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         _passwordConfirmController.text,
       )
           .then((response) {
-        if (response != null) {
+        if (response['status'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'Account creation Successfull',
+                style: TextStyle(color: AppTheme.whiteColor),
+              ),
+              duration: Duration(seconds: 3),
+              backgroundColor: AppTheme.primaryColor,
+              padding: EdgeInsets.all(16.0),
+              elevation: 10,
+              behavior: SnackBarBehavior.floating));
+
+          User user = response["data"];
+
+          Provider.of<UserProvider>(context, listen: false).setUser(user);
           if (kDebugMode) {
-            print(response);
+            print("logged user $user");
           }
 
-          Fluttertoast.showToast(
-              msg: "Account creation Successful",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: AppTheme.primaryColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
-
-          // Navigator.pushNamed(context, MyRoutes.dashboardRoute);
-          Future.delayed(const Duration(seconds: 5)).then((_) {
-            // Navigator.pushReplacementNamed(context, '/login');
-            Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
-
-            // auth.loggedInStatus = Status.LoggedIn;
-            auth.notify();
-          });
-
+          Navigator.pushNamed(context, MyRoutes.dashboardRoute);
         } else {
-          Fluttertoast.showToast(
-              msg: "Account creation Failed",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: AppTheme.redColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
-
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(response.toString()),
-            duration: const Duration(seconds: 3),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'Account creation Failed',
+              style: TextStyle(color: AppTheme.whiteColor),
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: AppTheme.redColor,
+            padding: EdgeInsets.all(16.0),
+            elevation: 10,
+            behavior: SnackBarBehavior.floating,
           ));
+
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text(response.toString()),
+          //   duration: const Duration(seconds: 3),
+          //   elevation: 10,
+          //   behavior: SnackBarBehavior.floating,
+          // ));
         }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid Form Please Complete the form properly'),
+        content: Text(
+          'Invalid Form Please Complete the form properly',
+          style: TextStyle(color: AppTheme.whiteColor),
+        ),
         duration: Duration(seconds: 3),
+        backgroundColor: AppTheme.redColor,
+        padding: EdgeInsets.all(16.0),
+        elevation: 10,
+        behavior: SnackBarBehavior.floating,
       ));
     }
   }

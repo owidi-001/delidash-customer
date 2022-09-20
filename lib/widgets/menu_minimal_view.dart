@@ -1,10 +1,9 @@
 // Returns widget view for see all belonging to best selling
 import 'package:flutter/material.dart';
-import 'package:greens_veges/models/product.model.dart';
-import 'package:greens_veges/utils/routes.dart';
+import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/utility/routes.dart';
 
 import '../constants/app_theme.dart';
-// import '../utils/routes.dart';
 
 Widget seeAllView(BuildContext context, String name, List<Product>? products) {
   return Row(

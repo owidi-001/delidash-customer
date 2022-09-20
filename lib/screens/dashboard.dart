@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/domain/user.model.dart';
+import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import 'package:greens_veges/services/product.service.dart';
-import 'package:greens_veges/utils/routes.dart';
+import 'package:greens_veges/utility/routes.dart';
 import 'package:provider/provider.dart';
-import '../models/product.model.dart';
-import '../models/user.model.dart';
 import '../widgets/category_view.dart';
 import '../widgets/menu_minimal_view.dart';
 
@@ -29,13 +30,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print(user);
     }
 
-    List<Product>? products =
+    List<Product> products =
         Provider.of<ProductProvider>(context).products.cast<Product>();
-    List<ProductCategory?> categories =
-        Provider.of<ProductProvider>(context).categories;
 
-    Map<String, List<Product>> productCategories =
-        Provider.of<ProductProvider>(context).productCategories;
+    // List<ProductCategory> categories =
+    //     Provider.of<ProductProvider>(context).categories;
+    Future<List<ProductCategory>> categories =
+        ProductService().fetchProductCategories();
 
     var greetings = greetingMessage();
 
@@ -89,7 +90,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               height: 4,
                             ),
                             Text(
-                              user.first_name ?? user.email.split("@")[0],
+                              // user.first_name ?? user.email.split("@")[0],
+                              "${user.first_name!.isEmpty ? user.email.split("@")[0] : user.first_name}",
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -216,19 +218,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(16),
               child: seeAllView(context, "Categories", products),
             ),
-            
+
+            // Categories list
+
             SizedBox(
-                height: 100,
-                width: size.width,
-                child: categoryCardListView(categories)),
+              height: 100,
+              width: size.width,
+              child: FutureBuilder<List<ProductCategory>?>(
+                future: categories,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: AppTheme.primaryColor,
+                    ));
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child:
+                            Text('Failed to load categories ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return categoryCardListView(snapshot.data!);
+                    } else {
+                      return const Text('Empty data');
+                    }
+                  } else {
+                    return Text('State: ${snapshot.connectionState}');
+                  }
+                },
+              ),
+            ),
+
+            //  categoryCardListView(categories)),
+
             const SizedBox(
               height: 24,
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: categoryView(productCategories),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: categoryView(productCategories),
+            // )
           ]),
         ),
       ),

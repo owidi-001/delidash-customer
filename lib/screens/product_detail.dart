@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/utility/routes.dart';
 
-import '../models/product.model.dart';
-import '../utils/routes.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   

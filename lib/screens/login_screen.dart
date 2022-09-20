@@ -2,11 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:greens_veges/constants/app_theme.dart';
-import 'package:greens_veges/models/user.model.dart';
+import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
+import 'package:greens_veges/utility/validators.dart';
+import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:provider/provider.dart';
-import '../utils/routes.dart';
+import '../utility/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -34,25 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) {
         _emailController.value;
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Email field required!";
-        }
-        if (!RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(value)) {
-          return "Enter a valid email address";
-        }
-        return null;
-      },
+      validator: ((value) => validEmail(_emailController.text)),
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.mail),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Email",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
+      decoration: buildInputDecoration("Email", Icons.mail),
     );
 
     // password field
@@ -64,35 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) {
         _passwordController.value;
       },
+      validator: (value) => validPassword(_passwordController.text),
       textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
-
-    // login button
-    final loginButton = Material(
-      elevation: 5,
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      color: AppTheme.primaryColor,
-      child: MaterialButton(
-        onPressed: () {
-          doLogin();
-        },
-        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-        minWidth: MediaQuery.of(context).size.width,
-        child: const Text(
-          "Login",
-          style: TextStyle(
-              color: AppTheme.whiteColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-        ),
-      ),
+      decoration: buildInputDecoration("Password", Icons.lock),
     );
 
     return Scaffold(
@@ -154,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  loginButton,
+                  submitButton("Login", doLogin),
                   const SizedBox(
                     height: 24,
                   ),
@@ -203,40 +163,52 @@ class _LoginScreenState extends State<LoginScreen> {
         if (response['status'] == true) {
           User user = response['user'];
           Provider.of<UserProvider>(context, listen: false).setUser(user);
-          if (kDebugMode) {
-            print("logged user $user");
-          }
+
           Navigator.pushNamed(context, MyRoutes.dashboardRoute);
 
-          if (kDebugMode) {
-            print("Dashboard pushed");
-          }
-          Fluttertoast.showToast(
-              msg: "Login Successful",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'Login Success',
+                style: TextStyle(color: AppTheme.whiteColor),
+              ),
+              duration: Duration(seconds: 3),
               backgroundColor: AppTheme.primaryColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
+              padding: EdgeInsets.all(16.0),
+              elevation: 10,
+              behavior: SnackBarBehavior.floating));
         } else {
-          Fluttertoast.showToast(
-              msg: "Login Failed!",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: AppTheme.redColor,
-              textColor: Colors.white,
-              fontSize: 16.0);
-
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            elevation: 2,
-            content: Text(response['message']['message'].toString()),
-            duration: const Duration(seconds: 3),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'Login Failed',
+              style: TextStyle(color: AppTheme.whiteColor),
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: AppTheme.redColor,
+            padding: EdgeInsets.all(16.0),
+            elevation: 10,
+            behavior: SnackBarBehavior.floating,
           ));
+
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   elevation: 2,
+          //   content: Text(response['message']['message'].toString()),
+          //   duration: const Duration(seconds: 3),
+          // ));
         }
       });
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'Invalid form input!',
+              style: TextStyle(color: AppTheme.whiteColor),
+            ),
+            duration: Duration(seconds: 3),
+            backgroundColor: AppTheme.redColor,
+            padding: EdgeInsets.all(16.0),
+            elevation: 10,
+            behavior: SnackBarBehavior.floating,
+          ));
+
       if (kDebugMode) {
         print("form is invalid");
       }
