@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
                       Provider.of<UserProvider>(context, listen: false)
                           .setUser(user);
-                      Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+                      Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
                     }
                   })
 
@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
               else
                 {
                   // Route to first time use
-                  Navigator.pushNamed(context, MyRoutes.welcome)
+                  Navigator.pushReplacementNamed(context, MyRoutes.welcome)
                 }
             }, onError: (error) {
       if (kDebugMode) {

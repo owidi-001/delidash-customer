@@ -252,7 +252,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             print("logged user $user");
           }
 
-          Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+          Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(

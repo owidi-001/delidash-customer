@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
@@ -21,18 +22,25 @@ class ProductService with ChangeNotifier {
     _productLoadedStatus = Status.productsLoading;
     notifyListeners();
 
-    final response = await get(Uri.parse(AppUrl.listProducts));
+    String token = await UserPreferences().getToken();
+
+    final response = await get(Uri.parse(AppUrl.listProducts),
+        headers: {"Authorization": "Token $token"});
+
+    if (kDebugMode) {
+      print("The Products load response status is ${response.statusCode} ");
+    }
 
     if (response.statusCode == 200) {
-
       final parsed = json.decode(response.body);
 
-      var products =
+      List<Product> products =
           parsed.map<Product>((json) => Product.fromJson(json)).toList();
 
       if (kDebugMode) {
-        print("The loaded Products");
+        print("The loaded Products $products");
       }
+
       ProductProvider().setProducts(products);
 
       _productLoadedStatus = Status.productsLoaded;

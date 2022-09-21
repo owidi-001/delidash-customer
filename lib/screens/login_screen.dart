@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Store token to shared preferences
           UserPreferences().saveToken(user.token);
 
-          Navigator.pushNamed(context, MyRoutes.dashboardRoute);
+          Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text(

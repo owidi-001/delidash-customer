@@ -35,6 +35,7 @@ Widget categoryView(Map<String, List<Product>> categoricalFoods) {
           const SizedBox(
             height: 24,
           ),
+          
           SizedBox(
             height: 200,
             width: double.maxFinite,

@@ -9,7 +9,6 @@ import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/category.service.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
-import 'package:greens_veges/services/product.service.dart';
 import 'package:greens_veges/utility/routes.dart';
 import 'package:provider/provider.dart';
 import '../widgets/category_view.dart';
@@ -27,16 +26,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     User user = Provider.of<UserProvider>(context).user;
 
-    if (kDebugMode) {
-      print(user);
-    }
+    // Load Products
+    List<Product> products = ProductProvider().products;
 
-    List<Product> products =
-        Provider.of<ProductProvider>(context).products.cast<Product>();
-
+    // Load categories
     Future<List<ProductCategory>> categories =
         ProductCategoryService().fetchProductCategories();
 
+    // Fetch products categorically
+    Map<String, List<Product>> productsCategorically =
+        ProductProvider().getFoodsCategorically();
+
+    if (kDebugMode) {
+      print("Loaded products $products");
+      print("Loaded categories ${categories.then((value) => value)}");
+      print("Loaded products categorically $productsCategorically");
+    }
+
+    if (kDebugMode) {
+      print(productsCategorically);
+    }
     var greetings = greetingMessage();
 
     Size size = MediaQuery.of(context).size;
@@ -60,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     flex: 1,
                     child: InkWell(
                       onTap: () => {
-                        Navigator.pushReplacementNamed(
+                        Navigator.pushNamed(
                             context, MyRoutes.profileRoute)
                       },
                       child: Image.asset(
@@ -219,47 +228,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
 
             // Categories list
-
             SizedBox(
               height: 100,
               width: size.width,
-              child: FutureBuilder<List<ProductCategory>?>(
-                future: categories,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      color: AppTheme.primaryColor,
-                    ));
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      return Padding(
-                        padding: const EdgeInsets.all(16),
-                        child:
-                            Text('Failed to load categories ${snapshot.error}'),
-                      );
-                    } else if (snapshot.hasData) {
-                      return categoryCardListView(snapshot.data!);
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+                child: FutureBuilder<List<ProductCategory>?>(
+                  future: categories,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: AppTheme.primaryColor,
+                      ));
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Text(
+                            'Failed to load categories ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return categoryCardListView(snapshot.data!);
+                      } else {
+                        return const Text('Empty data');
+                      }
                     } else {
-                      return const Text('Empty data');
+                      return Text('State: ${snapshot.connectionState}');
                     }
-                  } else {
-                    return Text('State: ${snapshot.connectionState}');
-                  }
-                },
+                  },
+                ),
               ),
             ),
-
-            //  categoryCardListView(categories)),
 
             const SizedBox(
               height: 24,
             ),
 
-            // Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: categoryView(productCategories),
-            // )
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: categoryView(productsCategorically),
+            )
           ]),
         ),
       ),

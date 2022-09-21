@@ -58,7 +58,6 @@ class AuthProvider with ChangeNotifier {
 
       // // Save user to provider
       // UserProvider().setUser(authUser);
-      
 
       _loggedInStatus = Status.loggedIn;
       notifyListeners();
@@ -136,5 +135,10 @@ class AuthProvider with ChangeNotifier {
       print('the error is ${error.detail}');
     }
     return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+  }
+
+  // Log out
+  void logout() {
+    UserPreferences().removeUser();
   }
 }

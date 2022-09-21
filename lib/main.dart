@@ -6,6 +6,8 @@ import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/screens/cart.dart';
 import 'package:greens_veges/screens/products_list_screen.dart';
 import 'package:greens_veges/screens/login_screen.dart';
+import 'package:greens_veges/screens/profile.dart';
+import 'package:greens_veges/screens/profileEdit.dart';
 import 'package:greens_veges/screens/splash.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:provider/provider.dart';
@@ -45,8 +47,8 @@ class MyApp extends StatelessWidget {
 
             MyRoutes.foodListRoute: (context) => const FoodListScreen(),
             MyRoutes.cartRoute: (context) => const CartScreen(),
-            // MyRoutes.profileRoute: (context) => const Profile(),
-            // MyRoutes.profileEditRoute: (context) => const ProfileEdit(),
+            MyRoutes.profileRoute: (context) => const Profile(),
+            MyRoutes.profileEditRoute: (context) => const ProfileEdit(),
           },
         ));
   }
