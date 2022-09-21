@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 enum Status {
   notLoggedIn,
@@ -47,15 +50,16 @@ class AuthProvider with ChangeNotifier {
 
       User authUser = User.fromJson(responseData);
 
-      UserPreferences().saveUser(authUser);
+      // //save user
+      // UserPreferences().saveUser(authUser);
 
-      if (kDebugMode) {
-        print("User saved to preferences");
-      }
-      UserProvider().setUser(authUser);
-      if (kDebugMode) {
-        print("User set to provider");
-      }
+      // //save token
+      // UserPreferences().saveToken(authUser.token);
+
+      // // Save user to provider
+      // UserProvider().setUser(authUser);
+      
+
       _loggedInStatus = Status.loggedIn;
       notifyListeners();
 
@@ -75,7 +79,8 @@ class AuthProvider with ChangeNotifier {
   // end login
 
   // register
-  Future<Map<String, dynamic>> register(String email, String phone, String password) async {
+  Future<Map<String, dynamic>> register(
+      String email, String phone, String password) async {
     final Map<String, dynamic> apiBodyData = {
       'email': email,
       'phone_number': phone,
@@ -104,15 +109,12 @@ class AuthProvider with ChangeNotifier {
         print("User object created from reg data $authUser");
       }
 
-      // Clear preferences data
-      UserPreferences().removeUser();
-
       // now we will create shared preferences and save data
       UserPreferences().saveUser(authUser);
-      
+      UserPreferences().saveToken(authUser.token);
+
       // Set user to provider
       UserProvider().setUser(authUser);
-
 
       result = {
         'status': true,

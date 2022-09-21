@@ -29,7 +29,7 @@ String? validEmail(String email) {
 String? validPhone(String phone) {
   String? message;
 
-  const pattern = r"^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$";
+  const pattern = r"^(\+254|0)\d{9}$";
   final regExp = RegExp(pattern);
 
   // Null or empty phone is invalid

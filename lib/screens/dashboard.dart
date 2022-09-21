@@ -6,6 +6,7 @@ import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/providers/user.provider.dart';
+import 'package:greens_veges/services/category.service.dart';
 import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/services/location.service.dart';
 import 'package:greens_veges/services/product.service.dart';
@@ -24,7 +25,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    User? user = Provider.of<UserProvider>(context).user;
+    User user = Provider.of<UserProvider>(context).user;
 
     if (kDebugMode) {
       print(user);
@@ -33,10 +34,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     List<Product> products =
         Provider.of<ProductProvider>(context).products.cast<Product>();
 
-    // List<ProductCategory> categories =
-    //     Provider.of<ProductProvider>(context).categories;
     Future<List<ProductCategory>> categories =
-        ProductService().fetchProductCategories();
+        ProductCategoryService().fetchProductCategories();
 
     var greetings = greetingMessage();
 

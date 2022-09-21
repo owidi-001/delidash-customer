@@ -50,7 +50,7 @@ class ProductCategory {
     return ProductCategory(
         id: json["id"],
         name: json["name"],
-        icon: json["image"],
+        icon: json["icon"],
         );
   }
 }

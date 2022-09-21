@@ -5,6 +5,7 @@ import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
+import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:provider/provider.dart';
@@ -161,8 +162,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
       successfulMessage.then((response) {
         if (response['status'] == true) {
+
+          // TODO! Concerns(late initializer)
+          // Below commented is not necessary
           User user = response['user'];
+
+          // Update provider to read user
           Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+          // Store user to shared preferences
+          UserPreferences().saveUser(user);
+          
+          // Store token to shared preferences
+          UserPreferences().saveToken(user.token);
 
           Navigator.pushNamed(context, MyRoutes.dashboardRoute);
 

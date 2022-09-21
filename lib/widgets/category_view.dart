@@ -16,7 +16,7 @@ Widget categoryCardListView(List<ProductCategory> categories) {
     itemBuilder: (BuildContext context, int index) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: categoryCardView(categories[index]!.icon, categories[index]!.name),
+        child: categoryCardView(categories[index].icon, categories[index].name),
       );
     },
   );

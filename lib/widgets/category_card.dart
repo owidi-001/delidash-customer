@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/utility/constants.dart';
 
 import '../constants/app_theme.dart';
 
@@ -10,8 +11,12 @@ Widget categoryCardView(String imagePath, String catName) {
         radius: 32,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Image.asset(
-            imagePath,
+          // child: Image.asset(
+          //   imagePath,
+          //   scale: 4.0,
+          // ),
+          child: Image.network(
+            "$baseURL$imagePath",
             scale: 4.0,
           ),
         ),
