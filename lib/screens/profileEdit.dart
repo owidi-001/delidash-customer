@@ -112,7 +112,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           backgroundColor: Colors.white,
           leading: InkWell(
               onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.arrow_back_ios)),
+              child: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,)),
         ),
         body: SingleChildScrollView(
           // form fields with details

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
+import 'package:greens_veges/widgets/category_card_skeleton.dart';
 import 'package:greens_veges/widgets/category_view.dart';
 import 'package:greens_veges/widgets/product_card.dart';
+import 'package:greens_veges/widgets/product_card_skeleton.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/status.dart';
@@ -13,7 +15,6 @@ class ProductListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     var appProvider = Provider.of<MealioApplicationProvider>(context);
 
     return Scaffold(
@@ -26,12 +27,19 @@ class ProductListScreen extends StatelessWidget {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Icon(Icons.arrow_back_ios)),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: AppTheme.primaryColor,
+          ),
+          iconSize: 24,
+          splashRadius: 40,
+          splashColor: AppTheme.gradientColor,
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(
@@ -67,17 +75,43 @@ class ProductListScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                    child: categoryCardListView(appProvider.categories)),
+                    child: appProvider.categoriesStatus == ServiceStatus.loading
+                        ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0),
+                              child: categorySkeletonLoader(),
+                            );
+                          },
+                        )
+                        : categoryCardListView(appProvider.categories)),
               ),
             ),
-const SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: SizedBox(height: 24),
             ),
             //  Product grid
-            appProvider.categoriesStatus == ServiceStatus.loading ||
-                    appProvider.productsStatus == ServiceStatus.loading
-                ? const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()))
+            appProvider.productsStatus == ServiceStatus.loading
+                ? SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return productSkeletonLoader();
+                      },
+                      childCount: 6,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.0,
+                    ),
+                  )
                 : SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -95,7 +129,8 @@ const SliverToBoxAdapter(
                       },
                       childCount: appProvider.products.length,
                     ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,

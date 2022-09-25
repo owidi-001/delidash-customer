@@ -1,18 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:greens_veges/domain/location.model.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 
-class Location {
-  late String address;
-  // double latitude;
-  // double longitude;
-
-  // Location(
-  //     {required this.address, required this.latitude, required this.longitude});
-
+class LocationService {
   Future<Position> getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -36,28 +31,37 @@ class Location {
     );
   }
 
-  Future<String> getAddressFromLatLong(Position position) async {
+  Future<String?> getAddressFromLatLong(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    if (kDebugMode) {
-      print("The placemarks are: ");
-      print(placemarks[0].name);
-    }
+    // if (kDebugMode) {
+    //   print("The placemarks are: ");
+    //   print(placemarks[0].name);
+    // }
+
     Placemark place = placemarks[0];
     // address ='${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    address = '${place.name}';
+    String? address = place.name;
 
     return address;
   }
 
-  Future<String> getAddress() async {
-    return getAddressFromLatLong(await getGeoLocationPosition());
-  }
-}
+  Future<UserLocation> fetchLocation() async {
+    late UserLocation location = UserLocation(address: "My Location");
 
-Future<String> getAddress() {
-  return Future.delayed(const Duration(seconds: 5),(){
-    return Location().getAddress();
-  });
+    var position = await getGeoLocationPosition();
+
+    var address = await getAddressFromLatLong(position);
+
+    if (address != null) {
+      // location=Location(address: address);
+      location = UserLocation(address: address);
+
+      // Update provider to read location
+      LocationProvider().setLocation(location);
+    }
+
+    return location;
+  }
 }

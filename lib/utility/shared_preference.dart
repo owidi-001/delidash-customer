@@ -19,9 +19,9 @@ class UserPreferences {
     String? authToken = prefs.getString(TOKEN);
 
     if (user != null && authToken != null) {
-      if (kDebugMode) {
-        print(json.decode(user));
-      }
+      // if (kDebugMode) {
+      //   print(json.decode(user));
+      // }
       return LoginData(
         user: User.fromJson(
           json.decode(user),

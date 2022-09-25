@@ -4,6 +4,7 @@ import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class ProductCardWidget extends StatelessWidget {
@@ -19,6 +20,10 @@ class ProductCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+
+    // Check if product is already added to cart
+    bool inCart = cartProvider
+        .productInCart(CartItemModel(product: product, quantity: 1));
 
     return InkWell(
       onTap: () => onTapCallback(),
@@ -60,19 +65,35 @@ class ProductCardWidget extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
-                    InkWell(
-                      onTap: (() {
-                        // check if item in cart
-                        
-                        cartProvider.add(CartItemModel(product: product, quantity: 1));
-                        // add item
-                      }),
-                      child: Image.asset(
-                        "assets/images/add_icon.png",
-                        width: 36,
-                        height: 36,
-                      ),
-                    )
+                    inCart
+                        ? InkWell(
+                            onTap: (() {
+                              // check if item in cart
+                              showMessage(
+                                  true, "${product.label} already in cart");
+                              // add item
+                            }),
+                            child: Image.asset(
+                              "assets/images/check.png",
+                              width: 36,
+                              height: 36,
+                            ),
+                          )
+                        : InkWell(
+                            onTap: (() {
+                              // check if item in cart
+                              cartProvider.add(
+                                  CartItemModel(product: product, quantity: 1));
+                              showMessage(
+                                  true, "${product.label} added to cart");
+                              // add item
+                            }),
+                            child: Image.asset(
+                              "assets/images/add_icon.png",
+                              width: 36,
+                              height: 36,
+                            ),
+                          )
                   ],
                 )
               ],

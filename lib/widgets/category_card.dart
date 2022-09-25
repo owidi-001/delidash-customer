@@ -11,10 +11,6 @@ Widget categoryCardView(String imagePath, String catName) {
         radius: 32,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          // child: Image.asset(
-          //   imagePath,
-          //   scale: 4.0,
-          // ),
           child: Image.network(
             "$baseURL$imagePath",
             scale: 4.0,

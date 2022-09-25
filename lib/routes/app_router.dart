@@ -33,7 +33,7 @@ class ApiUrl{
   static const String forgotPassword = "$baseURL/forgot-password";
 
   // Vendors
-  static const String listVendors = "$baseURL/vendor/vendors";
+  static const String listVendors = "$baseURL/vendor/vendors/";
 
   // products
   static const String listProducts = "$baseURL/product/";

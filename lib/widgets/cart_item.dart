@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/cart.model.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +27,8 @@ class CartItemWidget extends StatelessWidget {
                     color: AppTheme.lightColor,
                     borderRadius: BorderRadius.all(Radius.circular(12))),
                 alignment: Alignment.center,
-                child: Image.asset(
-                  item.product.image,
+                child: Image.network(
+                  "$baseURL${item.product.image}",
                 ),
               )),
           const SizedBox(

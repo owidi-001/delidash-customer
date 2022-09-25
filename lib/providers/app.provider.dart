@@ -19,6 +19,8 @@ class MealioApplicationProvider with ChangeNotifier {
   List<Product> products = [];
   ServiceStatus productsStatus = ServiceStatus.initial;
 
+  Map<Vendor, List<Product>> vendorProducts = {};
+
   MealioApplicationProvider() {
     categoriesStatus = ServiceStatus.loading;
     vendorsStatus = ServiceStatus.loading;
@@ -36,7 +38,6 @@ class MealioApplicationProvider with ChangeNotifier {
   }
 
   Future<void> _initCategories() async {
-
     final res = await ProductCategoryService().fetchCategories();
 
     if (res["status"]) {
@@ -49,7 +50,6 @@ class MealioApplicationProvider with ChangeNotifier {
   }
 
   Future<void> _initProducts() async {
-    
     final res = await ProductService().fetchProducts();
 
     if (res["status"]) {
@@ -62,15 +62,28 @@ class MealioApplicationProvider with ChangeNotifier {
   }
 
   Future<void> _initVendors() async {
-    
     final res = await VendorService().fetchVendors();
 
     if (res["status"]) {
       vendors = res["vendors"];
+
       vendorsStatus = ServiceStatus.loadingSuccess;
     } else {
       vendorsStatus = ServiceStatus.loadingFailure;
-      notifyListeners();
     }
+    notifyListeners();
+  }
+
+  // Load vendor products
+  List<Product> fetchVendorProducts(Vendor vendor) {
+    List<Product> results = [];
+
+    for (var product in products) {
+      if (vendor.id == product.vendor) {
+        results.add(product);
+      }
+    }
+
+    return results;
   }
 }

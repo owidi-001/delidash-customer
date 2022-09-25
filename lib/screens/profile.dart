@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
             onTap: () => Navigator.pop(context),
             child: const Icon(
               Icons.arrow_back_ios,
-              color: AppTheme.darkColor,
+              color: AppTheme.primaryColor,
             )),
       ),
       body: SafeArea(

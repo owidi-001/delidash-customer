@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/domain/product.model.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -17,33 +20,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+
+    // Check if product is already added to cart
+    bool inCart = cartProvider
+        .productInCart(CartItemModel(product: widget.product, quantity: 1));
+
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "Product detail",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: AppTheme.primaryColor,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Container(
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: AppTheme.lightColor,
                   borderRadius: BorderRadius.vertical(
                       bottom: Radius.elliptical(
                           MediaQuery.of(context).size.width, 140.0))),
               child: Column(children: [
-                const SizedBox(
-                  height: 36,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(Icons.arrow_back_ios)),
-                    ],
-                  ),
-                ),
                 const SizedBox(
                   height: 24,
                 ),
@@ -204,6 +216,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             width: MediaQuery.of(context).size.width * 0.4,
                             child: ElevatedButton(
                               onPressed: () {
+                                // check if item in cart
+                                cartProvider.add(CartItemModel(
+                                    product: widget.product,
+                                    quantity: itemCount));
                                 Navigator.pushNamed(context, AppRoute.cart);
                               },
                               style: TextButton.styleFrom(

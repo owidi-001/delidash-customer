@@ -16,7 +16,6 @@ Widget seeAllView(BuildContext context, String name, List<Product>? products) {
       InkWell(
         onTap: () {
           Navigator.pushNamed(context, AppRoute.productList);
-          // Navigator.pushNamed(context, FoodListScreen(products:products));
         },
         child: const Text(
           "See All",
@@ -29,3 +28,52 @@ Widget seeAllView(BuildContext context, String name, List<Product>? products) {
     ],
   );
 }
+
+// Widget browsableMenu() {
+//   List<String> browsables = ["Products", "Category", "Vendor"];
+//   String chosenValue = browsables[0];
+//   return SliverToBoxAdapter(
+//     child: Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 16.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: <Widget>[
+//           const Text(
+//             "Browse Products",
+//             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//           ),
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 24),
+//             decoration: const BoxDecoration(
+//                 color: AppTheme.lightColor,
+//                 borderRadius: BorderRadius.all(Radius.circular(24))),
+//             child: DropdownButton<String>(
+//                 focusColor: AppTheme.whiteColor,
+//                 value: chosenValue,
+//                 style: const TextStyle(color: Colors.white),
+//                 iconEnabledColor: AppTheme.darkColor,
+//                 items: browsables.map<DropdownMenuItem<String>>((String value) {
+//                   return DropdownMenuItem<String>(
+//                     value: value,
+//                     child: Text(
+//                       value,
+//                       style: const TextStyle(color: AppTheme.darkColor),
+//                     ),
+//                   );
+//                 }).toList(),
+//                 hint: Text(
+//                   browsables[0],
+//                   style: const TextStyle(
+//                       color: Colors.black,
+//                       fontSize: 16,
+//                       fontWeight: FontWeight.w600),
+//                 ),
+//                 onChanged: (String? newValue) {
+//                   chosenValue = newValue!;
+//                 }),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }

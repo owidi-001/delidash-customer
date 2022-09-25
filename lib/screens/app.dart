@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/cart.dart';
 import 'package:greens_veges/screens/dashboard.dart';
@@ -33,6 +34,7 @@ class _MealioState extends State<Mealio> {
         ),
         ChangeNotifierProvider(create: (_) => MealioApplicationProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
         // ChangeNotifierProvider(create: (_) => UserProvider()),
         // ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],

@@ -58,9 +58,9 @@ class _HomeState extends State<Home> {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.list_alt), label: "Foods"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.shopping_cart_outlined), label: "Cart"),
+                    icon: Icon(Icons.shopping_bag_outlined), label: "Cart"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.person), label: "Profile"),
+                    icon: Icon(Icons.person_outline), label: "Profile"),
               ]),
         ));
   }
