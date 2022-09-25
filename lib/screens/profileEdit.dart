@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
 import 'package:greens_veges/domain/user.model.dart';
-import 'package:greens_veges/providers/user.provider.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/services/user.service.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class ProfileEdit extends StatefulWidget {
@@ -26,13 +28,15 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<UserProvider>(context).user;
+    var user = context.watch<AuthenticationProvider>().user;
 
 // first Name field
     final firstNameField = TextFormField(
       autofocus: false,
       controller: _firstNameController,
       keyboardType: TextInputType.name,
+      // initialValue: user.firstName.isNotEmpty ? user.firstName : "",
+      // initialValue: user.firstName,
       onSaved: (value) {
         _firstNameController.value;
       },
@@ -51,6 +55,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _lastNameController,
       keyboardType: TextInputType.name,
+      // initialValue: user.lastName,
       onSaved: (value) {
         _lastNameController.value;
       },
@@ -69,6 +74,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
+      // initialValue: user.email,
       onSaved: (value) {
         _emailController.value;
       },
@@ -80,9 +86,11 @@ class _ProfileEditState extends State<ProfileEdit> {
     // phone field
     final phoneField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: false,
       controller: _phoneController,
       keyboardType: TextInputType.phone,
+      maxLength: 10,
+      // initialValue: user.phoneNumber,
       onSaved: (value) {
         _phoneController.value;
       },
@@ -96,19 +104,15 @@ class _ProfileEditState extends State<ProfileEdit> {
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            "Profile",
+            "Profile Update",
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           elevation: 0,
           backgroundColor: Colors.white,
           leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Image.asset(
-              "assets/images/back_icon.png",
-              scale: 2.2,
-            ),
-          ),
+              onTap: () => Navigator.pop(context),
+              child: const Icon(Icons.arrow_back_ios)),
         ),
         body: SingleChildScrollView(
           // form fields with details
@@ -233,5 +237,31 @@ class _ProfileEditState extends State<ProfileEdit> {
         ));
   }
 
-  void doUpdate() {}
+  void doUpdate() {
+    final form = _formkey.currentState;
+
+    if (form!.validate()) {
+      form.save();
+
+      final Future<Map<String, dynamic>> successfulMessage = UserService()
+          .updateProfile(_firstNameController.text, _lastNameController.text,
+              _emailController.text, _phoneController.text);
+
+      successfulMessage.then((response) {
+        if (response['status'] == true) {
+          // redirect to profile
+          Navigator.pushReplacementNamed(context, AppRoute.profile);
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Profile Updated Successfully"));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(showMessage(
+              false, "Profile Update Failed ${response['message']!}"));
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(false, 'Invalid form input!'));
+    }
+  }
 }

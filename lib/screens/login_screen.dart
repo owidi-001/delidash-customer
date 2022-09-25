@@ -1,15 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/domain/user.model.dart';
-import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
-import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
-import '../utility/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -115,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  submitButton("Login", doLogin),
+                  submitButton("Login", login),
                   const SizedBox(
                     height: 24,
                   ),
@@ -131,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, MyRoutes.register);
+                          Navigator.pushNamed(context, AppRoute.register);
                         },
                         child: const Text(
                           "Sign Up",
@@ -150,80 +148,35 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void doLogin() {
-    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
+  void login() {
     final form = _formkey.currentState;
 
     if (form!.validate()) {
       form.save();
 
       final Future<Map<String, dynamic>> successfulMessage =
-          auth.login(_emailController.text, _passwordController.text);
+          UserService().login(_emailController.text, _passwordController.text);
 
       successfulMessage.then((response) {
         if (response['status'] == true) {
-
-          // TODO! Concerns(late initializer)
-          // Below commented is not necessary
           User user = response['user'];
 
-          // Update provider to read user
-          Provider.of<UserProvider>(context, listen: false).setUser(user);
+          Provider.of<AuthenticationProvider>(context)
+              .loginUser(user: user, authToken: user.token);
 
-          // Store user to shared preferences
-          UserPreferences().saveUser(user);
-          
-          // Store token to shared preferences
-          UserPreferences().saveToken(user.token);
+          // Go to homescreen
+          Navigator.pushReplacementNamed(context, AppRoute.home);
 
-          Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
-
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'Login Success',
-                style: TextStyle(color: AppTheme.whiteColor),
-              ),
-              duration: Duration(seconds: 3),
-              backgroundColor: AppTheme.primaryColor,
-              padding: EdgeInsets.all(16.0),
-              elevation: 10,
-              behavior: SnackBarBehavior.floating));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Login Success"));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'Login Failed',
-              style: TextStyle(color: AppTheme.whiteColor),
-            ),
-            duration: Duration(seconds: 3),
-            backgroundColor: AppTheme.redColor,
-            padding: EdgeInsets.all(16.0),
-            elevation: 10,
-            behavior: SnackBarBehavior.floating,
-          ));
-
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //   elevation: 2,
-          //   content: Text(response['message']['message'].toString()),
-          //   duration: const Duration(seconds: 3),
-          // ));
+          ScaffoldMessenger.of(context).showSnackBar(
+              showMessage(false, "Login Failed ${response['message']!}"));
         }
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'Invalid form input!',
-              style: TextStyle(color: AppTheme.whiteColor),
-            ),
-            duration: Duration(seconds: 3),
-            backgroundColor: AppTheme.redColor,
-            padding: EdgeInsets.all(16.0),
-            elevation: 10,
-            behavior: SnackBarBehavior.floating,
-          ));
-
-      if (kDebugMode) {
-        print("form is invalid");
-      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(false, 'Invalid form input!'));
     }
   }
 }

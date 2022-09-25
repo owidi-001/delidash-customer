@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
 
-class AppTheme {
+class AppTheme{
   // global colors
   static const Color primaryColor = Color(0xff23AA49);
   static const Color gradientColor = Color(0xffEBF8EE);

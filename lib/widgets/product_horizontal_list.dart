@@ -12,9 +12,7 @@ Widget productHorizontalList({required List<Product> products}) {
     itemCount: products.length,
     itemBuilder: (context, index) {
       return DashboardFoodCardWidget(
-        imagePath: products[index].image,
-        name: products[index].label,
-        price: products[index].unitPrice,
+        product: products[index],
         onTapCallback: () {
           // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
           //     arguments: products[index]);
@@ -23,7 +21,7 @@ Widget productHorizontalList({required List<Product> products}) {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      FoodDetailScreen(product: products[index])));
+                      ProductDetailScreen(product: products[index])));
         },
       );
     },

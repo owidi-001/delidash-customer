@@ -1,35 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/providers/product.provider.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
 
-enum Status {
-  productsNotLoaded,
-  productsLoading,
-  productsLoaded,
-}
 
-class ProductService with ChangeNotifier {
-  Status _productLoadedStatus = Status.productsNotLoaded;
+class ProductService{
+
 
 // get all products
-  Future<List<Product>> fetchProduct() async {
-    _productLoadedStatus = Status.productsLoading;
-    notifyListeners();
+  Future<Map<String, dynamic>> fetchProducts() async {
+    Map<String, dynamic> result;
+
 
     String token = await UserPreferences().getToken();
 
-    final response = await get(Uri.parse(AppUrl.listProducts),
-        headers: {"Authorization": "Token $token"});
 
-    if (kDebugMode) {
-      print("The Products load response status is ${response.statusCode} ");
-    }
+    final response = await get(Uri.parse(ApiUrl.listProducts),
+        headers: {"Authorization": "Token $token"});
 
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body);
@@ -37,20 +28,24 @@ class ProductService with ChangeNotifier {
       List<Product> products =
           parsed.map<Product>((json) => Product.fromJson(json)).toList();
 
-      if (kDebugMode) {
-        print("The loaded Products $products");
-      }
+      // Update provider to read products
 
-      ProductProvider().setProducts(products);
+      result = {
+        'status': true,
+        'message': "Products loaded",
+        "products": products
+      };
 
-      _productLoadedStatus = Status.productsLoaded;
-      notifyListeners();
-
-      return products;
+      return result;
     } else {
-      _productLoadedStatus = Status.productsNotLoaded;
-      notifyListeners();
-      throw Exception('Failed to load foods');
+      
+      //   throw Exception('Failed to load products');
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
     }
+
+    return result;
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/domain/user.model.dart';
-import 'package:greens_veges/providers/user.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
-import 'package:greens_veges/utility/routes.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -219,14 +219,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void doRegister() {
-    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
-
     final form = _formkey.currentState;
 
     if (form!.validate()) {
       form.save();
 
-      auth
+      UserService()
           .register(
         _emailController.text,
         _phoneController.text,
@@ -234,58 +232,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       )
           .then((response) {
         if (response['status'] == true) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'Account creation Successfull',
-                style: TextStyle(color: AppTheme.whiteColor),
-              ),
-              duration: Duration(seconds: 3),
-              backgroundColor: AppTheme.primaryColor,
-              padding: EdgeInsets.all(16.0),
-              elevation: 10,
-              behavior: SnackBarBehavior.floating));
-
           User user = response["data"];
 
-          Provider.of<UserProvider>(context, listen: false).setUser(user);
-          if (kDebugMode) {
-            print("logged user $user");
-          }
+          // Update provider to read user
+          Provider.of<AuthenticationProvider>(context)
+              .loginUser(user: user, authToken: user.token);
 
-          Navigator.pushReplacementNamed(context, MyRoutes.dashboardRoute);
+          // Go to homescreen
+          Navigator.pushReplacementNamed(context, AppRoute.home);
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Account creation Successful"));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'Account creation Failed',
-              style: TextStyle(color: AppTheme.whiteColor),
-            ),
-            duration: Duration(seconds: 3),
-            backgroundColor: AppTheme.redColor,
-            padding: EdgeInsets.all(16.0),
-            elevation: 10,
-            behavior: SnackBarBehavior.floating,
-          ));
-
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //   content: Text(response.toString()),
-          //   duration: const Duration(seconds: 3),
-          //   elevation: 10,
-          //   behavior: SnackBarBehavior.floating,
-          // ));
+          ScaffoldMessenger.of(context).showSnackBar(showMessage(
+              false, "Registration failed! ${response.toString()}"));
         }
-      });
+      }, onError: ((error) {
+        if (kDebugMode) {
+          print(error);
+        }
+      }));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-          'Invalid Form Please Complete the form properly',
-          style: TextStyle(color: AppTheme.whiteColor),
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: AppTheme.redColor,
-        padding: EdgeInsets.all(16.0),
-        elevation: 10,
-        behavior: SnackBarBehavior.floating,
-      ));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(false, "Please fill the form properly"));
     }
   }
 }

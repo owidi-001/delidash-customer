@@ -1,4 +1,3 @@
-
 class Product {
   final int id;
   final String label;
@@ -6,8 +5,8 @@ class Product {
   final String image;
   final String description;
   final int quantity;
-  final int category; // Change to return category name
-  final int vendor; // Change to return vendor email
+  final int? category;
+  final int vendor;
 
   // constructor
   Product(
@@ -17,22 +16,21 @@ class Product {
       required this.image,
       required this.description,
       required this.quantity,
-      required this.category,
+      this.category,
       required this.vendor});
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-        id: int.parse(json["id"]),
-        label: json["name"],
+        id: json["id"],
+        label: json["label"],
         unitPrice: double.parse(json["unit_price"]),
         image: json["image"],
         description: json["description"],
-        quantity: int.parse(json["quantity"]),
-        category: int.parse(json["category"]),
-        vendor: int.parse(json["vendor"]));
+        quantity: json["quantity"],
+        category: json["category"],
+        vendor: json["vendor"]);
   }
 }
-
 
 class ProductCategory {
   final int id;
@@ -40,17 +38,17 @@ class ProductCategory {
   final String icon;
 
   // constructor
-  ProductCategory(
-      {required this.id,
-      required this.name,
-      required this.icon,
-      });
+  ProductCategory({
+    required this.id,
+    required this.name,
+    required this.icon,
+  });
 
   factory ProductCategory.fromJson(Map<String, dynamic> json) {
     return ProductCategory(
-        id: json["id"],
-        name: json["name"],
-        icon: json["icon"],
-        );
+      id: json["id"],
+      name: json["name"],
+      icon: json["icon"],
+    );
   }
 }

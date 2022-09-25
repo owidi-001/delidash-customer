@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 
 Widget orderCardHorizontal() {
   return InkWell(
@@ -22,20 +22,55 @@ Widget orderCardHorizontal() {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text("#Oder number",style: TextStyle(color: AppTheme.darkColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                      SizedBox(height: 16.0,),
-                      Text("date: sep 02/22",style: TextStyle(color: AppTheme.secondaryColor,fontSize: 14,fontWeight: FontWeight.normal),),
+                      Text(
+                        "#Order number",
+                        style: TextStyle(
+                            color: AppTheme.secondaryColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                        "Total: Sh. 200",
+                        style: TextStyle(
+                            color: AppTheme.darkColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ],
                   )),
               Flexible(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    Icon(Icons.edit,color: AppTheme.secondaryColor,),
-                    Icon(Icons.replay_circle_filled_outlined,color: AppTheme.primaryColor,),
-                    Icon(Icons.delete,color: AppTheme.redColor,),
+                  children: [
+                    GestureDetector(
+                      onTap: () => {},
+                      child: const CircleAvatar(
+                        backgroundColor: AppTheme.whiteColor,
+                        radius: 20,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.delete,
+                            color: AppTheme.redColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    const Text(
+                      "date: sep 02/22",
+                      style: TextStyle(
+                          color: AppTheme.secondaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal),
+                    ),
                   ],
                 ),
               ),

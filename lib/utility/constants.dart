@@ -1,2 +1,7 @@
-const String baseURL = "http://owidi.pythonanywhere.com/";
-int timeout = 100000;
+// Load time
+int TIMEOUT = 100000;
+
+// Shared preference keys
+const TOKEN = "TOKEN";
+const USER = "USER";
+const ONBOARD = "BOARDED";

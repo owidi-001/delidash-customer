@@ -6,7 +6,7 @@ import 'package:greens_veges/screens/product_detail.dart';
 
 import 'product_card.dart';
 
-Widget productGrids({required List<Product> products}) {
+Widget productGrids(List<Product> products) {
   if (kDebugMode) {
     print("The number of items");
     print(products.length);
@@ -23,19 +23,17 @@ Widget productGrids({required List<Product> products}) {
     ),
     itemBuilder: (context, index) {
       return Flexible(
-        child: FoodCardWidget(
-          image: products[index].image,
-          name: products[index].label,
-          price: products[index].unitPrice,
+        child: ProductCardWidget(
+          product: products[index],
           onTapCallback: () {
             // Navigator.pushNamed(context, MyRoutes.foodDetailRoute,
             //     arguments: products[index]);
 
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      FoodDetailScreen(product: products[index])));
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProductDetailScreen(product: products[index])));
           },
         ),
       );

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/theme/app_theme.dart';
+import 'package:greens_veges/domain/product.model.dart';
 
 class DashboardFoodCardWidget extends StatelessWidget {
-  final String imagePath;
-  final String name;
-  final double price;
+  final Product product;
   final VoidCallback onTapCallback;
+
   const DashboardFoodCardWidget(
-      {Key? key,
-      required this.imagePath,
-      required this.name,
-      required this.price,
-      required this.onTapCallback})
+      {Key? key, required this.product, required this.onTapCallback})
       : super(
           key: key,
         );
@@ -33,11 +30,14 @@ class DashboardFoodCardWidget extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 2,
-                  child: Image.asset(
-                    imagePath,
+                  // child: Image.network(
+                  //   "$baseURL${product.image}",
+                  //   width: 120,
+                  //   height: 120,
+                  // ),
+                  child: Image.asset(product.image,
                     width: 120,
-                    height: 120,
-                  ),
+                    height: 120,),
                 ),
                 const SizedBox(
                   height: 12,
@@ -45,7 +45,7 @@ class DashboardFoodCardWidget extends StatelessWidget {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    name,
+                    product.label,
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/utility/constants.dart';
+import 'package:greens_veges/routes/app_router.dart';
 
-import '../constants/app_theme.dart';
+import '../theme/app_theme.dart';
 
 Widget categoryCardView(String imagePath, String catName) {
   return Column(

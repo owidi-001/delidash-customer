@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
-
-class CartItemWidget extends StatefulWidget {
+class CartItemWidget extends StatelessWidget {
   final CartItemModel item;
   const CartItemWidget({Key? key, required this.item}) : super(key: key);
 
   @override
-  State<CartItemWidget> createState() => _CartItemWidgetState();
-}
-
-class _CartItemWidgetState extends State<CartItemWidget> {
-  int itemCount = 1;
-  @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -21,11 +18,21 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-              child: Image.asset(
-            widget.item.imagePath,
-            width: 40,
-            height: 40,
-          )),
+              flex: 1,
+              child: Container(
+                height: 80,
+                padding: const EdgeInsets.all(8.0),
+                decoration: const BoxDecoration(
+                    color: AppTheme.lightColor,
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                alignment: Alignment.center,
+                child: Image.asset(
+                  item.product.image,
+                ),
+              )),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             flex: 2,
             child: Column(
@@ -33,66 +40,73 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.item.name,
+                  item.product.label,
                   style: const TextStyle(
-                      color: Colors.black,
+                      color: AppTheme.secondaryColor,
                       fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.normal),
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                Text(widget.item.price,
+                Text("Sh. ${item.product.unitPrice}",
                     style: const TextStyle(
-                        color: Color(0xffFF324B),
+                        color: AppTheme.darkColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold)),
               ],
             ),
           ),
           Expanded(
-            child: Row(
+            flex: 1,
+            child: Column(
               children: [
-                InkWell(
-                  onTap: (() {
-                    setState(() {
-                      if (itemCount > 1){
-                        itemCount--;
-                      } else{
-                        // TODO! remove item from cart menu
-                      }
-                    });
-                  }),
-                  child: Image.asset(
-                    "assets/images/remove_icon.png",
-                    width: 24,
-                    height: 24,
-                  ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (() {
+                        cartProvider.updateCart(item, item.quantity - 1);
+                      }),
+                      child: Image.asset(
+                        "assets/images/remove_icon.png",
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "${item.quantity}",
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        cartProvider.updateCart(item, item.quantity + 1);
+                      },
+                      child: Image.asset(
+                        "assets/images/add_icon.png",
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
-                  width: 8,
+                  height: 10,
                 ),
                 Text(
-                  "$itemCount",
+                  "sub: ${item.product.unitPrice * item.quantity}",
                   style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      itemCount++;
-                    });
-                  },
-                  child: Image.asset(
-                    "assets/images/add_icon.png",
-                    width: 24,
-                    height: 24,
-                  ),
+                      color: AppTheme.secondaryColor),
                 ),
               ],
             ),

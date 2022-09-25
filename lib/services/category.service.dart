@@ -1,27 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/providers/category.provider.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
 
-enum Status { categoriesNotLoaded, categoriesLoading, categoriesLoaded }
-
-class ProductCategoryService with ChangeNotifier {
-  Status _categoriesLoadedStatus = Status.categoriesNotLoaded;
-
-// get all categories
-  Future<List<ProductCategory>> fetchProductCategories() async {
+class ProductCategoryService {
+  // Fetch categories
+  Future<Map<String, dynamic>> fetchCategories() async {
+    Map<String, dynamic> result;
     String token = await UserPreferences().getToken();
 
-    final response = await get(Uri.parse(AppUrl.listCategories),
+    final response = await get(Uri.parse(ApiUrl.listCategories),
         headers: {"Authorization": "Token $token"});
 
     if (response.statusCode == 200) {
-
       List parsed = jsonDecode(response.body);
 
       // Convert the list to ProductCategory instance
@@ -29,17 +23,19 @@ class ProductCategoryService with ChangeNotifier {
           .map<ProductCategory>((json) => ProductCategory.fromJson(json))
           .toList();
 
-      ProductCategoryProvider().setCategories(categories);
-
-      _categoriesLoadedStatus = Status.categoriesLoaded;
-      notifyListeners();
-
-      return categories;
+      // Update provider to read categories
+      result = {
+        "status": true,
+        "message": "Categories loaded",
+        "categories": categories
+      };
     } else {
-      _categoriesLoadedStatus = Status.categoriesNotLoaded;
-      notifyListeners();
-
-      throw Exception('Failed to load categories');
+      // throw Exception('Failed to load categories');
+      result = {
+        "status": false,
+        "message": "Categories not loaded",
+      };
     }
+    return result;
   }
 }

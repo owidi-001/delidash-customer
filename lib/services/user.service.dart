@@ -1,33 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:greens_veges/domain/auth.model.dart';
 import 'package:greens_veges/domain/user.model.dart';
-import 'package:greens_veges/providers/user.provider.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:provider/provider.dart';
-
-enum Status {
-  notLoggedIn,
-  notRegistered,
-  loggedIn,
-  registered,
-  authenticating,
-  registering,
-  loggedOut
-}
-
-class AuthProvider with ChangeNotifier {
-  Status _loggedInStatus = Status.notLoggedIn;
-  Status _registeredInStatus = Status.notRegistered;
-
-  Status get loggedInStatus => _loggedInStatus;
-
-  Status get registeredInStatus => _registeredInStatus;
-
+class UserService {
   // login
   Future<Map<String, dynamic>> login(String email, String password) async {
     Map<String, dynamic> result;
@@ -37,11 +18,8 @@ class AuthProvider with ChangeNotifier {
       'password': password
     };
 
-    _loggedInStatus = Status.authenticating;
-    notifyListeners();
-
     Response response = await post(
-      Uri.parse(AppUrl.login),
+      Uri.parse(ApiUrl.login),
       body: loginData,
     );
 
@@ -50,23 +28,15 @@ class AuthProvider with ChangeNotifier {
 
       User authUser = User.fromJson(responseData);
 
-      // //save user
-      // UserPreferences().saveUser(authUser);
+      //save user
+      UserPreferences().saveUser(authUser);
 
-      // //save token
-      // UserPreferences().saveToken(authUser.token);
-
-      // // Save user to provider
-      // UserProvider().setUser(authUser);
-
-      _loggedInStatus = Status.loggedIn;
-      notifyListeners();
+      //save token
+      UserPreferences().saveToken(authUser.token);
+      UserPreferences().onBoardUser();
 
       result = {'status': true, 'message': "Successful", 'user': authUser};
     } else {
-      _loggedInStatus = Status.notLoggedIn;
-      notifyListeners();
-
       result = {
         'status': false,
         'message': json.decode(response.body)['error']
@@ -74,7 +44,6 @@ class AuthProvider with ChangeNotifier {
     }
     return result;
   }
-
   // end login
 
   // register
@@ -86,10 +55,7 @@ class AuthProvider with ChangeNotifier {
       'password': password
     };
 
-    _loggedInStatus = Status.registering;
-    notifyListeners();
-
-    return await post(Uri.parse(AppUrl.register),
+    return await post(Uri.parse(ApiUrl.register),
             body: json.encode(apiBodyData),
             headers: {'Content-Type': 'application/json'})
         .then(onValue)
@@ -104,16 +70,10 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       User authUser = User.fromJson(responseData);
 
-      if (kDebugMode) {
-        print("User object created from reg data $authUser");
-      }
-
       // now we will create shared preferences and save data
       UserPreferences().saveUser(authUser);
       UserPreferences().saveToken(authUser.token);
-
-      // Set user to provider
-      UserProvider().setUser(authUser);
+      UserPreferences().onBoardUser();
 
       result = {
         'status': true,
@@ -141,4 +101,51 @@ class AuthProvider with ChangeNotifier {
   void logout() {
     UserPreferences().removeUser();
   }
+
+  // Update profile
+  // login
+  Future<Map<String, dynamic>> updateProfile(
+      String firstName, String lastName, String email, String phone) async {
+    Map<String, dynamic> result;
+
+    String token = await UserPreferences().getToken();
+
+    final Map<String, dynamic> profileData = {
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'phone_number': phone,
+      'token': token
+    };
+
+    Response response = await post(Uri.parse(ApiUrl.profileUpdate),
+        body: profileData, headers: {"Authorization": "Token $token"});
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+      //TODO! Update user data
+      User authUser = User.fromJson(responseData);
+
+      //update provider
+      AuthenticationProvider.instance
+          .loginUser(user: authUser, authToken: authUser.token);
+
+      //save to prefs
+      LoginData loginData =
+          LoginData(user: authUser, authToken: authUser.token);
+
+      UserPreferences().storeLoginData(loginData);
+
+      result = {'status': true, 'message': "Successful", 'user': authUser};
+    } else {
+      ///Throw some exception
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+  // end login
 }

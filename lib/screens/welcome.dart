@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
-
-import '../utility/routes.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -71,7 +70,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, MyRoutes.login);
+                              context, AppRoute.login);
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),

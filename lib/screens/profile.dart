@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/app_theme.dart';
-import 'package:greens_veges/domain/user.model.dart';
-import 'package:greens_veges/providers/user.provider.dart';
-import 'package:greens_veges/screens/login_screen.dart';
-import 'package:greens_veges/services/user.service.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/order_card_horizontal.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  
+  
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<UserProvider>(context).user;
-    List orders = [];
+    var orders = [1, 2, 3];
     bool hasOrders = orders.isEmpty;
 
+    var user= context.watch<AuthenticationProvider>().user;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,20 +33,17 @@ class _ProfileState extends State<Profile> {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Image.asset(
-            "assets/images/back_icon.png",
-            scale: 2.2,
-          ),
-        ),
+            onTap: () => Navigator.pop(context),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: AppTheme.darkColor,
+            )),
       ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // const SizedBox(
-              //   height: 36,
-              // ),
-              Container(
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Container(
                 margin: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
                     color: AppTheme.lightColor,
@@ -75,9 +72,9 @@ class _ProfileState extends State<Profile> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
-                          user.first_name!.isEmpty
+                          user.firstName.isEmpty
                               ? "Update Name"
-                              : "${user.first_name} ${user.last_name}",
+                              : "${user.firstName} ${user.lastName}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
@@ -105,7 +102,7 @@ class _ProfileState extends State<Profile> {
                         child: ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, MyRoutes.profileEditRoute);
+                                  context, AppRoute.profileEdit);
                             },
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -120,11 +117,12 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              // const SizedBox(
-              //   height: 8,
-              // ),
-              const Padding(
-                padding: EdgeInsets.all(8),
+            ),
+
+            // Lower layer
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   "Your Orders",
                   style: TextStyle(
@@ -133,89 +131,71 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-                  child: hasOrders
-                      ? //check if customer has made any orders
-                      Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: const BoxDecoration(
-                              color: AppTheme.lightColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(24))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                const Text(
-                                  "No orders yet!",
-                                  style: TextStyle(
-                                      color: AppTheme.darkColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: 0.5,
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pushReplacementNamed(
-                                            context, MyRoutes.dashboardRoute);
-                                      },
-                                      style: TextButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12),
-                                        textStyle: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500),
-                                        shape: const StadiumBorder(),
-                                        backgroundColor:
-                                            AppTheme.secondaryColor,
-                                      ),
-                                      child: const Text("Browse Products")),
-                                ),
-                              ],
-                            ),
-                          ))
-                      : //Show relevant messages
-                      Column(
-                          children: [
-                            orderCardHorizontal(),
-                            orderCardHorizontal(),
-                            orderCardHorizontal(),
-                            orderCardHorizontal(),
-                            orderCardHorizontal(),
-                            orderCardHorizontal(),
-                          ],
+            ),
+
+            // List view
+            hasOrders
+                ? //check if customer has made any orders
+                SliverToBoxAdapter(
+                    child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: const BoxDecoration(
+                            color: AppTheme.lightColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(24))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              const Text(
+                                "No orders yet!",
+                                style: TextStyle(
+                                    color: AppTheme.darkColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 24.0,
+                              ),
+                              FractionallySizedBox(
+                                widthFactor: 0.5,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pushReplacementNamed(
+                                          context, AppRoute.dashboard);
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      textStyle: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                      shape: const StadiumBorder(),
+                                      backgroundColor: AppTheme.secondaryColor,
+                                    ),
+                                    child: const Text("Browse Products")),
+                              ),
+                            ],
+                          ),
                         )),
-            ],
-          ),
+                  )
+                : //Show order list
+
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(((
+                    context,
+                    index,
+                  ) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: orderCardHorizontal(),
+                    );
+                  }), childCount: 10))
+          ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: (){
-            AuthProvider().logout();
-            // TODO! Set to pop all other pages
-            Navigator.pushReplacementNamed(context, MyRoutes.login);
-            
-            // Navigator.pushAndRemoveUntil(
-            //     context,   
-            //     MaterialPageRoute(builder: (context) => const LoginScreen()), 
-            //     ModalRoute.withName('/')
-            // );
-          },
-          isExtended: true,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          // icon: const Icon(Icons.supervised_user_circle),
-          backgroundColor: AppTheme.primaryColor,
-          icon: const Icon(Icons.logout_outlined),
-          label: const Text(
-            'Logout',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ));
+      ),
+    );
   }
 }

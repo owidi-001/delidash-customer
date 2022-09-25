@@ -1,9 +1,9 @@
 // Returns widget view for see all belonging to best selling
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/utility/routes.dart';
+import 'package:greens_veges/routes/app_router.dart';
 
-import '../constants/app_theme.dart';
+import '../theme/app_theme.dart';
 
 Widget seeAllView(BuildContext context, String name, List<Product>? products) {
   return Row(
@@ -15,7 +15,7 @@ Widget seeAllView(BuildContext context, String name, List<Product>? products) {
       ),
       InkWell(
         onTap: () {
-          Navigator.pushNamed(context, MyRoutes.foodListRoute);
+          Navigator.pushNamed(context, AppRoute.productList);
           // Navigator.pushNamed(context, FoodListScreen(products:products));
         },
         child: const Text(
