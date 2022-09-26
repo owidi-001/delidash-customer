@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/domain/vendor.model.dart';
 import 'package:greens_veges/providers/app.provider.dart';
-import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/product_card.dart';

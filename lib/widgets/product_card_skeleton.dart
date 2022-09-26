@@ -14,7 +14,7 @@ Widget productSkeletonLoader() {
         child: Flex(
           direction: Axis.vertical,
           children: [
-            Flexible(
+            const Flexible(
               flex: 2,
               child: Skeleton(
                 height: 120,
@@ -26,10 +26,10 @@ Widget productSkeletonLoader() {
             ),
             Container(
                 alignment: Alignment.centerLeft,
-                child: Skeleton(height: 16, width: 100),),
+                child: const Skeleton(height: 16, width: 100),),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Skeleton(
                   height: 20,
                   width: 80,

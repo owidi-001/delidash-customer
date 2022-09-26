@@ -4,13 +4,13 @@ import 'package:greens_veges/widgets/skeleton.dart';
 
 Widget categorySkeletonLoader() {
   return Column(
-    children: [
+    children: const [
       CircleAvatar(
         backgroundColor: AppTheme.lightColor,
         radius: 32,
         child: Skeleton(height: 32,width: 32,)
       ),
-      const SizedBox(
+      SizedBox(
         height: 8,
       ),
       Skeleton(height: 20,width: 80,)

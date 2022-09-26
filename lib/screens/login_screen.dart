@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
@@ -153,6 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (form!.validate()) {
       form.save();
+
+      // Update authentication status
+      AuthenticationProvider.instance
+          .authenticationChanged(AuthenticationStatus.authenticating);
 
       final Future<Map<String, dynamic>> successfulMessage =
           UserService().login(_emailController.text, _passwordController.text);

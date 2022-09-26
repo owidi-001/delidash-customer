@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/services/user.service.dart';
@@ -35,7 +34,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _firstNameController,
       keyboardType: TextInputType.name,
-      // initialValue: user.firstName.isNotEmpty ? user.firstName : "",
+      initialValue: user.firstName.isNotEmpty ? user.firstName : "",
       // initialValue: user.firstName,
       onSaved: (value) {
         _firstNameController.value;
@@ -55,7 +54,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _lastNameController,
       keyboardType: TextInputType.name,
-      // initialValue: user.lastName,
+      initialValue: user.lastName,
       onSaved: (value) {
         _lastNameController.value;
       },
@@ -74,7 +73,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
-      // initialValue: user.email,
+      initialValue: user.email,
       onSaved: (value) {
         _emailController.value;
       },
@@ -90,7 +89,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       maxLength: 10,
-      // initialValue: user.phoneNumber,
+      initialValue: user.phoneNumber,
       onSaved: (value) {
         _phoneController.value;
       },

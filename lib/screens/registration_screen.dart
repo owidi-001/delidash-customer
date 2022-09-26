@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
@@ -223,6 +224,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     if (form!.validate()) {
       form.save();
+
+      // Update authentication status
+      AuthenticationProvider.instance
+          .authenticationChanged(AuthenticationStatus.authenticating);
 
       UserService()
           .register(

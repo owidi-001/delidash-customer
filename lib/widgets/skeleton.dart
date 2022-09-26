@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 
 class Skeleton extends StatelessWidget {
-  double? height, width;
-  Skeleton({Key? key, this.width, this.height}) : super(key: key);
+  final double? height, width;
+  const Skeleton({Key? key, this.width, this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

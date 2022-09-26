@@ -28,12 +28,10 @@ class UserService {
 
       User authUser = User.fromJson(responseData);
 
-      //save user
-      UserPreferences().saveUser(authUser);
+      LoginData data = LoginData(user: authUser, authToken: authUser.token);
 
-      //save token
-      UserPreferences().saveToken(authUser.token);
-      UserPreferences().onBoardUser();
+      //save user
+      UserPreferences().storeLoginData(data);
 
       result = {'status': true, 'message': "Successful", 'user': authUser};
     } else {
@@ -70,10 +68,10 @@ class UserService {
     if (response.statusCode == 200) {
       User authUser = User.fromJson(responseData);
 
-      // now we will create shared preferences and save data
-      UserPreferences().saveUser(authUser);
-      UserPreferences().saveToken(authUser.token);
-      UserPreferences().onBoardUser();
+      LoginData data = LoginData(user: authUser, authToken: authUser.token);
+
+      //save user
+      UserPreferences().storeLoginData(data);
 
       result = {
         'status': true,
@@ -124,7 +122,6 @@ class UserService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-      //TODO! Update user data
       User authUser = User.fromJson(responseData);
 
       //update provider

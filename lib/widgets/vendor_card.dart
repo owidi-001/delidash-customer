@@ -4,12 +4,11 @@ import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/vendor_product_list.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class VendorCard extends StatelessWidget {
-  Vendor vendor;
-  VendorCard({super.key, required this.vendor});
+  final Vendor vendor;
+  const VendorCard({super.key, required this.vendor});
 
   @override
   Widget build(BuildContext context) {

@@ -27,16 +27,6 @@ class ProductListScreen extends StatelessWidget {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: AppTheme.primaryColor,
-          ),
-          iconSize: 24,
-          splashRadius: 40,
-          splashColor: AppTheme.gradientColor,
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
