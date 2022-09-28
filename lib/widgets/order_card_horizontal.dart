@@ -48,7 +48,10 @@ Widget orderCardHorizontal() {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () => {},
+                      onTap: () => {
+                        // delete item from the order list
+                        // orderProvider.items.remove(order);
+                      },
                       child: const CircleAvatar(
                         backgroundColor: AppTheme.whiteColor,
                         radius: 20,

@@ -184,7 +184,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  submitButton("Register", doRegister),
+                  AuthenticationProvider.instance.status !=
+                          AuthenticationStatus.authenticating
+                      ? submitButton("Register", doRegister)
+                      : Material(
+                          elevation: 5,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          color: AppTheme.primaryColor,
+                          child: MaterialButton(
+                            onPressed: () => {},
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            minWidth: double.infinity,
+                            child: const Text(
+                              "Authenticating...",
+                              style: TextStyle(
+                                  color: AppTheme.whiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                          ),
+                        ),
                   const SizedBox(
                     height: 24,
                   ),

@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) {
         _passwordController.value;
       },
-      validator: (value) => validPassword(_passwordController.text),
+      // validator: (value) => validPassword(_passwordController.text),
       textInputAction: TextInputAction.done,
       decoration: buildInputDecoration("Password", Icons.lock),
     );

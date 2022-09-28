@@ -12,6 +12,7 @@ if (flutterRoot == null) {
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+def mapsAPIKey = localProperties.getProperty('mapsAPIKey')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
 }
@@ -48,10 +49,12 @@ android {
         applicationId "com.example.green_veges"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        // minSdkVersion flutter.minSdkVersion
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders += [mapsAPIKey:mapsAPIKey]
     }
 
     buildTypes {

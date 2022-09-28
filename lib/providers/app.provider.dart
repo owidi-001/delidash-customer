@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:greens_veges/domain/address.model.dart';
+import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/services/address.service.dart';
+import 'package:greens_veges/services/order.service.dart';
 
 import '../domain/vendor.model.dart';
 import '../services/category.service.dart';
@@ -19,7 +23,17 @@ class MealioApplicationProvider with ChangeNotifier {
   List<Product> products = [];
   ServiceStatus productsStatus = ServiceStatus.initial;
 
+  List<Address> addresses = [];
+  ServiceStatus addressesStatus = ServiceStatus.initial;
+
   Map<Vendor, List<Product>> vendorProducts = {};
+
+  List<Order> orders = [];
+  ServiceStatus orderStatus = ServiceStatus.initial;
+
+  List<OrderItem> orderItems = [];
+  ServiceStatus orderItemsStatus = ServiceStatus.initial;
+
 
   MealioApplicationProvider() {
     categoriesStatus = ServiceStatus.loading;
@@ -35,6 +49,24 @@ class MealioApplicationProvider with ChangeNotifier {
     await _initCategories();
     await _initProducts();
     await _initVendors();
+
+    // Get saved address
+    await _userAddress();
+    // Orders
+    await _getOrders();
+    await _getOrderItems();
+  }
+
+  Future<void> _userAddress() async {
+    final res = await AddressService().fetchAddress();
+
+    if (res["status"]) {
+      addresses = res["addresses"];
+      addressesStatus = ServiceStatus.loadingSuccess;
+    } else {
+      addressesStatus = ServiceStatus.loadingFailure;
+    }
+    notifyListeners();
   }
 
   Future<void> _initCategories() async {
@@ -84,6 +116,45 @@ class MealioApplicationProvider with ChangeNotifier {
       }
     }
 
+    return results;
+  }
+
+  // Getting orders
+  Future<void> _getOrders() async {
+    final res = await OrderService().fetchOrders();
+
+    if (res["status"]) {
+      orders = res["orders"];
+
+      orderStatus = ServiceStatus.loadingSuccess;
+    } else {
+      orderStatus = ServiceStatus.loadingFailure;
+    }
+    notifyListeners();
+  }
+
+  // Getting orders
+  Future<void> _getOrderItems() async {
+    final res = await OrderService().fetchOrderItems();
+
+    if (res["status"]) {
+      orderItems = res["orderItems"];
+
+      orderItemsStatus = ServiceStatus.loadingSuccess;
+    } else {
+      orderItemsStatus = ServiceStatus.loadingFailure;
+    }
+    notifyListeners();
+  }
+
+  // Categorise order with their items
+  List<OrderItem> getOrderItems(Order order) {
+    List<OrderItem> results = [];
+    for (var item in orderItems) {
+      if (item.order == order.id) {
+        results.add(item);
+      }
+    }
     return results;
   }
 }

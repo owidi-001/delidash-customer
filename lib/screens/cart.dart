@@ -190,7 +190,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "${cartProvider.totalPrice}",
+                            (cartProvider.totalPrice).toStringAsFixed(2),
                             style: const TextStyle(
                                 color: AppTheme.secondaryColor,
                                 fontSize: 16,
@@ -233,7 +233,7 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Sh. ${cartProvider.totalPrice + deliveryFee}",
+                            "Sh. ${(cartProvider.totalPrice + deliveryFee).toStringAsFixed(2)}",
                             style: const TextStyle(
                                 color: AppTheme.darkColor,
                                 fontSize: 18,

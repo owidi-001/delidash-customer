@@ -2,7 +2,7 @@
 const String baseURL = "http://owidi.pythonanywhere.com";
 
 // Routes for app
-class AppRoute{
+class AppRoute {
   static const String splash = "/";
 
   // auth routes
@@ -13,6 +13,7 @@ class AppRoute{
   // Dashboard,list,detail routes
   static const String home = "/home";
   static const String dashboard = "/dashboard";
+  static const String location = "/location";
   static const String productList = "/foods";
   static const String productDetail = "/food_detail";
 
@@ -24,13 +25,23 @@ class AppRoute{
   static const String profileEdit = "/profileEdit";
 }
 
-
-class ApiUrl{
+class ApiUrl {
   // user auth
   static const String login = "$baseURL/auth/login/";
   static const String register = "$baseURL/auth/register/";
-  static const String profileUpdate = "$baseURL/auth/profile/"; // Update profile 
+  static const String profileUpdate =
+      "$baseURL/auth/profile/"; // Update profile
   static const String forgotPassword = "$baseURL/forgot-password";
+
+  // User
+  // Saved addresses
+  static const String userAddress = "$baseURL/address";
+  // orders
+  static const String orders = "$baseURL/orders";
+  static const String orderItems = "$baseURL/order_items";
+
+  // feedback
+  static const String feedback = "$baseURL/feedback";
 
   // Vendors
   static const String listVendors = "$baseURL/vendor/vendors/";
@@ -39,8 +50,4 @@ class ApiUrl{
   static const String listProducts = "$baseURL/product/";
 
   static const String listCategories = "$baseURL/categories/";
-
-  // order
-  static const String placeOrder = "$baseURL/order/";
-
 }

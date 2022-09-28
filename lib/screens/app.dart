@@ -13,6 +13,7 @@ import 'package:greens_veges/screens/products_list_screen.dart';
 import 'package:greens_veges/screens/profile.dart';
 import 'package:greens_veges/screens/profileEdit.dart';
 import 'package:greens_veges/screens/registration_screen.dart';
+import 'package:greens_veges/screens/search_locations.dart';
 import 'package:greens_veges/screens/splash.dart';
 import 'package:greens_veges/screens/welcome.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,7 @@ class _MealioState extends State<Mealio> {
           AppRoute.login: (context) => const LoginScreen(),
           AppRoute.home: (context) => const Home(),
           AppRoute.dashboard: ((context) => const DashboardScreen()),
+          AppRoute.location: (context) => const SearchLocation(),
           AppRoute.productList: (context) => const ProductListScreen(),
           AppRoute.cart: (context) => const CartScreen(),
           AppRoute.profile: (context) => const Profile(),

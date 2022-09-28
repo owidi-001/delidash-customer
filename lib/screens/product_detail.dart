@@ -100,7 +100,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             InkWell(
                               onTap: (() {
                                 setState(() {
-                                  if (itemCount > 0) itemCount--;
+                                  if (itemCount > 1) {
+                                    itemCount--;
+                                  } else {
+                                    return;
+                                  }
                                 });
                               }),
                               child: Image.asset(
@@ -142,7 +146,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Text("Sh. ${widget.product.unitPrice * itemCount}",
+                  Text(
+                      "Sh. ${(widget.product.unitPrice * itemCount).toStringAsFixed(2)}",
                       style: const TextStyle(
                           color: AppTheme.darkColor,
                           fontSize: 24,
@@ -198,7 +203,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                  "Sh. ${widget.product.unitPrice * itemCount}",
+                                  "Sh. ${(widget.product.unitPrice * itemCount).toStringAsFixed(2)}",
                                   style: const TextStyle(
                                       color: AppTheme.darkColor,
                                       fontSize: 18,

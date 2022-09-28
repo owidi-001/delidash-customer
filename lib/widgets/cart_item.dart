@@ -103,7 +103,7 @@ class CartItemWidget extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "sub: ${item.product.unitPrice * item.quantity}",
+                  "sub: ${(item.product.unitPrice * item.quantity).toStringAsFixed(2)}",
                   style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,

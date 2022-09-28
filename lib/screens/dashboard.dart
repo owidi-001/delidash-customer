@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
+import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
@@ -11,6 +12,7 @@ import 'package:greens_veges/services/greetings.service.dart';
 import 'package:greens_veges/widgets/product_card.dart';
 import 'package:greens_veges/widgets/product_card_skeleton.dart';
 import 'package:greens_veges/widgets/vendor_card.dart';
+import 'package:greens_veges/widgets/vendor_card_skeleton.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -21,6 +23,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  static List<String> browsables = ["Vendors", "Products"];
+  String chosenValue = browsables[0];
   @override
   Widget build(BuildContext context) {
     var greetings = greetingMessage();
@@ -34,8 +38,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Load Location
     var locationProvider = Provider.of<LocationProvider>(context);
 
-    List<String> browsables = ["Vendors", "Products"];
-    String chosenValue = browsables[0];
+    // Banner product
+    Product? product;
+    if (appProvider.productsStatus == ServiceStatus.loadingSuccess && appProvider.products.length > 1) {
+      product = (appProvider.products..shuffle()).first;
+    }
 
     return Scaffold(
         backgroundColor: AppTheme.whiteColor,
@@ -107,38 +114,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             )),
                         Expanded(
                             flex: 2,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: const BoxDecoration(
-                                  color: AppTheme.lightColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24))),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  const Icon(
-                                    CupertinoIcons.location,
-                                    color: AppTheme.primaryColor,
-                                    size: 16,
-                                  ),
-                                  Text(
-                                    locationProvider.location.address,
-                                    softWrap: false,
-                                    overflow: TextOverflow.clip,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const Icon(
-                                    CupertinoIcons.chevron_down,
-                                    color: AppTheme.primaryColor,
-                                    size: 12,
-                                  )
-                                ],
+                            child: InkWell(
+                              onTap: (() => {
+                                    // Navigate to maps page
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => const MapScreen(),
+                                    //   ),
+                                    // ),
+                                    Navigator.pushNamed(
+                                        context, AppRoute.location)
+                                  }),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: const BoxDecoration(
+                                    color: AppTheme.lightColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(24))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Icon(
+                                      CupertinoIcons.location,
+                                      color: AppTheme.primaryColor,
+                                      size: 16,
+                                    ),
+                                    Text(
+                                      locationProvider.location.address,
+                                      softWrap: false,
+                                      overflow: TextOverflow.clip,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    const Icon(
+                                      CupertinoIcons.chevron_down,
+                                      color: AppTheme.primaryColor,
+                                      size: 12,
+                                    )
+                                  ],
+                                ),
                               ),
                             ))
                       ],
@@ -147,30 +167,107 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               // Hero section
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.asset(
-                    "assets/images/banner.png",
-                    scale: 4.0,
+                child: Card(
+                  semanticContainer: true,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  elevation: 5,
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset(
+                        "assets/images/banner.png",
+                        fit: BoxFit.fill,
+                        height: 160,
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        height: 160,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          // height: MediaQuery.of(context).size.width * 0.56,
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryColor,
+                            borderRadius: BorderRadius.horizontal(
+                              left: Radius.elliptical(
+                                  MediaQuery.of(context).size.width * 0.2,
+                                  MediaQuery.of(context).size.width * 0.8),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                "Food of the day",
+                                style: TextStyle(
+                                    color: AppTheme.gradientColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Text(
+                                product != null ? product.label : "Beef pizza",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    if (product != null) {
+                                      (() => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  ProductDetailScreen(
+                                                    product: product!,
+                                                  )),
+                                            ),
+                                          ));
+                                    } else {
+                                      return;
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.fastfood_outlined,
+                                    color: AppTheme.primaryColor,
+                                    size: 16,
+                                  ),
+                                  label: const Text(
+                                    "View",
+                                    style: TextStyle(
+                                        color: AppTheme.primaryColor,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.lightColor,
+                                      foregroundColor: AppTheme.secondaryColor,
+                                      elevation: 0,
+                                      fixedSize: const Size(120, 28),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(24.0),
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
-              // SliverToBoxAdapter(
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(vertical: 16.0),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: const <Widget>[
-              //         Text(
-              //           "Browse Products",
-              //           style: TextStyle(
-              //               fontSize: 18, fontWeight: FontWeight.bold),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
 
               // Show browsable menu
               SliverToBoxAdapter(
@@ -191,55 +288,77 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(24))),
                         child: DropdownButton<String>(
-                            focusColor: AppTheme.whiteColor,
-                            value: chosenValue,
-                            style: const TextStyle(color: Colors.white),
-                            iconEnabledColor: AppTheme.darkColor,
-                            items: browsables
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: const TextStyle(
-                                      color: AppTheme.darkColor),
-                                ),
-                              );
-                            }).toList(),
-                            hint: Text(
-                              browsables[0],
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            onChanged: (String? newValue) {
-                              chosenValue = newValue!;
-                            }),
-                      ),
+                          focusColor: AppTheme.whiteColor,
+                          value: chosenValue,
+                          style: const TextStyle(color: Colors.white),
+                          iconEnabledColor: AppTheme.darkColor,
+                          items: browsables
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              //   onTap: (() => {
+                              //     setState(() {
+                              //   chosenValue = value;
+                              // })
+                              //   }),
+                              value: value,
+                              child: Text(
+                                value,
+                                style:
+                                    const TextStyle(color: AppTheme.darkColor),
+                              ),
+                            );
+                          }).toList(),
+                          hint: Text(
+                            browsables[0],
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          onChanged: ((value) => {
+                                setState(() {
+                                  chosenValue = value!;
+                                })
+                              }),
+                        ),
+                      )
                     ],
                   ),
                 ),
               ),
 
-              //  Product grid
+              //  Data grid/columns
+
               appProvider.productsStatus == ServiceStatus.loading ||
                       appProvider.vendorsStatus == ServiceStatus.loading
-                  ? SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return productSkeletonLoader();
-                        },
-                        childCount: 8,
-                      ),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1.0,
-                      ),
-                    )
+                  // Check the browse value
+                  ? chosenValue == browsables[0]
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(((
+                            context,
+                            index,
+                          ) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: VendorCardSkeleton(),
+                            );
+                          }), childCount: 6),
+                        )
+                      : SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return productSkeletonLoader();
+                            },
+                            childCount: 8,
+                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 1.0,
+                          ),
+                        )
                   : chosenValue == "Products"
                       ? SliverGrid(
                           delegate: SliverChildBuilderDelegate(
@@ -270,17 +389,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         )
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(((
-                          context,
-                          index,
-                        ) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: VendorCard(
-                              vendor: appProvider.vendors[index],
-                            ),
-                          );
-                        }), childCount: appProvider.vendors.length))
+                            context,
+                            index,
+                          ) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: VendorCard(
+                                vendor: appProvider.vendors[index],
+                              ),
+                            );
+                          }), childCount: appProvider.vendors.length),
+                        )
             ],
           ),
         ));

@@ -55,7 +55,8 @@ class UserService {
 
     return await post(Uri.parse(ApiUrl.register),
             body: json.encode(apiBodyData),
-            headers: {'Content-Type': 'application/json'})
+            headers: {'Content-Type': 'application/json'}
+            )
         .then(onValue)
         .catchError(onError);
   }

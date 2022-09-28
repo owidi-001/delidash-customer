@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 
 class ErrorPage extends StatelessWidget {
-  String error;
-  ErrorPage({super.key, required this.error});
+  final String error;
+  const ErrorPage({super.key, required this.error});
 
   @override
   Widget build(BuildContext context) {
