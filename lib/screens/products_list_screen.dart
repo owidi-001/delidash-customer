@@ -27,6 +27,19 @@ class ProductListScreen extends StatelessWidget {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: CircleAvatar(
+              backgroundColor: AppTheme.gradientColor,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: AppTheme.primaryColor,
+              ),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -56,48 +69,43 @@ class ProductListScreen extends StatelessWidget {
                         )),
                   )),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 24),
-            ),
+
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 100,
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
-                  child: appProvider.categoriesStatus == ServiceStatus.loading
-                      ? ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: categorySkeletonLoader(),
-                            );
-                          },
-                        )
-                      : appProvider.categories.isEmpty
-                          ? Container(
-                              decoration: const BoxDecoration(
-                                  color: AppTheme.lightColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
-                              alignment: Alignment.center,
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16.0),
-                                child: Text(
-                                  "No saved categories yet",
-                                  style: TextStyle(
-                                      color: AppTheme.secondaryColor,
-                                      fontSize: 18),
-                                ),
+                child: appProvider.categoriesStatus == ServiceStatus.loading
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: categorySkeletonLoader(),
+                          );
+                        },
+                      )
+                    : appProvider.categories.isEmpty
+                        ? Container(
+                            decoration: const BoxDecoration(
+                                color: AppTheme.lightColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12))),
+                            alignment: Alignment.center,
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Text(
+                                "No saved categories yet",
+                                style: TextStyle(
+                                    color: AppTheme.secondaryColor,
+                                    fontSize: 18),
                               ),
-                            )
-                          : categoryCardListView(appProvider.categories),
-                ),
+                            ),
+                          )
+                        : categoryCardListView(appProvider.categories),
               ),
             ),
             const SliverToBoxAdapter(

@@ -38,7 +38,7 @@ class _CheckOutState extends State<CheckOut> {
           child: const Padding(
             padding: EdgeInsets.only(left: 16),
             child: CircleAvatar(
-              backgroundColor: AppTheme.lightColor,
+              backgroundColor: AppTheme.gradientColor,
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 color: AppTheme.primaryColor,
@@ -250,7 +250,7 @@ class _CheckOutState extends State<CheckOut> {
 
               // Spacer
               const SliverPadding(padding: EdgeInsets.all(16)),
-              
+
               // Delivery address
               SliverToBoxAdapter(
                 child: Row(
@@ -344,14 +344,13 @@ class _CheckOutState extends State<CheckOut> {
 
               const SliverPadding(padding: EdgeInsets.symmetric(vertical: 8.0)),
               SliverToBoxAdapter(
-                child: submitButton("Pay ${cartProvider.totalPrice}", () {
+                child: submitButton("Pay Sh. ${cartProvider.totalPrice}", () {
                   // SHow paying snackbar
                   ScaffoldMessenger.of(context).showSnackBar(
                       showMessage(true, "Verifying payment ...", timeout: 5));
 
                   // Navigate back to dashboard
-                  Navigator.pushReplacementNamed(
-                      context, AppRoute.productDetail);
+                  Navigator.pushReplacementNamed(context, AppRoute.profile);
                 }),
               ),
             ],

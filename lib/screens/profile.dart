@@ -16,9 +16,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    var orders = [1, 2, 3];
-    bool hasOrders = orders.isEmpty;
-
     var user = context.watch<AuthenticationProvider>().user;
     var appProvider = Provider.of<MealioApplicationProvider>(context);
 
@@ -37,7 +34,7 @@ class _ProfileState extends State<Profile> {
           child: const Padding(
             padding: EdgeInsets.only(left: 16),
             child: CircleAvatar(
-              backgroundColor: AppTheme.lightColor,
+              backgroundColor: AppTheme.gradientColor,
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 color: AppTheme.primaryColor,
@@ -141,7 +138,7 @@ class _ProfileState extends State<Profile> {
             ),
 
             // List view
-            hasOrders
+            appProvider.orders.isEmpty
                 ? //check if customer has made any orders
                 SliverToBoxAdapter(
                     child: Container(

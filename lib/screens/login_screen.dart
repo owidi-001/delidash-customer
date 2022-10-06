@@ -117,10 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 32,
                 ),
-                // AuthenticationProvider.instance.status ==
-                //         AuthenticationStatus.authenticating
-                //     ? submitButton("Authenticating ...", () {})
-                //     : submitButton("Login", login),
                 submitButton("Login", login),
                 const SizedBox(
                   height: 24,
@@ -163,6 +159,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (form!.validate()) {
       form.save();
 
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     showMessage(true, "Please wait authenticating ..."));
+
       // Update authentication status
       AuthenticationProvider.instance
           .authenticationChanged(AuthenticationStatus.authenticating);
@@ -170,30 +169,26 @@ class _LoginScreenState extends State<LoginScreen> {
       final Future<Map<String, dynamic>> successfulMessage =
           UserService().login(_emailController.text, _passwordController.text);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          showMessage(true, "Please wait authenticating ...", timeout: 5));
-
       successfulMessage.then((response) {
         if (response['status'] == true) {
           User user = response['user'];
 
-          Provider.of<AuthenticationProvider>(context)
+          // Provider.of<AuthenticationProvider>(context,listen: false)
+          //     .loginUser(user: user, authToken: user.token);
+
+          AuthenticationProvider.instance
               .loginUser(user: user, authToken: user.token);
 
-          Navigator.pushReplacementNamed(context, AppRoute.home);
+          if (AuthenticationProvider.instance.status ==
+              AuthenticationStatus.authenticated) {
+            // Go to homescreen
+            Navigator.pushReplacementNamed(context, AppRoute.home);
 
-          ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(true, "Login Success"));
-
-          // if (AuthenticationProvider.instance.status ==
-          //     AuthenticationStatus.authenticated) {
-
-          //   // Go to homescreen
-
-          // } else {
-          //   //  print()
-          // }
-
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showMessage(true, "Login Success"));
+          } else {
+            //  print()
+          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               showMessage(false, "Login Failed ${response['message']!}"));

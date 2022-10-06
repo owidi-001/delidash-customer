@@ -33,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
           child: const Padding(
             padding: EdgeInsets.only(left: 16),
             child: CircleAvatar(
-              backgroundColor: AppTheme.lightColor,
+              backgroundColor: AppTheme.gradientColor,
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 color: AppTheme.primaryColor,
