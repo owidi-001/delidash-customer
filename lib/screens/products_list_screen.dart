@@ -34,11 +34,11 @@ class ProductListScreen extends StatelessWidget {
           slivers: <Widget>[
             SliverToBoxAdapter(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Container(
                     decoration: const BoxDecoration(
                         color: AppTheme.lightColor,
-                        borderRadius: BorderRadius.all(Radius.circular(24))),
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
                     child: const TextField(
                         textAlignVertical: TextAlignVertical.center,
                         decoration: InputDecoration(
@@ -64,22 +64,40 @@ class ProductListScreen extends StatelessWidget {
                 height: 100,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                    child: appProvider.categoriesStatus == ServiceStatus.loading
-                        ? ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+                  child: appProvider.categoriesStatus == ServiceStatus.loading
+                      ? ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           physics: const ClampingScrollPhysics(),
                           itemCount: 5,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: categorySkeletonLoader(),
                             );
                           },
                         )
-                        : categoryCardListView(appProvider.categories)),
+                      : appProvider.categories.isEmpty
+                          ? Container(
+                              decoration: const BoxDecoration(
+                                  color: AppTheme.lightColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12))),
+                              alignment: Alignment.center,
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  "No saved categories yet",
+                                  style: TextStyle(
+                                      color: AppTheme.secondaryColor,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            )
+                          : categoryCardListView(appProvider.categories),
+                ),
               ),
             ),
             const SliverToBoxAdapter(
@@ -102,31 +120,51 @@ class ProductListScreen extends StatelessWidget {
                       childAspectRatio: 1.0,
                     ),
                   )
-                : SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return ProductCardWidget(
-                          product: appProvider.products[index],
-                          onTapCallback: (() => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: ((context) => ProductDetailScreen(
-                                        product: appProvider.products[index],
-                                      )),
-                                ),
-                              )),
-                        );
-                      },
-                      childCount: appProvider.products.length,
-                    ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 1.0,
-                    ),
-                  ),
+                : appProvider.products.isEmpty
+                    ? SliverToBoxAdapter(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: AppTheme.lightColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12))),
+                          alignment: Alignment.center,
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              "No products yet",
+                              style: TextStyle(
+                                  color: AppTheme.secondaryColor, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SliverGrid(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return ProductCardWidget(
+                              product: appProvider.products[index],
+                              onTapCallback: (() => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: ((context) =>
+                                          ProductDetailScreen(
+                                            product:
+                                                appProvider.products[index],
+                                          )),
+                                    ),
+                                  )),
+                            );
+                          },
+                          childCount: appProvider.products.length,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 1.0,
+                        ),
+                      ),
           ],
         ),
       ),

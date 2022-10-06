@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
@@ -13,14 +14,14 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  
-  
   @override
   Widget build(BuildContext context) {
     var orders = [1, 2, 3];
     bool hasOrders = orders.isEmpty;
 
-    var user= context.watch<AuthenticationProvider>().user;
+    var user = context.watch<AuthenticationProvider>().user;
+    var appProvider = Provider.of<MealioApplicationProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -32,11 +33,18 @@ class _ProfileState extends State<Profile> {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: AppTheme.primaryColor,
-            )),
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: CircleAvatar(
+              backgroundColor: AppTheme.lightColor,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: AppTheme.primaryColor,
+              ),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         child: CustomScrollView(
@@ -46,12 +54,12 @@ class _ProfileState extends State<Profile> {
                 margin: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
                     color: AppTheme.lightColor,
-                    borderRadius: BorderRadius.all(Radius.circular(24))),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
                 alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       const SizedBox(
                         height: 44,
                       ),
@@ -123,10 +131,10 @@ class _ProfileState extends State<Profile> {
               child: Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  "Your Orders",
+                  "Your Orders will appear here",
                   style: TextStyle(
                       color: AppTheme.secondaryColor,
-                      fontSize: 24,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -142,7 +150,7 @@ class _ProfileState extends State<Profile> {
                         decoration: const BoxDecoration(
                             color: AppTheme.lightColor,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(24))),
+                                BorderRadius.all(Radius.circular(12))),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -184,14 +192,17 @@ class _ProfileState extends State<Profile> {
 
                 SliverList(
                     delegate: SliverChildBuilderDelegate(((
-                    context,
-                    index,
-                  ) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: orderCardHorizontal(),
-                    );
-                  }), childCount: 10))
+                      context,
+                      index,
+                    ) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: OrderCard(
+                          order: appProvider.orders[index],
+                        ),
+                      );
+                    }), childCount: appProvider.vendors.length),
+                  ),
           ],
         ),
       ),

@@ -99,7 +99,7 @@ class _SearchLocationState extends State<SearchLocation> {
                 child: Container(
                   decoration: const BoxDecoration(
                       color: AppTheme.lightColor,
-                      borderRadius: BorderRadius.all(Radius.circular(24))),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
                   child: TextFormField(
                       onChanged: ((value) {
                         placeAutoComplete(value);

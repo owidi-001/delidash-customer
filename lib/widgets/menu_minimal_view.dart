@@ -46,7 +46,7 @@ Widget seeAllView(BuildContext context, String name, List<Product>? products) {
 //             padding: const EdgeInsets.symmetric(horizontal: 24),
 //             decoration: const BoxDecoration(
 //                 color: AppTheme.lightColor,
-//                 borderRadius: BorderRadius.all(Radius.circular(24))),
+//                 borderRadius: BorderRadius.all(Radius.circular(12))),
 //             child: DropdownButton<String>(
 //                 focusColor: AppTheme.whiteColor,
 //                 value: chosenValue,

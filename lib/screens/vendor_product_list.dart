@@ -72,7 +72,7 @@ class VendorProductList extends StatelessWidget {
                             decoration: const BoxDecoration(
                                 color: AppTheme.lightColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(24))),
+                                    BorderRadius.all(Radius.circular(12))),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(

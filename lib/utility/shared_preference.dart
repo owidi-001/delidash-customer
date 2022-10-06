@@ -45,8 +45,8 @@ class UserPreferences {
     return data;
   }
 
-  void removeUser() async {
-    await prefs.then((value) => value.remove(USER));
-    await prefs.then((value) => value.remove(TOKEN));
-  }
+  // void removeUser() async {
+  //   await prefs.then((value) => value.remove(USER));
+  //   await prefs.then((value) => value.remove(TOKEN));
+  // }
 }

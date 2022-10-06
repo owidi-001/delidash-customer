@@ -39,9 +39,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         backgroundColor: Colors.white,
         leading: InkWell(
           onTap: () => Navigator.pop(context),
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: AppTheme.primaryColor,
+          child: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: CircleAvatar(
+              backgroundColor: AppTheme.lightColor,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: AppTheme.primaryColor,
+              ),
+            ),
           ),
         ),
       ),

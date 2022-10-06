@@ -46,7 +46,7 @@ class _MapScreenState extends State<MapScreen> {
               child: Container(
                 decoration: const BoxDecoration(
                     color: AppTheme.lightColor,
-                    borderRadius: BorderRadius.all(Radius.circular(24))),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
                 child: SingleChildScrollView(
                   child: Column(
                     children: const [

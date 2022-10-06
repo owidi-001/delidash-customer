@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
               type: BottomNavigationBarType.fixed,
               selectedItemColor: AppTheme.primaryColor,
               unselectedItemColor: AppTheme.secondaryColor,
-              showUnselectedLabels: false,
+              showUnselectedLabels: true,
               selectedLabelStyle: const TextStyle(color: AppTheme.primaryColor),
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

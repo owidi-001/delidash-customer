@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
@@ -18,6 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String authAction = "Login";
+
   // formkey
   final _formkey = GlobalKey<FormState>();
 
@@ -62,88 +65,93 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Form(
-              key: _formkey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                      height: 60,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
-                          Text(
-                            "Sign in",
-                            style: TextStyle(
-                                color: AppTheme.darkColor,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "Sign in to continue",
-                            style: TextStyle(
-                                color: AppTheme.secondaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const Text(
-                    "Email Address",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  emailField,
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const Text(
-                    "Password",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  passwordField,
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  submitButton("Login", login),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have account? ",
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, AppRoute.register);
-                        },
-                        child: const Text(
-                          "Sign Up",
+            key: _formkey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                    height: 60,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const <Widget>[
+                        Text(
+                          "Sign in",
                           style: TextStyle(
-                              color: AppTheme.primaryColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal),
+                              color: AppTheme.darkColor,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
                         ),
-                      )
-                    ],
-                  )
-                ],
-              )),
+                        Text(
+                          "Sign in to continue",
+                          style: TextStyle(
+                              color: AppTheme.secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )),
+                const SizedBox(
+                  height: 32,
+                ),
+                const Text(
+                  "Email Address",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                emailField,
+                const SizedBox(
+                  height: 32,
+                ),
+                const Text(
+                  "Password",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                passwordField,
+                const SizedBox(
+                  height: 32,
+                ),
+                // AuthenticationProvider.instance.status ==
+                //         AuthenticationStatus.authenticating
+                //     ? submitButton("Authenticating ...", () {})
+                //     : submitButton("Login", login),
+                submitButton("Login", login),
+                const SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don't have account? ",
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 18),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoute.register);
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                            color: AppTheme.primaryColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       )),
     );
@@ -162,6 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
       final Future<Map<String, dynamic>> successfulMessage =
           UserService().login(_emailController.text, _passwordController.text);
 
+      ScaffoldMessenger.of(context).showSnackBar(
+          showMessage(true, "Please wait authenticating ...", timeout: 5));
+
       successfulMessage.then((response) {
         if (response['status'] == true) {
           User user = response['user'];
@@ -169,11 +180,20 @@ class _LoginScreenState extends State<LoginScreen> {
           Provider.of<AuthenticationProvider>(context)
               .loginUser(user: user, authToken: user.token);
 
-          // Go to homescreen
           Navigator.pushReplacementNamed(context, AppRoute.home);
 
           ScaffoldMessenger.of(context)
               .showSnackBar(showMessage(true, "Login Success"));
+
+          // if (AuthenticationProvider.instance.status ==
+          //     AuthenticationStatus.authenticated) {
+
+          //   // Go to homescreen
+
+          // } else {
+          //   //  print()
+          // }
+
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               showMessage(false, "Login Failed ${response['message']!}"));

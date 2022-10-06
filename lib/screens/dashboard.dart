@@ -40,7 +40,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     // Banner product
     Product? product;
-    if (appProvider.productsStatus == ServiceStatus.loadingSuccess && appProvider.products.length > 1) {
+    if (appProvider.productsStatus == ServiceStatus.loadingSuccess &&
+        appProvider.products.length > 1) {
       product = (appProvider.products..shuffle()).first;
     }
 
@@ -116,13 +117,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             flex: 2,
                             child: InkWell(
                               onTap: (() => {
-                                    // Navigate to maps page
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => const MapScreen(),
-                                    //   ),
-                                    // ),
                                     Navigator.pushNamed(
                                         context, AppRoute.location)
                                   }),
@@ -132,7 +126,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 decoration: const BoxDecoration(
                                     color: AppTheme.lightColor,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(24))),
+                                        BorderRadius.all(Radius.circular(12))),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -286,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         decoration: const BoxDecoration(
                             color: AppTheme.lightColor,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(24))),
+                                BorderRadius.all(Radius.circular(12))),
                         child: DropdownButton<String>(
                           focusColor: AppTheme.whiteColor,
                           value: chosenValue,
@@ -295,11 +289,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           items: browsables
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
-                              //   onTap: (() => {
-                              //     setState(() {
-                              //   chosenValue = value;
-                              // })
-                              //   }),
                               value: value,
                               child: Text(
                                 value,
@@ -328,7 +317,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
 
               //  Data grid/columns
-
               appProvider.productsStatus == ServiceStatus.loading ||
                       appProvider.vendorsStatus == ServiceStatus.loading
                   // Check the browse value
@@ -360,47 +348,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         )
                   : chosenValue == "Products"
-                      ? SliverGrid(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return ProductCardWidget(
-                                product: appProvider.products[index],
-                                onTapCallback: (() => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) =>
-                                            ProductDetailScreen(
-                                              product:
-                                                  appProvider.products[index],
-                                            )),
-                                      ),
-                                    )),
-                              );
-                            },
-                            childCount: appProvider.products.length,
-                          ),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 1.0,
-                          ),
-                        )
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate(((
-                            context,
-                            index,
-                          ) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: VendorCard(
-                                vendor: appProvider.vendors[index],
+                      ? appProvider.products.isNotEmpty
+                          ? SliverGrid(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  return ProductCardWidget(
+                                    product: appProvider.products[index],
+                                    onTapCallback: (() => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: ((context) =>
+                                                ProductDetailScreen(
+                                                  product: appProvider
+                                                      .products[index],
+                                                )),
+                                          ),
+                                        )),
+                                  );
+                                },
+                                childCount: appProvider.products.length,
                               ),
-                            );
-                          }), childCount: appProvider.vendors.length),
-                        )
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: 1.0,
+                              ),
+                            )
+                          : const SliverToBoxAdapter(
+                              child: Text(
+                                "No Products saved yet",
+                                style: TextStyle(
+                                    color: AppTheme.secondaryColor,
+                                    fontSize: 18),
+                              ),
+                            )
+                      : appProvider.vendors.isNotEmpty
+                          ? SliverList(
+                              delegate: SliverChildBuilderDelegate(((
+                                context,
+                                index,
+                              ) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: VendorCard(
+                                    vendor: appProvider.vendors[index],
+                                  ),
+                                );
+                              }), childCount: appProvider.vendors.length),
+                            )
+                          : const SliverToBoxAdapter(
+                              child: Text(
+                                "No vendors saved yet",
+                                style: TextStyle(
+                                    color: AppTheme.secondaryColor,
+                                    fontSize: 18),
+                              ),
+                            ),
             ],
           ),
         ));

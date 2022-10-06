@@ -34,7 +34,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _firstNameController,
       keyboardType: TextInputType.name,
-      initialValue: user.firstName.isNotEmpty ? user.firstName : "",
       // initialValue: user.firstName,
       onSaved: (value) {
         _firstNameController.value;
@@ -54,7 +53,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _lastNameController,
       keyboardType: TextInputType.name,
-      initialValue: user.lastName,
+      // initialValue: user.lastName ?? "",
       onSaved: (value) {
         _lastNameController.value;
       },
@@ -73,7 +72,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       autofocus: false,
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
-      initialValue: user.email,
+      // initialValue: user.email,
       onSaved: (value) {
         _emailController.value;
       },
@@ -89,7 +88,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       maxLength: 10,
-      initialValue: user.phoneNumber,
+      // initialValue: user.phoneNumber,
       onSaved: (value) {
         _phoneController.value;
       },
@@ -110,8 +109,18 @@ class _ProfileEditState extends State<ProfileEdit> {
           elevation: 0,
           backgroundColor: Colors.white,
           leading: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,)),
+            onTap: () => Navigator.pop(context),
+            child: const Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: CircleAvatar(
+                backgroundColor: AppTheme.lightColor,
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           // form fields with details
@@ -121,7 +130,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 margin: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
                     color: AppTheme.lightColor,
-                    borderRadius: BorderRadius.all(Radius.circular(24))),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
                 alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -138,7 +147,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ),
                       ),
                       const SizedBox(
-                        height: 32,
+                        height: 28,
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -150,7 +159,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 16,
                       ),
                     ],
                   ),
@@ -161,11 +170,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 30,
-                    ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,

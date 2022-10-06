@@ -12,7 +12,6 @@ class UserService {
   // login
   Future<Map<String, dynamic>> login(String email, String password) async {
     Map<String, dynamic> result;
-
     final Map<String, dynamic> loginData = {
       'email': email,
       'password': password
@@ -23,18 +22,21 @@ class UserService {
       body: loginData,
     );
 
+    if (kDebugMode) {
+      print("The response received is $response");
+    }
+
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
 
       User authUser = User.fromJson(responseData);
 
-      LoginData data = LoginData(user: authUser, authToken: authUser.token);
-
-      //save user
-      UserPreferences().storeLoginData(data);
-
       result = {'status': true, 'message': "Successful", 'user': authUser};
     } else {
+      if (kDebugMode) {
+        print(response.statusCode);
+        print(response.body);
+      }
       result = {
         'status': false,
         'message': json.decode(response.body)['error']
@@ -55,8 +57,7 @@ class UserService {
 
     return await post(Uri.parse(ApiUrl.register),
             body: json.encode(apiBodyData),
-            headers: {'Content-Type': 'application/json'}
-            )
+            headers: {'Content-Type': 'application/json'})
         .then(onValue)
         .catchError(onError);
   }
@@ -96,13 +97,8 @@ class UserService {
     return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
   }
 
-  // Log out
-  void logout() {
-    UserPreferences().removeUser();
-  }
 
   // Update profile
-  // login
   Future<Map<String, dynamic>> updateProfile(
       String firstName, String lastName, String email, String phone) async {
     Map<String, dynamic> result;
