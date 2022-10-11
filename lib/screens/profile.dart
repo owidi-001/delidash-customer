@@ -75,7 +75,7 @@ class _ProfileState extends State<Profile> {
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
                           user.firstName.isEmpty
-                              ? "Update Name"
+                              ? "Anonymous"
                               : "${user.firstName} ${user.lastName}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -97,27 +97,15 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       const SizedBox(
-                        height: 36,
+                        height: 16,
                       ),
                       user.firstName.isEmpty
-                          ? FractionallySizedBox(
-                              widthFactor: 0.5,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, AppRoute.profileEdit);
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    textStyle: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                    shape: const StadiumBorder(),
-                                    backgroundColor: AppTheme.primaryColor,
-                                  ),
-                                  child: const Text("Update Profile")),
-                            )
+                          ? TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, AppRoute.profileEdit);
+                              },
+                              child: const Text("Update Profile",style: TextStyle(color: AppTheme.primaryColor,fontSize: 14, fontWeight: FontWeight.w500),))
                           : Container()
                     ],
                   ),

@@ -54,7 +54,11 @@ class Location {
   final String? name;
   final String? city;
   final String? street;
-  Location({this.lng, this.lat, this.name, this.city, this.street});
+  late final String? blockName;
+  late final String? floor;
+  late final String? roomNumber;
+
+  Location({this.lng, this.lat, this.name, this.city, this.street,this.blockName,this.floor,this.roomNumber});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(

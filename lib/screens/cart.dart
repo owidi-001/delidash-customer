@@ -126,29 +126,20 @@ class _CartScreenState extends State<CartScreen> {
                                   const SizedBox(
                                     height: 24.0,
                                   ),
-                                  FractionallySizedBox(
-                                    widthFactor: 0.5,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          // Navigator.pushReplacementNamed(
-                                          //     context, AppRoute.productList);
-                                          Navigator.popUntil(
-                                              context,
-                                              ModalRoute.withName(
-                                                  AppRoute.dashboard));
-                                        },
-                                        style: TextButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12),
-                                          textStyle: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500),
-                                          shape: const StadiumBorder(),
-                                          backgroundColor:
-                                              AppTheme.secondaryColor,
-                                        ),
-                                        child: const Text("Browse Products")),
-                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                AppRoute.dashboard));
+                                      },
+                                      child: const Text(
+                                        "Browse Products",
+                                        style: TextStyle(
+                                            color: AppTheme.primaryColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ))
                                 ],
                               ),
                             )),

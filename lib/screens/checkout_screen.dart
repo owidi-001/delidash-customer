@@ -51,7 +51,8 @@ class _CheckOutState extends State<CheckOut> {
             "assets/images/user.png",
             width: 48,
             height: 48,
-          )
+          ),
+          const SizedBox(width: 16.0,)
         ],
       ),
       body: SafeArea(
@@ -62,6 +63,106 @@ class _CheckOutState extends State<CheckOut> {
               // Spacer
               const SliverPadding(padding: EdgeInsets.all(8.0)),
               // Delivery address
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "Deliver to:",
+                      style: TextStyle(
+                        color: AppTheme.darkColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: (() {
+                        return;
+                      }),
+                      child: const CircleAvatar(
+                        backgroundColor: AppTheme.gradientColor,
+                        child: Icon(
+                          Icons.edit_location_alt_outlined,
+                          size: 24,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.whiteColor,
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _circle(Icons.arrow_drop_down_circle),
+                          Container(
+                            height: 50,
+                            margin: const EdgeInsets.only(
+                                left: 10, top: 0, right: 0, bottom: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                  11,
+                                  (index) => Expanded(
+                                        child: Container(
+                                          color: index % 2 == 0
+                                              ? Colors.transparent
+                                              : Colors.grey.shade300,
+                                          height: 1,
+                                          width: 2,
+                                        ),
+                                      )),
+                            ),
+                          ),
+                          _circle(Icons.circle),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      // TODO! Set some relevant picked addressed
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          SizedBox(
+                            height: 65,
+                          ),
+                          Text(
+                            "Street/City/Country",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Spacer
+              const SliverPadding(padding: EdgeInsets.all(8.0)),
+
               SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,24 +187,25 @@ class _CheckOutState extends State<CheckOut> {
                   ],
                 ),
               ),
+
               // Spacer
               const SliverPadding(padding: EdgeInsets.all(8.0)),
               // Payment card
+
               SliverToBoxAdapter(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  padding: const EdgeInsets.all(16.0),
                   decoration: const BoxDecoration(
                     color: AppTheme.primaryColor,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.black26,
+                    //     blurRadius: 10,
+                    //     spreadRadius: 2,
+                    //     offset: Offset(0, 2),
+                    //   ),
+                    // ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -251,100 +353,8 @@ class _CheckOutState extends State<CheckOut> {
               // Spacer
               const SliverPadding(padding: EdgeInsets.all(16)),
 
-              // Delivery address
               SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      "Address",
-                      style: TextStyle(
-                        color: AppTheme.darkColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (() {
-                        return;
-                      }),
-                      child: const CircleAvatar(
-                        backgroundColor: AppTheme.gradientColor,
-                        child: Icon(
-                          Icons.edit_location_alt_outlined,
-                          size: 24,
-                          color: AppTheme.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Spacer
-              const SliverPadding(padding: EdgeInsets.all(8.0)),
-
-              SliverToBoxAdapter(
-                child: Container(
-                    decoration: const BoxDecoration(
-                      color: AppTheme.whiteColor,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Card(
-                      elevation: 0,
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            "assets/images/dummy_map.png",
-                            fit: BoxFit.contain,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: 40,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: AppTheme.whiteColor,
-                                // borderRadius: BorderRadius.all(
-                                //   Radius.circular(12.0),
-                                // ),
-                              ),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: const <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Other details",
-                                        style: TextStyle(
-                                          color: AppTheme.darkColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    )
-                                  ]),
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
-              ),
-
-              const SliverPadding(padding: EdgeInsets.symmetric(vertical: 8.0)),
-              SliverToBoxAdapter(
-                child: submitButton("Pay Sh. ${cartProvider.totalPrice}", () {
+                child: submitButton("Pay", () {
                   // SHow paying snackbar
                   ScaffoldMessenger.of(context).showSnackBar(
                       showMessage(true, "Verifying payment ...", timeout: 5));
@@ -356,6 +366,22 @@ class _CheckOutState extends State<CheckOut> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _circle(IconData icon) {
+    return Container(
+      height: 20,
+      width: 20,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border.all(color: AppTheme.primaryColor, width: 2),
+      ),
+      child: Icon(
+        icon,
+        color: AppTheme.primaryColor,
+        size: 15,
       ),
     );
   }
