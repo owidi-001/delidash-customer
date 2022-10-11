@@ -196,7 +196,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const Text(
-                                "Food of the day",
+                                "Random suggestions",
                                 style: TextStyle(
                                     color: AppTheme.gradientColor,
                                     fontSize: 12,
@@ -285,7 +285,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           focusColor: AppTheme.whiteColor,
                           value: chosenValue,
                           style: const TextStyle(color: Colors.white),
-                          iconEnabledColor: AppTheme.darkColor,
+                          // iconEnabledColor: AppTheme.darkColor,
                           items: browsables
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(

@@ -37,10 +37,12 @@ class ProductCardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Flex(
               direction: Axis.vertical,
-              children: [
+              children: <Widget>[
                 Flexible(
                   flex: 2,
-                  child: Image.network("$baseURL${product.image}"),
+                  child: Image.network(
+                    "$baseURL${product.image}",
+                  ),
                 ),
                 const SizedBox(
                   height: 12,
@@ -49,7 +51,9 @@ class ProductCardWidget extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     product.label,
+                    maxLines: 1,
                     style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: AppTheme.secondaryColor),

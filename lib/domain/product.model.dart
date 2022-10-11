@@ -1,10 +1,11 @@
 class Product {
   final int id;
   final String label;
+  final String? unit;
   final double unitPrice;
   final String image;
   final String description;
-  final int quantity;
+  final int stock;
   final int? category;
   final int vendor;
 
@@ -12,10 +13,11 @@ class Product {
   Product(
       {required this.id,
       required this.label,
+      this.unit,
       required this.unitPrice,
       required this.image,
       required this.description,
-      required this.quantity,
+      required this.stock,
       this.category,
       required this.vendor});
 
@@ -26,7 +28,7 @@ class Product {
         unitPrice: double.parse(json["unit_price"]),
         image: json["image"],
         description: json["description"],
-        quantity: json["quantity"],
+        stock: json["stock"],
         category: json["category"],
         vendor: json["vendor"]);
   }

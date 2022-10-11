@@ -34,7 +34,6 @@ class MealioApplicationProvider with ChangeNotifier {
   List<OrderItem> orderItems = [];
   ServiceStatus orderItemsStatus = ServiceStatus.initial;
 
-
   MealioApplicationProvider() {
     categoriesStatus = ServiceStatus.loading;
     vendorsStatus = ServiceStatus.loading;
@@ -51,23 +50,12 @@ class MealioApplicationProvider with ChangeNotifier {
     await _initVendors();
 
     // Get saved address
-    await _userAddress();
+    // await _userAddress();
     // Orders
     await _getOrders();
     await _getOrderItems();
   }
 
-  Future<void> _userAddress() async {
-    final res = await AddressService().fetchAddress();
-
-    if (res["status"]) {
-      addresses = res["addresses"];
-      addressesStatus = ServiceStatus.loadingSuccess;
-    } else {
-      addressesStatus = ServiceStatus.loadingFailure;
-    }
-    notifyListeners();
-  }
 
   Future<void> _initCategories() async {
     final res = await ProductCategoryService().fetchCategories();
@@ -106,6 +94,8 @@ class MealioApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  
+
   // Load vendor products
   List<Product> fetchVendorProducts(Vendor vendor) {
     List<Product> results = [];
@@ -119,10 +109,25 @@ class MealioApplicationProvider with ChangeNotifier {
     return results;
   }
 
+  // user address
+  // Future<void> _userAddress() async {
+  //   final res = await AddressService().fetchAddress();
+
+  //   if (res["status"]) {
+  //     addresses = res["addresses"];
+  //     addressesStatus = ServiceStatus.loadingSuccess;
+  //   } else {
+  //     addressesStatus = ServiceStatus.loadingFailure;
+  //   }
+  //   notifyListeners();
+  // }
+
   // Getting orders
   Future<void> _getOrders() async {
     final res = await OrderService().fetchOrders();
-
+    if (kDebugMode) {
+      print("The order status is : ${res["status"]}");
+    }
     if (res["status"]) {
       orders = res["orders"];
 

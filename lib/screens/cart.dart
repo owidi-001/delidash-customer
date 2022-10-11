@@ -4,6 +4,7 @@ import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/cart_item.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     double deliveryFee = cartProvider.items.isEmpty ? 0 : 50;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -101,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
                   SliverToBoxAdapter(
                       child: Center(
                         child: Container(
-                            height: MediaQuery.of(context).size.height * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.3,
                             width: double.infinity,
                             padding: const EdgeInsets.all(16.0),
                             decoration: const BoxDecoration(
@@ -114,10 +116,6 @@ class _CartScreenState extends State<CartScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  const Divider(
-                                    color: AppTheme.whiteColor,
-                                    thickness: 2,
-                                  ),
                                   const Text(
                                     "No Products in your cart!",
                                     style: TextStyle(
@@ -269,8 +267,10 @@ class _CartScreenState extends State<CartScreen> {
               SliverToBoxAdapter(
                 child: submitButton("Checkout", () {
                   if (cartProvider.items.isEmpty) {
-                    // return;
-                    Navigator.pushNamed(context, AppRoute.checkout);
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(showMessage(false, "Your cart is empty"));
+
+                    return;
                   } else {
                     // Navigate to checkout
                     Navigator.pushNamed(context, AppRoute.checkout);

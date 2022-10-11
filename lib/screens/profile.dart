@@ -58,20 +58,18 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: <Widget>[
                       const SizedBox(
-                        height: 44,
+                        height: 16,
                       ),
                       CircleAvatar(
                         backgroundColor: AppTheme.whiteColor,
                         radius: 50,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                              // widget.user.profileImage,
-                              "assets/images/user.png"),
+                          child: Image.asset("assets/images/user.png"),
                         ),
                       ),
                       const SizedBox(
-                        height: 32,
+                        height: 16,
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -101,22 +99,26 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(
                         height: 36,
                       ),
-                      FractionallySizedBox(
-                        widthFactor: 0.5,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, AppRoute.profileEdit);
-                            },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              textStyle: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w500),
-                              shape: const StadiumBorder(),
-                              backgroundColor: AppTheme.primaryColor,
-                            ),
-                            child: const Text("Update Profile")),
-                      )
+                      user.firstName.isEmpty
+                          ? FractionallySizedBox(
+                              widthFactor: 0.5,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoute.profileEdit);
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    textStyle: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                    shape: const StadiumBorder(),
+                                    backgroundColor: AppTheme.primaryColor,
+                                  ),
+                                  child: const Text("Update Profile")),
+                            )
+                          : Container()
                     ],
                   ),
                 ),
@@ -124,12 +126,14 @@ class _ProfileState extends State<Profile> {
             ),
 
             // Lower layer
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  "Your Orders will appear here",
-                  style: TextStyle(
+                  appProvider.orders.isEmpty
+                      ? "Your Orders will appear here"
+                      : "Your Orders",
+                  style: const TextStyle(
                       color: AppTheme.secondaryColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
@@ -192,13 +196,13 @@ class _ProfileState extends State<Profile> {
                       context,
                       index,
                     ) {
-                      return Padding(
+                      return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: OrderCard(
                           order: appProvider.orders[index],
                         ),
                       );
-                    }), childCount: appProvider.vendors.length),
+                    }), childCount: appProvider.orders.length),
                   ),
           ],
         ),

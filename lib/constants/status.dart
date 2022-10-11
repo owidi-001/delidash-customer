@@ -8,4 +8,9 @@ enum ServiceStatus {
   submissionFailure
 }
 
-enum AuthenticationStatus { unknown,authenticating, authenticated, unAuthenticated }
+enum AuthenticationStatus {
+  unknown,
+  authenticating,
+  authenticated,
+  unAuthenticated
+}
