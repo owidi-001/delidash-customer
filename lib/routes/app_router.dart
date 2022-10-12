@@ -42,8 +42,6 @@ class ApiUrl {
   // Saved addresses
   static const String userAddress = "$baseURL/orders/address";
 
-  // cart
-
   
   // orders
   // static const String orders = "$baseURL/orders/orders";

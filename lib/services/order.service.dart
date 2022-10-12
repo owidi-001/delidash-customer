@@ -20,11 +20,6 @@ class OrderService {
     if (response.statusCode == 200) {
       List parsed = jsonDecode(response.body);
 
-      if (kDebugMode) {
-        print("Pre orders conversion");
-        print(parsed);
-      }
-
       // Convert the list to Address instance
       List<Order> orders =
           parsed.map<Order>((json) => Order.fromJson(json)).toList();
@@ -83,6 +78,88 @@ class OrderService {
         "message": "Items not loaded",
       };
     }
+    return result;
+  }
+
+  // Save order / checkout => Order needs to be saved before the items since items use order ID
+  Future<Map<String, dynamic>> saveOrder(Location location) async {
+    Map<String, dynamic> result;
+
+    Response response = await post(
+      Uri.parse(ApiUrl.orders),
+      body: Location().toMap(location),
+    );
+
+    if (kDebugMode) {
+      print("The response received is $response");
+    }
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+      Order order = Order.fromJson(responseData);
+
+      result = {
+        'status': true,
+        'message': "Order placed successfuly",
+        'data': order
+      };
+    } else {
+      if (kDebugMode) {
+        print(response.statusCode);
+        print(response.body);
+      }
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+  
+
+/*"""
+
+{
+
+    "id": 11,
+    "cart": 2,
+    "quantity": 1,
+    "product": {
+        "id": 4,
+        "label": "Avocado",
+        "unit": "kg",
+        "unit_price": "200.00",
+        "image": "/media/product/2022/10/04/avocado.png",
+        "description": "Developed in 1951 by James Bacon, this avocado type is a medium-sized fruit with yellowish-green, light-tasting flesh. It has a large seed with the flesh containing a large amount of oil. 9. Cleopatra. It is a relatively new avocado type with a medium-sized fruit having yellow, creamy flesh and a rich, creamy flavor.",
+        "stock": 1,
+        "category": 6,
+        "vendor": 9
+    }
+
+},
+
+""" */
+
+  // Save order items
+  Future<Map<String, dynamic>> saveOrderItems(List<OrderItem> items) async {
+    Map<String, dynamic> result={
+      "status":true,
+      "message":"All items posted"
+    };
+
+    for (var item in items) {
+      // Save every order item
+      Response response = await post(
+        Uri.parse(ApiUrl.orderItems),
+        body: OrderItem.toMap(item),
+      );
+
+      if (kDebugMode) {
+        print("The response received is $response");
+      }
+    }
+
     return result;
   }
 }

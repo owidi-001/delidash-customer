@@ -3,7 +3,6 @@ import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/widgets/cart_item.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';

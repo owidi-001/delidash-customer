@@ -32,6 +32,22 @@ class Product {
         category: json["category"],
         vendor: json["vendor"]);
   }
+
+  static Map<String, dynamic> toMap(Product product) {
+    Map<String, dynamic> data = {
+      "id": product.id,
+      "label": product.label,
+      "unit": product.unit,
+      "unit_price": product.unitPrice,
+      "image": product.image,
+      "description": product.description,
+      "stock": product.stock,
+      "category": product.category,
+      "vendor": product.vendor
+    };
+
+    return data;
+  }
 }
 
 class ProductCategory {

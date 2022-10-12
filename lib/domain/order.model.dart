@@ -29,22 +29,33 @@ class OrderItem {
   final int quantity;
   Product product;
 
-  OrderItem(
-      {required this.id,
-      required this.order,
-      required this.product,
-      required this.quantity,
-      });
+  OrderItem({
+    required this.id,
+    required this.order,
+    required this.product,
+    required this.quantity,
+  });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     Product product = Product.fromJson(json["product"]);
 
     return OrderItem(
-        id: json["id"],
-        order: json["cart"],
-        product: product,
-        quantity: json["quantity"],
-        );
+      id: json["id"],
+      order: json["cart"],
+      product: product,
+      quantity: json["quantity"],
+    );
+  }
+
+  static Map<String, dynamic> toMap(OrderItem item) {
+    Map<String, dynamic> data = {
+      "id": item.id,
+      "cart": item.order,
+      "quantity": item.quantity,
+      "product": Product.toMap(item.product)
+    };
+
+    return data;
   }
 }
 
@@ -58,7 +69,15 @@ class Location {
   late final String? floor;
   late final String? roomNumber;
 
-  Location({this.lng, this.lat, this.name, this.city, this.street,this.blockName,this.floor,this.roomNumber});
+  Location(
+      {this.lng,
+      this.lat,
+      this.name,
+      this.city,
+      this.street,
+      this.blockName,
+      this.floor,
+      this.roomNumber});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
@@ -67,6 +86,21 @@ class Location {
         name: json["name"],
         city: json["city"],
         street: json["street"]);
+  }
+
+  Map<String, dynamic> toMap(Location location) {
+    Map<String, dynamic> data = {
+      "lng": location.lng,
+      "lat": location.lat,
+      "name": location.name,
+      "city": location.city,
+      "street": location.street,
+      "blockName": location.blockName,
+      "floor": location.floor,
+      "roomNumber": location.roomNumber
+    };
+
+    return data;
   }
 }
 
