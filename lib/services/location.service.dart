@@ -1,6 +1,5 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/location.provider.dart';
 
 class LocationService {
@@ -35,11 +34,6 @@ class LocationService {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    // if (kDebugMode) {
-    //   print("The placemarks are: ");
-    //   print(placemarks[0].name);
-    // }
-
     Placemark place = placemarks[0];
     // address ='${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     String? address = place.name;
@@ -47,21 +41,21 @@ class LocationService {
     return address;
   }
 
-  Future<UserLocation> fetchLocation() async {
-    late UserLocation location = UserLocation(address: "My Location");
+  // Future<Location> fetchLocation() async {
+  //   late Location location = Location();
 
-    var position = await getGeoLocationPosition();
+  //   var position = await getGeoLocationPosition();
 
-    var address = await getAddressFromLatLong(position);
+  //   var address = await getAddressFromLatLong(position);
 
-    if (address != null) {
-      // location=Location(address: address);
-      location = UserLocation(address: address);
+  //   if (address != null) {
+  //     // location=Location(address: address);
+  //     location = Location(address: address);
 
-      // Update provider to read location
-      LocationProvider().setLocation(location);
-    }
+  //     // Update provider to read location
+  //     LocationProvider().setLocation(location);
+  //   }
 
-    return location;
-  }
+  //   return location;
+  // }
 }

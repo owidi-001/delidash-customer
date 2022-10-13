@@ -1,27 +1,6 @@
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
 
-/*
-
-{
-
-    "id": 11,
-    "cart": 2,
-    "quantity": 1,
-    "product": {
-        "id": 4,
-        "label": "Avocado",
-        "unit": "kg",
-        "unit_price": "200.00",
-        "image": "/media/product/2022/10/04/avocado.png",
-        "description": "Developed in 1951 by James Bacon, this avocado type is a medium-sized fruit with yellowish-green, light-tasting flesh. It has a large seed with the flesh containing a large amount of oil. 9. Cleopatra. It is a relatively new avocado type with a medium-sized fruit having yellow, creamy flesh and a rich, creamy flavor.",
-        "stock": 1,
-        "category": 6,
-        "vendor": 9
-    }
-
-},
-
- */
 
 class OrderItem {
   final int id;
@@ -53,51 +32,6 @@ class OrderItem {
       "cart": item.order,
       "quantity": item.quantity,
       "product": Product.toMap(item.product)
-    };
-
-    return data;
-  }
-}
-
-class Location {
-  final double? lng;
-  final double? lat;
-  final String? name;
-  final String? city;
-  final String? street;
-  late final String? blockName;
-  late final String? floor;
-  late final String? roomNumber;
-
-  Location(
-      {this.lng,
-      this.lat,
-      this.name,
-      this.city,
-      this.street,
-      this.blockName,
-      this.floor,
-      this.roomNumber});
-
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-        lng: json["lng"],
-        lat: json["lat"],
-        name: json["name"],
-        city: json["city"],
-        street: json["street"]);
-  }
-
-  Map<String, dynamic> toMap(Location location) {
-    Map<String, dynamic> data = {
-      "lng": location.lng,
-      "lat": location.lat,
-      "name": location.name,
-      "city": location.city,
-      "street": location.street,
-      "blockName": location.blockName,
-      "floor": location.floor,
-      "roomNumber": location.roomNumber
     };
 
     return data;

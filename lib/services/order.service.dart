@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
@@ -87,7 +88,7 @@ class OrderService {
 
     Response response = await post(
       Uri.parse(ApiUrl.orders),
-      body: Location().toMap(location),
+      body: Location.toMap(location),
     );
 
     if (kDebugMode) {
@@ -117,30 +118,6 @@ class OrderService {
     return result;
   }
   
-
-/*"""
-
-{
-
-    "id": 11,
-    "cart": 2,
-    "quantity": 1,
-    "product": {
-        "id": 4,
-        "label": "Avocado",
-        "unit": "kg",
-        "unit_price": "200.00",
-        "image": "/media/product/2022/10/04/avocado.png",
-        "description": "Developed in 1951 by James Bacon, this avocado type is a medium-sized fruit with yellowish-green, light-tasting flesh. It has a large seed with the flesh containing a large amount of oil. 9. Cleopatra. It is a relatively new avocado type with a medium-sized fruit having yellow, creamy flesh and a rich, creamy flavor.",
-        "stock": 1,
-        "category": 6,
-        "vendor": 9
-    }
-
-},
-
-""" */
-
   // Save order items
   Future<Map<String, dynamic>> saveOrderItems(List<OrderItem> items) async {
     Map<String, dynamic> result={

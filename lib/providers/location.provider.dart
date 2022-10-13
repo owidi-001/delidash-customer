@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/location.model.dart';
 
 class LocationProvider extends ChangeNotifier {
-  UserLocation _location = UserLocation(address: "My Location");
+  late Location _location;
+  ServiceStatus locationStatus = ServiceStatus.initial;
 
-  UserLocation get location {
+  Location? get location {
     return _location;
   }
 
-  void setLocation(UserLocation location) {
+  Future<void> setLocation(Location location) async {
     _location = location;
+    locationStatus = ServiceStatus.loadingSuccess;
     notifyListeners();
   }
 }

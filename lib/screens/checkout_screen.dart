@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
@@ -51,7 +52,9 @@ class _CheckOutState extends State<CheckOut> {
             width: 48,
             height: 48,
           ),
-          const SizedBox(width: 16.0,)
+          const SizedBox(
+            width: 16.0,
+          )
         ],
       ),
       body: SafeArea(
@@ -354,6 +357,10 @@ class _CheckOutState extends State<CheckOut> {
 
               SliverToBoxAdapter(
                 child: submitButton("Pay", () {
+                  // Save order
+                  // Get location
+                  Location location = Location();
+
                   // SHow paying snackbar
                   ScaffoldMessenger.of(context).showSnackBar(
                       showMessage(true, "Verifying payment ...", timeout: 5));
@@ -389,3 +396,8 @@ class _CheckOutState extends State<CheckOut> {
 String spacePhone(String phone) {
   return "${phone.substring(0, 4)}  ${phone.substring(4, 7)}  ${phone.substring(7, 10)}";
 }
+
+// Save order
+void saveOrder(params) {}
+// Save order items
+void saveItems() {}

@@ -132,8 +132,8 @@ class _OrderCardState extends State<OrderCard> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             widget.order.location != null
-                ? "To: ${widget.order.location!.name} ${widget.order.location!.street}"
-                : "Not specified",
+                ? "To: ${widget.order.location!.name}"
+                : "Unamed",
             maxLines: 1,
             style: const TextStyle(
                 overflow: TextOverflow.ellipsis,

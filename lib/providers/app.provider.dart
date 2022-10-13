@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:greens_veges/domain/address.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/services/address.service.dart';
 import 'package:greens_veges/services/order.service.dart';
 
 import '../domain/vendor.model.dart';
@@ -23,8 +21,8 @@ class MealioApplicationProvider with ChangeNotifier {
   List<Product> products = [];
   ServiceStatus productsStatus = ServiceStatus.initial;
 
-  List<Address> addresses = [];
-  ServiceStatus addressesStatus = ServiceStatus.initial;
+  // List<Address> addresses = [];
+  // ServiceStatus addressesStatus = ServiceStatus.initial;
 
   Map<Vendor, List<Product>> vendorProducts = {};
 

@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:greens_veges/domain/auto_complete_prediction.dart';
 import 'package:greens_veges/domain/place_auto_complete_response.dart';
 import 'package:greens_veges/secrets/keys.dart';
@@ -18,6 +16,7 @@ class SearchLocation extends StatefulWidget {
 
 class _SearchLocationState extends State<SearchLocation> {
   List<AutocompletePrediction> placePredictions = [];
+
   // Search complete
   void placeAutoComplete(String query) async {
     Uri uri =
@@ -29,12 +28,11 @@ class _SearchLocationState extends State<SearchLocation> {
     String? response = await NetworkUtility.fetchUrl(uri);
 
     if (response != null) {
-      // print(response);
       PlaceAutoCompleteResponse result =
           PlaceAutoCompleteResponse.parseAutocompleteResult(response);
-      if (kDebugMode) {
-        print(response);
-      }
+      // if (kDebugMode) {
+      //   print(response);
+      // }
       if (result.predictions != null) {
         setState(() {
           placePredictions = result.predictions!;
@@ -160,7 +158,9 @@ class _SearchLocationState extends State<SearchLocation> {
             child: ListView.builder(
               itemCount: placePredictions.length,
               itemBuilder: ((context, index) => LocationListTile(
-                    onTapCallBack: () {},
+                    onTapCallBack: () {
+
+                    },
                     location: placePredictions[index].description!,
                   )),
             ),

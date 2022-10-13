@@ -131,22 +131,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    const Icon(
+                                  children: const <Widget>[
+                                    Icon(
                                       CupertinoIcons.location,
                                       color: AppTheme.primaryColor,
                                       size: 16,
                                     ),
                                     Text(
-                                      locationProvider.location.address,
+                                      "My Location",
                                       softWrap: false,
                                       overflow: TextOverflow.clip,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w500),
                                     ),
-                                    const Icon(
+                                    Icon(
                                       CupertinoIcons.chevron_down,
                                       color: AppTheme.primaryColor,
                                       size: 12,
