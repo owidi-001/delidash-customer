@@ -5,3 +5,4 @@ int TIMEOUT = 100000;
 const TOKEN = "TOKEN";
 const USER = "USER";
 const ONBOARD = "BOARDED";
+const LOCATION = "LOCATION";

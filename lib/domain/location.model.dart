@@ -1,4 +1,6 @@
-class Location {
+import 'package:equatable/equatable.dart';
+
+class Location extends Equatable {
   final String? name;
   late final String? blockName;
   late final String? floor;
@@ -25,4 +27,10 @@ class Location {
 
     return data;
   }
+
+  @override
+  List<Object?> get props => [name, blockName, floor, roomNumber];
+
+  factory Location.empty() => Location(
+      name: "Unknown", blockName: "Unknown", floor: "0", roomNumber: "0");
 }

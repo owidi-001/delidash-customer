@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/screens/login_screen.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/order_card_horizontal.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,7 @@ class _ProfileState extends State<Profile> {
         leading: InkWell(
           onTap: () => Navigator.pop(context),
           child: const Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.only(left: 8.0),
             child: CircleAvatar(
               backgroundColor: AppTheme.gradientColor,
               child: Icon(
@@ -42,6 +43,32 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ),
+        actions: [
+          InkWell(
+            onTap: () => {
+              AuthenticationProvider.instance.logout(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const LoginScreen()),
+                ),
+              )
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: CircleAvatar(
+                backgroundColor: AppTheme.gradientColor,
+                child: Icon(
+                  Icons.logout_outlined,
+                  color: AppTheme.secondaryColor,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 16.0,
+          )
+        ],
       ),
       body: SafeArea(
         child: CustomScrollView(
@@ -105,7 +132,13 @@ class _ProfileState extends State<Profile> {
                                 Navigator.pushNamed(
                                     context, AppRoute.profileEdit);
                               },
-                              child: const Text("Update Profile",style: TextStyle(color: AppTheme.primaryColor,fontSize: 14, fontWeight: FontWeight.w500),))
+                              child: const Text(
+                                "Update Profile",
+                                style: TextStyle(
+                                    color: AppTheme.primaryColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ))
                           : Container()
                     ],
                   ),

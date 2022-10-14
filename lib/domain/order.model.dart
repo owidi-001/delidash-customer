@@ -3,14 +3,14 @@ import 'package:greens_veges/domain/product.model.dart';
 
 
 class OrderItem {
-  final int id;
-  final int order;
+  final int? id;
+  final int? order;
   final int quantity;
   Product product;
 
   OrderItem({
-    required this.id,
-    required this.order,
+    this.id,
+    this.order,
     required this.product,
     required this.quantity,
   });

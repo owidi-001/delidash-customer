@@ -159,8 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (form!.validate()) {
       form.save();
 
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //     showMessage(true, "Please wait authenticating ..."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(true, "Please wait authenticating ..."));
 
       // Update authentication status
       AuthenticationProvider.instance
@@ -179,16 +179,21 @@ class _LoginScreenState extends State<LoginScreen> {
           AuthenticationProvider.instance
               .loginUser(user: user, authToken: user.token);
 
-          if (AuthenticationProvider.instance.status ==
-              AuthenticationStatus.authenticated) {
-            // Go to homescreen
-            Navigator.pushReplacementNamed(context, AppRoute.home);
+          Navigator.pushReplacementNamed(context, AppRoute.home);
 
-            ScaffoldMessenger.of(context)
-                .showSnackBar(showMessage(true, "Login Success"));
-          } else {
-            //  print()
-          }
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Login Success"));
+
+          // if (AuthenticationProvider.instance.status ==
+          //     AuthenticationStatus.authenticated) {
+          //   // Go to homescreen
+          //   Navigator.pushReplacementNamed(context, AppRoute.home);
+
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(showMessage(true, "Login Success"));
+          // } else {
+          //   //  print()
+          // }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               showMessage(false, "Login Failed ${response['message']!}"));

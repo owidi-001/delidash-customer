@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/location.model.dart';
+import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/services/order.service.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
@@ -20,6 +23,7 @@ class _CheckOutState extends State<CheckOut> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
+    final locationProvider = Provider.of<LocationProvider>(context);
 
     double deliveryFee = cartProvider.items.isEmpty ? 0 : 50;
 
@@ -46,16 +50,6 @@ class _CheckOutState extends State<CheckOut> {
             ),
           ),
         ),
-        actions: [
-          Image.asset(
-            "assets/images/user.png",
-            width: 48,
-            height: 48,
-          ),
-          const SizedBox(
-            width: 16.0,
-          )
-        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -82,12 +76,16 @@ class _CheckOutState extends State<CheckOut> {
                       onTap: (() {
                         return;
                       }),
-                      child: const CircleAvatar(
-                        backgroundColor: AppTheme.gradientColor,
-                        child: Icon(
-                          Icons.edit_location_alt_outlined,
-                          size: 24,
-                          color: AppTheme.primaryColor,
+                      child: InkWell(
+                        onTap: (() =>
+                            {Navigator.pushNamed(context, AppRoute.location)}),
+                        child: const CircleAvatar(
+                          backgroundColor: AppTheme.gradientColor,
+                          child: Icon(
+                            Icons.edit_location_alt_outlined,
+                            size: 24,
+                            color: AppTheme.primaryColor,
+                          ),
                         ),
                       ),
                     ),
@@ -145,16 +143,17 @@ class _CheckOutState extends State<CheckOut> {
                       const SizedBox(
                         width: 40,
                       ),
-                      // TODO! Set some relevant picked addressed
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          SizedBox(
+                        children: <Widget>[
+                          const SizedBox(
                             height: 65,
                           ),
                           Text(
-                            "Street/City/Country",
-                            style: TextStyle(fontSize: 14),
+                            locationProvider.location.name!.isNotEmpty
+                                ? locationProvider.location.name!
+                                : "Set your delivery address",
+                            style: const TextStyle(fontSize: 14),
                           ),
                         ],
                       ),
@@ -358,8 +357,7 @@ class _CheckOutState extends State<CheckOut> {
               SliverToBoxAdapter(
                 child: submitButton("Pay", () {
                   // Save order
-                  // Get location
-                  Location location = Location();
+                  OrderService().saveOrder(locationProvider.location);
 
                   // SHow paying snackbar
                   ScaffoldMessenger.of(context).showSnackBar(

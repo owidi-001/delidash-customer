@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
+import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
+
 
 class OrderService {
   // Fetch orders
@@ -17,6 +19,10 @@ class OrderService {
 
     final response = await get(Uri.parse(ApiUrl.orders),
         headers: {"Authorization": "Token $token"});
+
+    if (kDebugMode) {
+      print(response.body);
+    }
 
     if (response.statusCode == 200) {
       List parsed = jsonDecode(response.body);
@@ -100,6 +106,14 @@ class OrderService {
 
       Order order = Order.fromJson(responseData);
 
+      List<OrderItem> items = [];
+      for (var item in CartProvider().items) {
+        items.add(OrderItem(
+            order: order.id, product: item.product, quantity: item.quantity));
+      }
+      // Save order items
+      saveOrderItems(items);
+
       result = {
         'status': true,
         'message': "Order placed successfuly",
@@ -117,12 +131,12 @@ class OrderService {
     }
     return result;
   }
-  
+
   // Save order items
   Future<Map<String, dynamic>> saveOrderItems(List<OrderItem> items) async {
-    Map<String, dynamic> result={
-      "status":true,
-      "message":"All items posted"
+    Map<String, dynamic> result = {
+      "status": true,
+      "message": "All items posted"
     };
 
     for (var item in items) {

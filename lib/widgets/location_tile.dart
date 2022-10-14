@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/theme/app_theme.dart';
+import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
 
@@ -88,61 +87,63 @@ class _LocationListTileState extends State<LocationListTile> {
     showModalBottomSheet(
         context: context,
         builder: (builder) {
-          return Container(
-            color: AppTheme.gradientColor,
-            // height: MediaQuery.of(context).size.height * 0.8,
-            child: Form(
-              key: _formkey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    const Text(
-                      "Building name",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    blockNameField,
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                    const Text(
-                      "Floor Number",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                    floorNumberField,
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                    const Text(
-                      "Room Number",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                    roomNumberField,
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                    submitButton("Save Location", saveLocation),
-                    const SizedBox(
-                      height: 18.0,
-                    ),
-                  ],
+          return SingleChildScrollView(
+            child: Container(
+              color: AppTheme.gradientColor,
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Form(
+                key: _formkey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      const Text(
+                        "Building name",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      blockNameField,
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                      const Text(
+                        "Floor Number",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                      floorNumberField,
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                      const Text(
+                        "Room Number",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                      roomNumberField,
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                      submitButton("Save Location", saveLocation),
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -165,6 +166,12 @@ class _LocationListTileState extends State<LocationListTile> {
 
       // Save location to provider
       LocationProvider().setLocation(location);
+      // Save location locally
+      LocationPreferences().storeLocationData(location);
+
+      // Navigate back to the last screen
+      Navigator.of(context).pop(); // Closses the bottom sheet
+      // Show confirmation message
 
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(true, 'Delivery location set!'));

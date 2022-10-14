@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/auth.model.dart';
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> initializeApp() async {
     LoginData? data = await UserPreferences().loadUserData();
+    Location? location = await LocationPreferences().loadLocationData();
 
     if (!mounted) {
       return;
@@ -55,7 +58,12 @@ class _SplashScreenState extends State<SplashScreen> {
             user: data.user,
             authToken: data.authToken,
           );
-          Navigator.pushReplacementNamed(context, AppRoute.home);
+
+      Navigator.pushReplacementNamed(context, AppRoute.home);
+    }
+
+    if (location != null) {
+      LocationProvider().setLocation(location);
     }
   }
 }

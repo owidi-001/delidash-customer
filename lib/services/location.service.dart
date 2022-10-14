@@ -35,9 +35,8 @@ class LocationService {
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
     Placemark place = placemarks[0];
-    // address ='${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    String? address = place.name;
-
+    String address ="${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}";
+    
     return address;
   }
 
@@ -58,4 +57,5 @@ class LocationService {
 
   //   return location;
   // }
+
 }
