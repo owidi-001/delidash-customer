@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/domain/product.model.dart';
 
 class CartProvider extends ChangeNotifier {
   /// Internal, private state of the cart.
@@ -62,6 +63,16 @@ class CartProvider extends ChangeNotifier {
     return false;
   }
 
-  // Save cart to backend
-  
+  // remove item from cart
+  void removeFromCart(Product product) {
+    for (var item in _items) {
+      if (item.product.id == product.id) {
+        // pop it
+        _items.remove(item);
+        break;
+      }
+    }
+
+    notifyListeners();
+  }
 }

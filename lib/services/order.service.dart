@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
@@ -18,9 +17,9 @@ class OrderService {
     final response = await get(Uri.parse(ApiUrl.orders),
         headers: {"Authorization": "Token $token"});
 
-    if (kDebugMode) {
-      print(response.body);
-    }
+    // if (kDebugMode) {
+    //   print(response.body);
+    // }
 
     if (response.statusCode == 200) {
       List parsed = jsonDecode(response.body);
@@ -29,10 +28,11 @@ class OrderService {
       List<Order> orders =
           parsed.map<Order>((json) => Order.fromJson(json)).toList();
 
-      if (kDebugMode) {
-        print("Post orders conversion");
-        print(orders);
-      }
+
+      // if (kDebugMode) {
+      //   print("Post orders conversion");
+      //   print(orders);
+      // }
 
       result = {
         "status": true,

@@ -3,8 +3,6 @@ import 'package:greens_veges/domain/cart.model.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/providers/app.provider.dart';
-import 'package:greens_veges/providers/cart.provider.dart';
-import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
@@ -14,20 +12,27 @@ import 'dart:convert';
 
 class CartService {
   // Save cart and signal payment
-  Future<Map<String, dynamic>> saveCart() async {
+  Future<Map<String, dynamic>> saveCart(
+      Location location,
+      List<CartItemModel> items,
+      double total,
+      String paymentPhoneNumber) async {
     String token = await UserPreferences().getToken();
 
     // Initialize objects to parse
-    Location location = LocationProvider().location;
-    List<CartItemModel> items = CartProvider().items;
-
-    Map<String, dynamic> apiBodyData = {"location": location, "items": items};
+    Map<String, dynamic> apiBodyData = {
+      "location": Location.toMap(location),
+      "items": items.map((e) => CartItemModel.toMap(e)).toList(),
+      "total": total,
+      "phone": paymentPhoneNumber
+    };
 
     return await post(Uri.parse(ApiUrl.orders),
-            body: json.encode(apiBodyData),
-            headers: {'Content-Type': 'application/json',"Authorization": "Token $token"})
-        .then(onValue)
-        .catchError(onError);
+        body: json.encode(apiBodyData),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Token $token"
+        }).then(onValue).catchError(onError);
   }
 
   static Future<Map<String, dynamic>> onValue(Response response) async {
@@ -35,14 +40,40 @@ class CartService {
 
     final Map<String, dynamic> responseData = json.decode(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       Order order = Order.fromJson(responseData);
 
       // Update order provider to read order
-      MealioApplicationProvider().orders.add(order);
+      MealioApplicationProvider().addOrder(order);
 
-      result = {'status': true, 'message': 'Successfully Saved', 'data': order};
+      // Trigger payment
+      String token = await UserPreferences().getToken();
+
+      Map<String, dynamic> apiBodyData = {"phone": null};
+
+      Response response = await post(Uri.parse(ApiUrl.login),
+          body: apiBodyData,
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "Token $token"
+          });
+
+      if (response.statusCode == 201) {
+        result = {
+          'status': true,
+          'message': "Payment Successful, order saved",
+          'data': order
+        };
+      } else {
+        result = {
+          'status': false,
+          'message': json.decode(response.body)['error']
+        };
+      }
     } else {
+      if (kDebugMode) {
+        print("The response status is ${response.statusCode}");
+      }
       result = {
         'status': false,
         'message': 'Response not ok',

@@ -8,6 +8,11 @@ enum ServiceStatus {
   submissionFailure
 }
 
+enum LocationStatus {
+  unknown,
+  loaded
+}
+
 enum AuthenticationStatus {
   unknown,
   authenticating,

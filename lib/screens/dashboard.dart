@@ -35,9 +35,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Use product provider
     var appProvider = Provider.of<MealioApplicationProvider>(context);
 
-    // Load Location
-    var locationProvider = Provider.of<LocationProvider>(context);
-
     // Banner product
     Product? product;
     if (appProvider.productsStatus == ServiceStatus.loadingSuccess &&

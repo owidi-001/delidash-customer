@@ -54,7 +54,6 @@ class MealioApplicationProvider with ChangeNotifier {
     await _getOrderItems();
   }
 
-
   Future<void> _initCategories() async {
     final res = await ProductCategoryService().fetchCategories();
 
@@ -91,8 +90,6 @@ class MealioApplicationProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  
 
   // Load vendor products
   List<Product> fetchVendorProducts(Vendor vendor) {
@@ -133,6 +130,12 @@ class MealioApplicationProvider with ChangeNotifier {
     } else {
       orderStatus = ServiceStatus.loadingFailure;
     }
+    notifyListeners();
+  }
+
+// Add order to orders list
+  void addOrder(Order order) async {
+    orders.add(order);
     notifyListeners();
   }
 

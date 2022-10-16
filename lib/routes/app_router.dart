@@ -21,7 +21,6 @@ class AppRoute {
 
   // cart routes
   static const String cart = "/cart";
-  static const String checkout = "/checkout";
 
   // profile, update
   static const String profile = "/profile";
@@ -44,7 +43,7 @@ class ApiUrl {
   
   // orders
   // static const String orders = "$baseURL/orders/orders";
-  static const String orders = "$baseURL/orders";
+  static const String orders = "$baseURL/orders/";
   static const String orderItems = "$baseURL/orders/items";
   static const String payment = "$baseURL/payment";
   

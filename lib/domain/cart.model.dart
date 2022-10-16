@@ -13,4 +13,13 @@ class CartItemModel {
     return CartItemModel(
         product: product ?? this.product, quantity: quantity ?? this.quantity);
   }
+
+  static Map<String, dynamic> toMap(CartItemModel item) {
+    Map<String, dynamic> data = {
+      "product": item.product.id,
+      "quantity": item.quantity
+    };
+
+    return data;
+  }
 }

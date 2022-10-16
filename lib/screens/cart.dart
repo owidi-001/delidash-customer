@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
@@ -6,6 +7,7 @@ import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/services/cart.service.dart';
 import 'package:greens_veges/theme/app_theme.dart';
+import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/cart_item.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
@@ -19,6 +21,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  String paymentPhoneNumber = AuthenticationProvider.instance.user.phoneNumber;
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -46,6 +50,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 color: AppTheme.primaryColor,
+                size: 20.0,
               ),
             ),
           ),
@@ -58,8 +63,9 @@ class _CartScreenState extends State<CartScreen> {
             child: const CircleAvatar(
               backgroundColor: AppTheme.lightColor,
               child: Icon(
-                Icons.clear_all_rounded,
-                color: AppTheme.primaryColor,
+                Icons.remove_shopping_cart,
+                color: AppTheme.redColor,
+                size: 20.0,
               ),
             ),
           ),
@@ -344,10 +350,12 @@ class _CartScreenState extends State<CartScreen> {
                   child: ListTile(
                     onTap: (() =>
                         {Navigator.pushNamed(context, AppRoute.location)}),
-                    leading: Text(spacePhone(authProvider.user.phoneNumber)),
+                    leading: Text(spacePhone(paymentPhoneNumber)),
                     trailing: InkWell(
-                      onTap: (() =>
-                          {Navigator.pushNamed(context, AppRoute.location)}),
+                      onTap: (() => {
+                            // show payment form model
+                            updatePaymentPhoneNumber()
+                          }),
                       child: const Padding(
                         padding: EdgeInsets.only(left: 16),
                         child: CircleAvatar(
@@ -378,8 +386,9 @@ class _CartScreenState extends State<CartScreen> {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(showMessage(true, "Please wait ..."));
 
-                      Future<Map<String, dynamic>> data =
-                          CartService().saveCart();
+                      Future<Map<String, dynamic>> data = CartService()
+                          .saveCart(locationProvider.location,
+                              cartProvider.items, cartProvider.totalPrice,paymentPhoneNumber);
 
                       data.then((value) {
                         if (value["status"]) {
@@ -395,7 +404,6 @@ class _CartScreenState extends State<CartScreen> {
                       });
                       return false;
                     });
-                    // placeOrder();
                   }
                 }),
               ),
@@ -410,17 +418,80 @@ class _CartScreenState extends State<CartScreen> {
     return "${phone.substring(0, 4)}  ${phone.substring(4, 7)}  ${phone.substring(7, 10)}";
   }
 
-// Place order
-  // Future<void> placeOrder() async {
-  //   Map<String, dynamic> data = await CartService().saveCart();
+  void updatePaymentPhoneNumber() {
+    // formkey
+    final _formkey = GlobalKey<FormState>();
 
-  //   if (data["status"]) {
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(showMessage(true, "Your order placed successfully"));
-  //     Navigator.pushReplacementNamed(context, AppRoute.profile);
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         showMessage(false, "Failed to place order! \nPayment failed"));
-  //   }
-  // }
+    final TextEditingController _phoneController = TextEditingController();
+
+    // Phone field
+    final phoneField = TextFormField(
+      autofocus: false,
+      controller: _phoneController,
+      keyboardType: TextInputType.phone,
+      maxLength: 10,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      onSaved: (value) {
+        _phoneController.value;
+      },
+      validator: ((value) => validPhone(_phoneController.text)),
+      textInputAction: TextInputAction.done,
+      decoration: buildInputDecoration("Enter your mobile number", Icons.phone),
+    );
+
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return SingleChildScrollView(
+            child: Container(
+              color: AppTheme.gradientColor,
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Form(
+                key: _formkey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Payment Number",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      phoneField,
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      submitButton("Set number", (() {
+                        final form = _formkey.currentState;
+
+                        if (form!.validate()) {
+                          form.save();
+
+                          paymentPhoneNumber = _phoneController.text;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              showMessage(true, "Payment number updated! "));
+
+                          Navigator.pop(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              showMessage(false, 'Invalid Phone number!'));
+                        }
+                      })),
+                      const SizedBox(
+                        height: 18.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
 }

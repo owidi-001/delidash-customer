@@ -4,6 +4,7 @@ import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/domain/product.model.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -225,32 +226,64 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // check if item in cart
-                                cartProvider.add(CartItemModel(
-                                    product: widget.product,
-                                    quantity: itemCount));
-                                Navigator.pushNamed(context, AppRoute.cart);
-                              },
-                              style: TextButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                textStyle: const TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w500),
-                                shape: const StadiumBorder(),
-                                backgroundColor: AppTheme.primaryColor,
-                              ),
-                              child: const Text(
-                                "Add to cart",
-                                style: TextStyle(color: AppTheme.whiteColor),
-                              ),
-                            ),
+                            child: inCart
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      cartProvider
+                                          .removeFromCart(widget.product);
+
+                                      // Navigator.pushNamed(context, AppRoute.cart);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(showMessage(
+                                              false, "Product removed cart!"));
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      textStyle: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                      shape: const StadiumBorder(),
+                                      backgroundColor: AppTheme.redColor,
+                                    ),
+                                    child: const Text(
+                                      "Remove from cart",
+                                      style:
+                                          TextStyle(color: AppTheme.whiteColor),
+                                    ),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      // check if item in cart
+                                      cartProvider.add(CartItemModel(
+                                          product: widget.product,
+                                          quantity: itemCount));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(showMessage(
+                                              true, "Product added to cart!"));
+
+                                      // Navigator.pushNamed(context, AppRoute.cart);
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      textStyle: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                      shape: const StadiumBorder(),
+                                      backgroundColor: AppTheme.primaryColor,
+                                    ),
+                                    child: const Text(
+                                      "Add to cart",
+                                      style:
+                                          TextStyle(color: AppTheme.whiteColor),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             )

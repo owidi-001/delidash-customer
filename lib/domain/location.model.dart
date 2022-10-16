@@ -17,12 +17,13 @@ class Location extends Equatable {
     );
   }
 
+
   static Map<String, dynamic> toMap(Location location) {
     Map<String, dynamic> data = {
       "name": location.name,
-      "blockName": location.blockName,
-      "floor": location.floor,
-      "roomNumber": location.roomNumber
+      "block_name": location.blockName,
+      "floor_number": location.floor,
+      "room_number": location.roomNumber
     };
 
     return data;
