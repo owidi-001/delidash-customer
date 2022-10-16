@@ -1,4 +1,10 @@
-import 'package:greens_veges/domain/product.model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/domain/location.model.dart';
+import 'package:greens_veges/domain/order.model.dart';
+import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
@@ -7,67 +13,49 @@ import 'dart:async';
 import 'dart:convert';
 
 class CartService {
-  // Fetch categories
-  Future<Map<String, dynamic>> fetchOrders() async {
-    Map<String, dynamic> result;
+  // Save cart and signal payment
+  Future<Map<String, dynamic>> saveCart() async {
     String token = await UserPreferences().getToken();
 
-    final response = await get(Uri.parse(ApiUrl.listCategories),
-        headers: {"Authorization": "Token $token"});
+    // Initialize objects to parse
+    Location location = LocationProvider().location;
+    List<CartItemModel> items = CartProvider().items;
+
+    Map<String, dynamic> apiBodyData = {"location": location, "items": items};
+
+    return await post(Uri.parse(ApiUrl.orders),
+            body: json.encode(apiBodyData),
+            headers: {'Content-Type': 'application/json',"Authorization": "Token $token"})
+        .then(onValue)
+        .catchError(onError);
+  }
+
+  static Future<Map<String, dynamic>> onValue(Response response) async {
+    Map<String, dynamic> result;
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      List parsed = jsonDecode(response.body);
+      Order order = Order.fromJson(responseData);
 
-      // Convert the list to ProductCategory instance
-      List<ProductCategory> categories = parsed
-          .map<ProductCategory>((json) => ProductCategory.fromJson(json))
-          .toList();
+      // Update order provider to read order
+      MealioApplicationProvider().orders.add(order);
 
-      // Update provider to read categories
-      result = {
-        "status": true,
-        "message": "Categories loaded",
-        "categories": categories
-      };
+      result = {'status': true, 'message': 'Successfully Saved', 'data': order};
     } else {
-      // throw Exception('Failed to load categories');
       result = {
-        "status": false,
-        "message": "Categories not loaded",
+        'status': false,
+        'message': 'Response not ok',
+        'data': responseData
       };
     }
     return result;
   }
 
-   // Fetch categories
-  Future<Map<String, dynamic>> saveOrders() async {
-    Map<String, dynamic> result;
-    String token = await UserPreferences().getToken();
-
-    final response = await get(Uri.parse(ApiUrl.listCategories),
-        headers: {"Authorization": "Token $token"});
-
-    if (response.statusCode == 200) {
-      List parsed = jsonDecode(response.body);
-
-      // Convert the list to ProductCategory instance
-      List<ProductCategory> categories = parsed
-          .map<ProductCategory>((json) => ProductCategory.fromJson(json))
-          .toList();
-
-      // Update provider to read categories
-      result = {
-        "status": true,
-        "message": "Categories loaded",
-        "categories": categories
-      };
-    } else {
-      // throw Exception('Failed to load categories');
-      result = {
-        "status": false,
-        "message": "Categories not loaded",
-      };
+  static onError(error) {
+    if (kDebugMode) {
+      print('the error is ${error.detail}');
     }
-    return result;
+    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
   }
 }

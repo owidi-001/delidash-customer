@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
-import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
-
 
 class OrderService {
   // Fetch orders
@@ -85,72 +83,6 @@ class OrderService {
         "message": "Items not loaded",
       };
     }
-    return result;
-  }
-
-  // Save order / checkout => Order needs to be saved before the items since items use order ID
-  Future<Map<String, dynamic>> saveOrder(Location location) async {
-    Map<String, dynamic> result;
-
-    Response response = await post(
-      Uri.parse(ApiUrl.orders),
-      body: Location.toMap(location),
-    );
-
-    if (kDebugMode) {
-      print("The response received is $response");
-    }
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-
-      Order order = Order.fromJson(responseData);
-
-      List<OrderItem> items = [];
-      for (var item in CartProvider().items) {
-        items.add(OrderItem(
-            order: order.id, product: item.product, quantity: item.quantity));
-      }
-      // Save order items
-      saveOrderItems(items);
-
-      result = {
-        'status': true,
-        'message': "Order placed successfuly",
-        'data': order
-      };
-    } else {
-      if (kDebugMode) {
-        print(response.statusCode);
-        print(response.body);
-      }
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
-    }
-    return result;
-  }
-
-  // Save order items
-  Future<Map<String, dynamic>> saveOrderItems(List<OrderItem> items) async {
-    Map<String, dynamic> result = {
-      "status": true,
-      "message": "All items posted"
-    };
-
-    for (var item in items) {
-      // Save every order item
-      Response response = await post(
-        Uri.parse(ApiUrl.orderItems),
-        body: OrderItem.toMap(item),
-      );
-
-      if (kDebugMode) {
-        print("The response received is $response");
-      }
-    }
-
     return result;
   }
 }
