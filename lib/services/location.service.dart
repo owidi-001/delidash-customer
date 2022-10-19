@@ -37,7 +37,7 @@ class LocationService {
       print("The placemarks are: ");
       print(placemarks[0].name);
     }
-    
+
     Placemark place = placemarks[0];
     String address =
         '${place.street} ${place.subLocality} ${place.locality} ${place.postalCode} ${place.country}';
@@ -49,5 +49,18 @@ class LocationService {
   // Return location description
   Future<String> getAddress() async {
     return getAddressFromLatLong(await getGeoLocationPosition());
+  }
+
+  String getAddressName() {
+    String name = "";
+    LocationService().getAddress().then((value) {
+      if (value.isEmpty) {
+        name = value;
+      } else {
+        name = "Location not loaded";
+      }
+    });
+
+    return name;
   }
 }

@@ -1,38 +1,35 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class RegistrationScreen extends StatelessWidget {
+  RegistrationScreen({Key? key}) : super(key: key);
 
-  @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
-}
-
-class _RegistrationScreenState extends State<RegistrationScreen> {
   // formkey
   final _formkey = GlobalKey<FormState>();
 
   // editing controllers
-
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _phoneController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
   final TextEditingController _passwordConfirmController =
       TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationProvider>(context);
+
     // email field
     final emailField = TextFormField(
       autofocus: false,
@@ -89,6 +86,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           _passwordController.text, _passwordConfirmController.text)),
       decoration: buildInputDecoration("Confirm your password", Icons.lock),
     );
+
+    // Handle register
+    void doRegister(BuildContext context) async {
+      final form = _formkey.currentState;
+
+      if (form!.validate()) {
+        form.save();
+
+        // Update authentication status
+        authProvider.authenticationChanged(AuthenticationStatus.authenticating);
+
+        final res = await UserService().register(_emailController.text,
+            _phoneController.text, _passwordConfirmController.text);
+
+        res.when(error: (error) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(false, error.message));
+        }, success: (data) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Registration successful"));
+
+          // Update provider to read user
+          authProvider.loginUser(user: data, authToken: data.token);
+
+          Navigator.pushReplacementNamed(context, AppRoute.home);
+        });
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showMessage(false, "Please fill the form properly"));
+      }
+    }
 
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
@@ -184,27 +212,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  AuthenticationProvider.instance.status !=
-                          AuthenticationStatus.authenticating
-                      ? submitButton("Register", doRegister)
-                      : Material(
-                          elevation: 5,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          color: AppTheme.primaryColor,
-                          child: MaterialButton(
-                            onPressed: () => {},
-                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                            minWidth: double.infinity,
-                            child: const Text(
-                              "Authenticating...",
-                              style: TextStyle(
-                                  color: AppTheme.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ),
+                  authProvider.status == AuthenticationStatus.authenticating
+                      ? const ButtonLoading(title: "Register")
+                      : submitButton("Register", () => doRegister(context)),
                   const SizedBox(
                     height: 24,
                   ),
@@ -237,49 +247,5 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       )),
     );
-  }
-
-  void doRegister() {
-    final form = _formkey.currentState;
-
-    if (form!.validate()) {
-      form.save();
-
-      // Update authentication status
-      AuthenticationProvider.instance
-          .authenticationChanged(AuthenticationStatus.authenticating);
-
-      UserService()
-          .register(
-        _emailController.text,
-        _phoneController.text,
-        _passwordConfirmController.text,
-      )
-          .then((response) {
-        if (response['status'] == true) {
-          User user = response["data"];
-
-          // Update provider to read user
-          Provider.of<AuthenticationProvider>(context)
-              .loginUser(user: user, authToken: user.token);
-
-          // Go to homescreen
-          Navigator.pushReplacementNamed(context, AppRoute.home);
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(true, "Account creation Successful"));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(showMessage(
-              false, "Registration failed! ${response.toString()}"));
-        }
-      }, onError: ((error) {
-        if (kDebugMode) {
-          print(error);
-        }
-      }));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(showMessage(false, "Please fill the form properly"));
-    }
   }
 }

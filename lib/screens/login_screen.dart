@@ -11,26 +11,21 @@ import 'package:greens_veges/widgets/form_field_maker.dart';
 import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  String authAction = "Login";
+class LoginScreen extends StatelessWidget {
+  LoginScreen({Key? key}) : super(key: key);
 
   // formkey
   final _formkey = GlobalKey<FormState>();
 
   // editing controllers
-
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationProvider>(context);
+
     // email field
     final emailField = TextFormField(
       autofocus: false,
@@ -117,7 +112,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 32,
                 ),
-                submitButton("Login", login),
+                authProvider.status == AuthenticationStatus.authenticating
+                    ? const ButtonLoading(title: "Login")
+                    : submitButton("Login", () => login(context)),
                 const SizedBox(
                   height: 24,
                 ),
@@ -153,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() {
+  void login(BuildContext context) async {
     final form = _formkey.currentState;
 
     if (form!.validate()) {
@@ -166,39 +163,27 @@ class _LoginScreenState extends State<LoginScreen> {
       AuthenticationProvider.instance
           .authenticationChanged(AuthenticationStatus.authenticating);
 
-      final Future<Map<String, dynamic>> successfulMessage =
-          UserService().login(_emailController.text, _passwordController.text);
+      final res = await UserService()
+          .login(_emailController.text, _passwordController.text);
+      res.when(
+        error: (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            showMessage(false, error.message),
+          );
+        },
+        success: (data) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            showMessage(true, "Login Success"),
+          );
 
-      successfulMessage.then((response) {
-        if (response['status'] == true) {
-          User user = response['user'];
-
-          // Provider.of<AuthenticationProvider>(context,listen: false)
-          //     .loginUser(user: user, authToken: user.token);
-
-          AuthenticationProvider.instance
-              .loginUser(user: user, authToken: user.token);
+          AuthenticationProvider.instance.loginUser(
+            user: data,
+            authToken: data.token,
+          );
 
           Navigator.pushReplacementNamed(context, AppRoute.home);
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(true, "Login Success"));
-
-          // if (AuthenticationProvider.instance.status ==
-          //     AuthenticationStatus.authenticated) {
-          //   // Go to homescreen
-          //   Navigator.pushReplacementNamed(context, AppRoute.home);
-
-          //   ScaffoldMessenger.of(context)
-          //       .showSnackBar(showMessage(true, "Login Success"));
-          // } else {
-          //   //  print()
-          // }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              showMessage(false, "Login Failed ${response['message']!}"));
-        }
-      });
+        },
+      );
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(false, 'Invalid form input!'));

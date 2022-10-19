@@ -27,7 +27,6 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final locationProvider = Provider.of<LocationProvider>(context);
-    final authProvider = Provider.of<AuthenticationProvider>(context);
 
     double deliveryFee = cartProvider.items.isEmpty ? 0 : 50;
 
@@ -295,24 +294,39 @@ class _CartScreenState extends State<CartScreen> {
               // Location data
               SliverToBoxAdapter(
                 child: Card(
-                  child: ListTile(
+                  child: InkWell(
                     onTap: (() =>
                         {Navigator.pushNamed(context, AppRoute.location)}),
-                    leading: locationProvider.location == Location.empty()
-                        ? const Text("Location not set!")
-                        : Text("${locationProvider.location.name}"),
-                    trailing: InkWell(
-                      onTap: (() =>
-                          {Navigator.pushNamed(context, AppRoute.location)}),
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 16),
-                        child: CircleAvatar(
-                          backgroundColor: AppTheme.gradientColor,
-                          child: Icon(
-                            Icons.edit_location_alt_outlined,
-                            color: AppTheme.primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              child: Text(
+                                "${LocationProvider.instance.location.name}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          InkWell(
+                            onTap: (() => {
+                                  Navigator.pushNamed(
+                                      context, AppRoute.location)
+                                }),
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: CircleAvatar(
+                                backgroundColor: AppTheme.gradientColor,
+                                child: Icon(
+                                  Icons.edit_location_alt_outlined,
+                                  color: AppTheme.primaryColor,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -387,8 +401,11 @@ class _CartScreenState extends State<CartScreen> {
                           .showSnackBar(showMessage(true, "Please wait ..."));
 
                       Future<Map<String, dynamic>> data = CartService()
-                          .saveCart(locationProvider.location,
-                              cartProvider.items, cartProvider.totalPrice,paymentPhoneNumber);
+                          .saveCart(
+                              LocationProvider.instance.location,
+                              cartProvider.items,
+                              cartProvider.totalPrice,
+                              paymentPhoneNumber);
 
                       data.then((value) {
                         if (value["status"]) {
@@ -472,7 +489,9 @@ class _CartScreenState extends State<CartScreen> {
                         if (form!.validate()) {
                           form.save();
 
-                          paymentPhoneNumber = _phoneController.text;
+                          setState(() {
+                            paymentPhoneNumber = _phoneController.text;
+                          });
 
                           ScaffoldMessenger.of(context).showSnackBar(
                               showMessage(true, "Payment number updated! "));

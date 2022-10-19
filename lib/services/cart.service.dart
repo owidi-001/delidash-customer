@@ -11,6 +11,8 @@ import 'dart:async';
 import 'dart:convert';
 
 class CartService {
+  static String? paymentNumber;
+
   // Save cart and signal payment
   Future<Map<String, dynamic>> saveCart(
       Location location,
@@ -26,6 +28,7 @@ class CartService {
       "total": total,
       "phone": paymentPhoneNumber
     };
+    paymentNumber = paymentPhoneNumber;
 
     return await post(Uri.parse(ApiUrl.orders),
         body: json.encode(apiBodyData),
@@ -49,14 +52,12 @@ class CartService {
       // Trigger payment
       String token = await UserPreferences().getToken();
 
-      Map<String, dynamic> apiBodyData = {"phone": null};
+      Map<String, dynamic> apiBodyData = {
+        "phone": paymentNumber
+      }; // Find a way of adding phone number
 
-      Response response = await post(Uri.parse(ApiUrl.login),
-          body: apiBodyData,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Token $token"
-          });
+      Response response = await post(Uri.parse(ApiUrl.orders),
+          body: apiBodyData, headers: {"Authorization": "Token $token"});
 
       if (response.statusCode == 201) {
         result = {

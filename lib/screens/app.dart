@@ -35,9 +35,7 @@ class _MealioState extends State<Mealio> {
         ),
         ChangeNotifierProvider(create: (_) => MealioApplicationProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
-        // ChangeNotifierProvider(create: (_) => UserProvider()),
-        // ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider.value(value: LocationProvider.instance)
       ],
       child: MaterialApp(
         title: 'Mealio',
@@ -46,8 +44,8 @@ class _MealioState extends State<Mealio> {
         routes: {
           AppRoute.splash: (context) => const SplashScreen(),
           AppRoute.welcome: (context) => const WelcomeScreen(),
-          AppRoute.register: (context) => const RegistrationScreen(),
-          AppRoute.login: (context) => const LoginScreen(),
+          AppRoute.register: (context) => RegistrationScreen(),
+          AppRoute.login: (context) => LoginScreen(),
           AppRoute.home: (context) => const Home(),
           AppRoute.dashboard: ((context) => const DashboardScreen()),
           AppRoute.location: (context) => const SearchLocation(),

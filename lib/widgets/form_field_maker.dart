@@ -30,3 +30,35 @@ Material submitButton(String title, Function() function) {
     ),
   );
 }
+
+class ButtonLoading extends StatelessWidget {
+  final String title;
+  const ButtonLoading({super.key,required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 5,
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+      color: AppTheme.primaryColor,
+      child: MaterialButton(
+          onPressed: () {},
+          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          minWidth: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    color: AppTheme.whiteColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+              const CircularProgressIndicator(color: AppTheme.whiteColor,),
+            ],
+          )),
+    );
+  }
+}

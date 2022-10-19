@@ -23,8 +23,6 @@ class SearchLocation extends StatefulWidget {
 class _SearchLocationState extends State<SearchLocation> {
   List<AutocompletePrediction> placePredictions = [];
 
-  final locationProvider = LocationProvider();
-
   // Search complete
   void placeAutoComplete(String query) async {
     Uri uri =
@@ -199,7 +197,7 @@ class _SearchLocationState extends State<SearchLocation> {
           roomNumber: _roomNumberController.text);
 
       // Save location to provider
-      locationProvider.setLocation(location);
+      LocationProvider.instance.setLocation(location);
       // Save location locally
       LocationPreferences().storeLocationData(location);
 
@@ -209,11 +207,6 @@ class _SearchLocationState extends State<SearchLocation> {
 
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(true, 'Delivery location set!'));
-
-      if (kDebugMode) {
-        print("The location saved is: ");
-        print(locationProvider.location);
-      }
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(false, 'Please help us find you!'));

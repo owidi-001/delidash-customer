@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     if (location != null) {
-      LocationProvider().setLocation(location);
+      LocationProvider.instance.setLocation(location);
     }
   }
 }

@@ -242,28 +242,26 @@ class _ProfileEditState extends State<ProfileEdit> {
         ));
   }
 
-  void doUpdate() {
+  void doUpdate() async {
     final form = _formkey.currentState;
 
     if (form!.validate()) {
       form.save();
 
-      final Future<Map<String, dynamic>> successfulMessage = UserService()
-          .updateProfile(_firstNameController.text, _lastNameController.text,
-              _emailController.text, _phoneController.text);
+      final res = await UserService().updateProfile(
+          _firstNameController.text,
+          _lastNameController.text,
+          _emailController.text,
+          _phoneController.text);
 
-      successfulMessage.then((response) {
-        if (response['status'] == true) {
-          // redirect to profile
-          Navigator.pushReplacementNamed(context, AppRoute.profile);
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(true, "Profile Updated Successfully"));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(showMessage(
-              false, "Profile Update Failed ${response['message']!}"));
-        }
+      res.when(error: (error) {
+        ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(false, error.message));
+      }, success: (success) {
+        ScaffoldMessenger.of(context)
+              .showSnackBar(showMessage(true, "Profile updated!"));
       });
+
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(false, 'Invalid form input!'));
