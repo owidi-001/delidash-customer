@@ -8,7 +8,7 @@ import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/services/greetings.service.dart';
+import 'package:greens_veges/utility/greetings.utility.dart';
 import 'package:greens_veges/widgets/product_card.dart';
 import 'package:greens_veges/widgets/product_card_skeleton.dart';
 import 'package:greens_veges/widgets/vendor_card.dart';
@@ -314,8 +314,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
 
               //  Data grid/columns
-              appProvider.productsStatus == ServiceStatus.loading ||
-                      appProvider.vendorsStatus == ServiceStatus.loading
+              appProvider.productsStatus == ServiceStatus.loadingSuccess ||
+                      appProvider.vendorsStatus == ServiceStatus.loadingSuccess
                   // Check the browse value
                   ? chosenValue == browsables[0]
                       ? SliverList(

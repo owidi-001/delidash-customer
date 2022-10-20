@@ -34,7 +34,7 @@ class HttpClient {
   }) async {
     try {
       final results = await HttpClient.post(
-        ApiUrl.profileUpdate,
+        url,
         data,
       );
 
@@ -44,7 +44,21 @@ class HttpClient {
     } catch (e) {
       return HttpResult.error(getException(e));
     }
+  }
 
-    // return dio.post(url, data: data);
+  // post
+  static Future<HttpResult<T>> get2<T>(
+    String url, {
+    T Function(dynamic data)? der,
+  }) async {
+    try {
+      final results = await HttpClient.get(url);
+
+      return HttpResult.success(
+        der != null ? der(results.data) : results.data,
+      );
+    } catch (e) {
+      return HttpResult.error(getException(e));
+    }
   }
 }

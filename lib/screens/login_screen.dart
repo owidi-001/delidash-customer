@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/domain/user.model.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/form_field_maker.dart';
@@ -163,8 +161,10 @@ class LoginScreen extends StatelessWidget {
       AuthenticationProvider.instance
           .authenticationChanged(AuthenticationStatus.authenticating);
 
-      final res = await UserService()
-          .login(_emailController.text, _passwordController.text);
+      final res = await UserService().login(data: {
+        "email": _emailController.text,
+        "password": _passwordController.text
+      });
       res.when(
         error: (error) {
           ScaffoldMessenger.of(context).showSnackBar(

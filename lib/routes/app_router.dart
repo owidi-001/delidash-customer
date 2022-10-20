@@ -1,6 +1,6 @@
 // API URL
 // const String baseURL = "http://owidi.pythonanywhere.com";
-const String baseURL = "http://192.168.43.16:8000";
+const String baseURL = "http://192.168.0.106:8000";
 
 
 // Routes for app

@@ -97,8 +97,11 @@ class RegistrationScreen extends StatelessWidget {
         // Update authentication status
         authProvider.authenticationChanged(AuthenticationStatus.authenticating);
 
-        final res = await UserService().register(_emailController.text,
-            _phoneController.text, _passwordConfirmController.text);
+        final res = await UserService().register(data: {
+          "email": _emailController.text,
+          "phone": _phoneController.text,
+          "password": _passwordConfirmController.text
+        });
 
         res.when(error: (error) {
           ScaffoldMessenger.of(context)

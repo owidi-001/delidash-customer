@@ -2,35 +2,35 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/services/order.service.dart';
 
 import '../domain/vendor.model.dart';
-import '../services/category.service.dart';
-import '../services/product.service.dart';
-import '../services/vendor.service.dart';
+import '../services/app.service.dart';
 import '../constants/status.dart';
 
 /// Manage state for Users etc
 class MealioApplicationProvider with ChangeNotifier {
+  List<Product> products = [];
+  ServiceStatus productsStatus = ServiceStatus.initial;
+
   List<ProductCategory> categories = [];
   ServiceStatus categoriesStatus = ServiceStatus.initial;
 
   List<Vendor> vendors = [];
   ServiceStatus vendorsStatus = ServiceStatus.initial;
 
-  List<Product> products = [];
-  ServiceStatus productsStatus = ServiceStatus.initial;
-
-  // List<Address> addresses = [];
-  // ServiceStatus addressesStatus = ServiceStatus.initial;
-
-  Map<Vendor, List<Product>> vendorProducts = {};
-
   List<Order> orders = [];
   ServiceStatus orderStatus = ServiceStatus.initial;
 
   List<OrderItem> orderItems = [];
   ServiceStatus orderItemsStatus = ServiceStatus.initial;
+
+  // Vendor specific products
+  Map<Vendor, List<Product>> vendorProducts = {};
+
+  // Category specific products
+  Map<Vendor, List<Product>> categoryProducts = {};
+
+  /// TODO! update this
 
   MealioApplicationProvider() {
     categoriesStatus = ServiceStatus.loading;
@@ -47,47 +47,49 @@ class MealioApplicationProvider with ChangeNotifier {
     await _initProducts();
     await _initVendors();
 
-    // Get saved address
-    // await _userAddress();
     // Orders
     await _getOrders();
     await _getOrderItems();
   }
 
   Future<void> _initCategories() async {
-    final res = await ProductCategoryService().fetchCategories();
+    final res = await AppService().fetchCategories();
 
-    if (res["status"]) {
-      categories = res["categories"];
-      categoriesStatus = ServiceStatus.loadingSuccess;
-    } else {
+    res.when(error: (error) {
+      /// pass
       categoriesStatus = ServiceStatus.loadingFailure;
-    }
+    }, success: (data) {
+      categories = data;
+      categoriesStatus = ServiceStatus.loadingSuccess;
+    });
     notifyListeners();
   }
 
   Future<void> _initProducts() async {
-    final res = await ProductService().fetchProducts();
+    final res = await AppService().fetchProducts();
 
-    if (res["status"]) {
-      products = res["products"];
-      productsStatus = ServiceStatus.loadingSuccess;
-    } else {
+    res.when(error: (error) {
       productsStatus = ServiceStatus.loadingFailure;
-    }
+    }, success: (data) {
+      products = data;
+      productsStatus = ServiceStatus.loadingSuccess;
+    });
+
     notifyListeners();
   }
 
   Future<void> _initVendors() async {
-    final res = await VendorService().fetchVendors();
+    final res = await AppService().fetchVendors();
 
-    if (res["status"]) {
-      vendors = res["vendors"];
-
-      vendorsStatus = ServiceStatus.loadingSuccess;
-    } else {
+    res.when(error: (error) {
+      if (kDebugMode) {
+        print(error);
+      }
       vendorsStatus = ServiceStatus.loadingFailure;
-    }
+    }, success: (data) {
+      vendors = data;
+      vendorsStatus = ServiceStatus.loadingSuccess;
+    });
     notifyListeners();
   }
 
@@ -104,52 +106,35 @@ class MealioApplicationProvider with ChangeNotifier {
     return results;
   }
 
-  // user address
-  // Future<void> _userAddress() async {
-  //   final res = await AddressService().fetchAddress();
-
-  //   if (res["status"]) {
-  //     addresses = res["addresses"];
-  //     addressesStatus = ServiceStatus.loadingSuccess;
-  //   } else {
-  //     addressesStatus = ServiceStatus.loadingFailure;
-  //   }
-  //   notifyListeners();
-  // }
-
-  // Getting orders
+  // load user orders
   Future<void> _getOrders() async {
-    final res = await OrderService().fetchOrders();
-    if (kDebugMode) {
-      print("The order status is : ${res["status"]}");
-    }
-    if (res["status"]) {
-      orders = res["orders"];
-
-      orderStatus = ServiceStatus.loadingSuccess;
-    } else {
+    final res = await AppService().fetchOrders();
+    res.when(error: (error) {
       orderStatus = ServiceStatus.loadingFailure;
-    }
+    }, success: (data) {
+      orders = data;
+      orderStatus = ServiceStatus.loadingSuccess;
+    });
     notifyListeners();
   }
 
 // Add order to orders list
   void addOrder(Order order) async {
-    orders.add(order);
+    if (!orders.contains(order)) {
+      orders.add(order);
+    }
     notifyListeners();
   }
 
   // Getting orders
   Future<void> _getOrderItems() async {
-    final res = await OrderService().fetchOrderItems();
-
-    if (res["status"]) {
-      orderItems = res["orderItems"];
-
-      orderItemsStatus = ServiceStatus.loadingSuccess;
-    } else {
+    final res = await AppService().fetchOrderItems();
+    res.when(error: (error) {
       orderItemsStatus = ServiceStatus.loadingFailure;
-    }
+    }, success: (data) {
+      orderItems = data;
+      orderItemsStatus = ServiceStatus.loadingSuccess;
+    });
     notifyListeners();
   }
 

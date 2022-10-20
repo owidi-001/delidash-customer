@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
-import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/services/user.service.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/validators.dart';
@@ -248,20 +247,20 @@ class _ProfileEditState extends State<ProfileEdit> {
     if (form!.validate()) {
       form.save();
 
-      final res = await UserService().updateProfile(
-          _firstNameController.text,
-          _lastNameController.text,
-          _emailController.text,
-          _phoneController.text);
+      final res = await UserService().updateProfile(data: {
+        "first_name": _firstNameController.text,
+        "last_name": _lastNameController.text,
+        "email": _emailController.text,
+        "password": _phoneController.text
+      });
 
       res.when(error: (error) {
         ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(false, error.message));
+            .showSnackBar(showMessage(false, error.message));
       }, success: (success) {
         ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(true, "Profile updated!"));
+            .showSnackBar(showMessage(true, "Profile updated!"));
       });
-
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(false, 'Invalid form input!'));
