@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/cart.model.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
-import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
 import 'package:http/http.dart';
@@ -47,7 +47,7 @@ class CartService {
       Order order = Order.fromJson(responseData);
 
       // Update order provider to read order
-      MealioApplicationProvider().addOrder(order);
+      OrderProvider().addOrder(order);
 
       // Trigger payment
       String token = await UserPreferences().getToken();

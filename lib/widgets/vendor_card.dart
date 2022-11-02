@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/vendor.model.dart';
-import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/search_list/pages/vendor_product_list.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:provider/provider.dart';
 
 class VendorCard extends StatelessWidget {
   final Vendor vendor;
@@ -12,14 +10,11 @@ class VendorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
     return InkWell(
       onTap: (() => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: ((context) => VendorProductList(
-                    vendor: vendor,products: appProvider.fetchVendorProducts(vendor),
-                  )),
+              builder: ((context) => VendorProductList(vendor: vendor)),
             ),
           )),
       child: Container(

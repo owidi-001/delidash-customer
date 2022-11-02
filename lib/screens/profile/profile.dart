@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/auth/login_screen.dart';
 import 'package:greens_veges/theme/app_theme.dart';
@@ -18,7 +19,12 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     var user = context.watch<AuthenticationProvider>().user;
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
+    var orders = Provider.of<OrderProvider>(context);
+
+    var userOrders = [];
+    if (orders.status == ServiceStatus.loading) {
+      userOrders = orders.getOrders();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +157,7 @@ class _ProfileState extends State<Profile> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  appProvider.orders.isEmpty
+                  userOrders.isEmpty
                       ? "Your Orders will appear here"
                       : "Your Orders",
                   style: const TextStyle(
@@ -163,7 +169,7 @@ class _ProfileState extends State<Profile> {
             ),
 
             // List view
-            appProvider.orders.isEmpty
+            userOrders.isEmpty
                 ? //check if customer has made any orders
                 SliverToBoxAdapter(
                     child: Container(
@@ -220,10 +226,10 @@ class _ProfileState extends State<Profile> {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: OrderCard(
-                          order: appProvider.orders[index],
+                          order: userOrders[index],
                         ),
                       );
-                    }), childCount: appProvider.orders.length),
+                    }), childCount: userOrders.length),
                   ),
           ],
         ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
-import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/domain/vendor.model.dart';
-import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/product_card.dart';
@@ -11,12 +10,16 @@ import 'package:provider/provider.dart';
 
 class VendorProductList extends StatelessWidget {
   Vendor vendor;
-  List<Product> products;
-  VendorProductList({super.key, required this.vendor, required this.products});
+  VendorProductList({super.key, required this.vendor});
 
   @override
   Widget build(BuildContext context) {
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
+    var products = Provider.of<ProductProvider>(context);
+    var vendorProducts = [];
+
+    if (products.status == ServiceStatus.loading) {
+      vendorProducts = products.fetchVendorProducts(vendor);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +51,7 @@ class VendorProductList extends StatelessWidget {
             ),
 
             //  Product grid
-            appProvider.productsStatus == ServiceStatus.loading
+            products.status == ServiceStatus.loading
                 ? SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -64,7 +67,7 @@ class VendorProductList extends StatelessWidget {
                       childAspectRatio: 1.0,
                     ),
                   )
-                : appProvider.fetchVendorProducts(vendor).isEmpty
+                : vendorProducts.isEmpty
                     ? SliverToBoxAdapter(
                         child: Container(
                             width: double.infinity,
@@ -115,22 +118,19 @@ class VendorProductList extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             return ProductCardWidget(
-                              product: products[index],
+                              product: products.data[index],
                               onTapCallback: (() => Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: ((context) =>
                                           ProductDetailScreen(
-                                            product:
-                                                appProvider.fetchVendorProducts(
-                                                    vendor)[index],
+                                            product: vendorProducts[index],
                                           )),
                                     ),
                                   )),
                             );
                           },
-                          childCount:
-                              appProvider.fetchVendorProducts(vendor).length,
+                          childCount: vendorProducts.length,
                         ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(

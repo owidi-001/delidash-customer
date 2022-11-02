@@ -36,9 +36,6 @@ class _SearchLocationState extends State<SearchLocation> {
     if (response != null) {
       PlaceAutoCompleteResponse result =
           PlaceAutoCompleteResponse.parseAutocompleteResult(response);
-      // if (kDebugMode) {
-      //   print(response);
-      // }
       if (result.predictions != null) {
         setState(() {
           placePredictions = result.predictions!;
@@ -54,7 +51,6 @@ class _SearchLocationState extends State<SearchLocation> {
   final _formkey = GlobalKey<FormState>();
 
   // editing controllers
-
   final TextEditingController _blockNameController = TextEditingController();
   final TextEditingController _floorNumberController = TextEditingController();
   final TextEditingController _roomNumberController = TextEditingController();
@@ -203,8 +199,8 @@ class _SearchLocationState extends State<SearchLocation> {
 
       // Navigate back to the last screen
       Navigator.of(context).pop(); // Closes the bottom sheet
+      
       // Show confirmation message
-
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(true, 'Delivery location set!'));
     } else {

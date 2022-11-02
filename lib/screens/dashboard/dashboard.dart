@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/providers/product.provider.dart';
+import 'package:greens_veges/providers/vendor.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
@@ -34,13 +35,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var user = context.watch<AuthenticationProvider>().user;
 
     // Use product provider
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
+    var products = Provider.of<ProductProvider>(context);
+    var vendors = context.watch<VendorProvider>();
 
     // Banner product
-    Product? product;
-    if (appProvider.productsStatus == ServiceStatus.loadingSuccess &&
-        appProvider.products.length > 1) {
-      product = (appProvider.products..shuffle()).first;
+    Product? product=Product.empty();
+    if (products.data.isNotEmpty) {
+      product = (products.data..shuffle()).first;
     }
 
     return CustomScrollView(
@@ -193,7 +194,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 fontWeight: FontWeight.normal),
                           ),
                           Text(
-                            product!.label,
+                            product.label,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -201,7 +202,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 fontSize: 28,
                                 fontWeight: FontWeight.normal),
                           ),
-                          const SizedBox(height: 8.0,),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
                           Container(
                             padding: const EdgeInsets.all(8.0),
                             width: 120,
@@ -229,7 +232,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       color: AppTheme.primaryColor,
                                       size: 16,
                                     ),
-                                    SizedBox(width: 8.0,),
+                                    SizedBox(
+                                      width: 8.0,
+                                    ),
                                     Text(
                                       "View",
                                       style: TextStyle(
@@ -302,12 +307,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
 
-        //  Data grid/columns
-        appProvider.productsStatus == ServiceStatus.loadingSuccess ||
-                appProvider.vendorsStatus == ServiceStatus.loadingSuccess
-            // Check the browse value
-            ? chosenValue == browsables[0]
-                ? SliverList(
+        // Check for the chosen browser
+        chosenValue == browsables[0]
+            ? vendors.status == ServiceStatus.loadingSuccess
+                ? vendors.data.isNotEmpty
+                    ? SliverList(
+                        delegate: SliverChildBuilderDelegate(((
+                          context,
+                          index,
+                        ) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: VendorCard(
+                              vendor: vendors.data[index],
+                            ),
+                          );
+                        }), childCount: vendors.data.length),
+                      )
+                    : const SliverPadding(
+                        padding: EdgeInsets.all(16.0),
+                        sliver: SliverToBoxAdapter(
+                          child: Text(
+                            "No vendors saved yet",
+                            style: TextStyle(
+                                color: AppTheme.secondaryColor, fontSize: 18),
+                          ),
+                        ),
+                      )
+                : SliverList(
                     delegate: SliverChildBuilderDelegate(((
                       context,
                       index,
@@ -318,44 +346,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       );
                     }), childCount: 6),
                   )
-                : SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  sliver: SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return productSkeletonLoader();
-                        },
-                        childCount: 8,
-                      ),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1.0,
-                      ),
-                    ),
-                )
-            : chosenValue == "Products"
-                ? appProvider.products.isNotEmpty
+            :
+
+            // Now for products
+            products.status == ServiceStatus.loadingSuccess
+                ? products.data.isNotEmpty
                     ? SliverGrid(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             return ProductCardWidget(
-                              product: appProvider.products[index],
+                              product: products.data[index],
                               onTapCallback: (() => Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: ((context) =>
                                           ProductDetailScreen(
-                                            product:
-                                                appProvider.products[index],
+                                            product: products.data[index],
                                           )),
                                     ),
                                   )),
                             );
                           },
-                          childCount: appProvider.products.length,
+                          childCount: products.data.length,
                         ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -372,28 +384,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               color: AppTheme.secondaryColor, fontSize: 18),
                         ),
                       )
-                : appProvider.vendors.isNotEmpty
-                    ? SliverList(
-                        delegate: SliverChildBuilderDelegate(((
-                          context,
-                          index,
-                        ) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: VendorCard(
-                              vendor: appProvider.vendors[index],
-                            ),
-                          );
-                        }), childCount: appProvider.vendors.length),
-                      )
-                    : const SliverToBoxAdapter(
-                        child: Text(
-                          "No vendors saved yet",
-                          style: TextStyle(
-                              color: AppTheme.secondaryColor, fontSize: 18),
-                        ),
+                : SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return productSkeletonLoader();
+                        },
+                        childCount: 8,
                       ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 1.0,
+                      ),
+                    ),
+                  ),
       ],
     );
   }

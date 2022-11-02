@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/providers/category.provider.dart';
+import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/category_card_skeleton.dart';
@@ -15,7 +16,8 @@ class ProductListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
+    var categories = Provider.of<CategoryProvider>(context);
+    var products = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +76,7 @@ class ProductListScreen extends StatelessWidget {
               child: SizedBox(
                 height: 100,
                 width: MediaQuery.of(context).size.width,
-                child: appProvider.categoriesStatus == ServiceStatus.loading
+                child: categories.status == ServiceStatus.loading
                     ? ListView.builder(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -88,7 +90,7 @@ class ProductListScreen extends StatelessWidget {
                           );
                         },
                       )
-                    : appProvider.categories.isEmpty
+                    : categories.data.isEmpty
                         ? Container(
                             decoration: const BoxDecoration(
                                 color: AppTheme.lightColor,
@@ -105,14 +107,14 @@ class ProductListScreen extends StatelessWidget {
                               ),
                             ),
                           )
-                        : categoryCardListView(appProvider.categories),
+                        : categoryCardListView(categories.data),
               ),
             ),
             const SliverToBoxAdapter(
               child: SizedBox(height: 24),
             ),
             //  Product grid
-            appProvider.productsStatus == ServiceStatus.loading
+            products.status == ServiceStatus.loading
                 ? SliverGrid(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -128,7 +130,7 @@ class ProductListScreen extends StatelessWidget {
                       childAspectRatio: 1.0,
                     ),
                   )
-                : appProvider.products.isEmpty
+                : products.data.isEmpty
                     ? SliverToBoxAdapter(
                         child: Container(
                           decoration: const BoxDecoration(
@@ -150,20 +152,19 @@ class ProductListScreen extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             return ProductCardWidget(
-                              product: appProvider.products[index],
+                              product: products.data[index],
                               onTapCallback: (() => Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: ((context) =>
                                           ProductDetailScreen(
-                                            product:
-                                                appProvider.products[index],
+                                            product: products.data[index],
                                           )),
                                     ),
                                   )),
                             );
                           },
-                          childCount: appProvider.products.length,
+                          childCount: products.data.length,
                         ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(

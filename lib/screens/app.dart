@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
+import 'package:greens_veges/providers/category.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
+import 'package:greens_veges/providers/order.provider.dart';
+import 'package:greens_veges/providers/product.provider.dart';
+import 'package:greens_veges/providers/vendor.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/cart/cart.dart';
 import 'package:greens_veges/screens/dashboard/dashboard.dart';
@@ -33,7 +36,10 @@ class _MealioState extends State<Mealio> {
         ChangeNotifierProvider(
           create: (_) => AuthenticationProvider.instance,
         ),
-        ChangeNotifierProvider(create: (_) => MealioApplicationProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => VendorProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider.value(value: LocationProvider.instance)
       ],

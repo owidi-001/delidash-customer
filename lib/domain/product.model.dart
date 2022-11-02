@@ -1,4 +1,6 @@
-class Product {
+import 'package:equatable/equatable.dart';
+
+class Product extends Equatable {
   final int id;
   final String label;
   final String? unit;
@@ -48,6 +50,19 @@ class Product {
 
     return data;
   }
+
+  @override
+  List<Object?> get props =>
+      [id, label, unit, unitPrice, image, description, stock, category, vendor];
+
+  factory Product.empty() => Product(
+      id: 1,
+      label: "dummy",
+      unitPrice: 0.00,
+      image: "assets/images/banner.png",
+      description: "",
+      stock: 0,
+      vendor: 0);
 }
 
 class ProductCategory {

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/order.model.dart';
-import 'package:greens_veges/providers/app.provider.dart';
+import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -105,11 +105,11 @@ class _OrderCardState extends State<OrderCard> {
 
   @override
   Widget build(BuildContext context) {
-    var appProvider = Provider.of<MealioApplicationProvider>(context);
+    var orders = Provider.of<OrderProvider>(context);
     List<OrderItem> _items = [];
-    if (appProvider.productsStatus == ServiceStatus.loadingSuccess &&
-        appProvider.products.length > 1) {
-      _items = appProvider.getOrderItems(widget.order);
+    if (orders.status == ServiceStatus.loadingSuccess &&
+        orders.getOrders().isNotEmpty) {
+      _items = orders.getOrderItems(widget.order);
     }
 
     return Card(
@@ -146,7 +146,7 @@ class _OrderCardState extends State<OrderCard> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            "On: ${convert_date(widget.order.dateOrdered)}",
+            "On: ${convertDate(widget.order.dateOrdered)}",
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -173,7 +173,7 @@ class _OrderCardState extends State<OrderCard> {
   }
 }
 
-String convert_date(String date) {
+String convertDate(String date) {
   DateTime dateConverted = DateTime.parse(date);
   List months = [
     'Jan',
