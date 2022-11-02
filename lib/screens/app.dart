@@ -5,17 +5,17 @@ import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
-import 'package:greens_veges/screens/cart.dart';
-import 'package:greens_veges/screens/dashboard.dart';
+import 'package:greens_veges/screens/cart/cart.dart';
+import 'package:greens_veges/screens/dashboard/dashboard.dart';
 import 'package:greens_veges/screens/home_screen.dart';
-import 'package:greens_veges/screens/login_screen.dart';
-import 'package:greens_veges/screens/products_list_screen.dart';
-import 'package:greens_veges/screens/profile.dart';
-import 'package:greens_veges/screens/profileEdit.dart';
-import 'package:greens_veges/screens/registration_screen.dart';
-import 'package:greens_veges/screens/search_locations.dart';
-import 'package:greens_veges/screens/splash.dart';
-import 'package:greens_veges/screens/welcome.dart';
+import 'package:greens_veges/screens/auth/login_screen.dart';
+import 'package:greens_veges/screens/search_list/products_list_screen.dart';
+import 'package:greens_veges/screens/profile/profile.dart';
+import 'package:greens_veges/screens/profile/pages/profileEdit.dart';
+import 'package:greens_veges/screens/auth/registration_screen.dart';
+import 'package:greens_veges/screens/cart/pages/search_locations.dart';
+import 'package:greens_veges/screens/auth/splash.dart';
+import 'package:greens_veges/screens/auth/welcome.dart';
 import 'package:provider/provider.dart';
 
 class Mealio extends StatefulWidget {
@@ -38,7 +38,7 @@ class _MealioState extends State<Mealio> {
         ChangeNotifierProvider.value(value: LocationProvider.instance)
       ],
       child: MaterialApp(
-        title: 'Mealio',
+        title: 'Meal-io',
         theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
         initialRoute: AppRoute.splash,
         routes: {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/app.provider.dart';
-import 'package:greens_veges/screens/product_detail.dart';
+import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/category_card_skeleton.dart';
 import 'package:greens_veges/widgets/category_view.dart';
@@ -8,7 +8,7 @@ import 'package:greens_veges/widgets/product_card.dart';
 import 'package:greens_veges/widgets/product_card_skeleton.dart';
 import 'package:provider/provider.dart';
 
-import '../constants/status.dart';
+import '../../constants/status.dart';
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});

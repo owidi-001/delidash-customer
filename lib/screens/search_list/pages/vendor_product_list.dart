@@ -3,7 +3,7 @@ import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/domain/vendor.model.dart';
 import 'package:greens_veges/providers/app.provider.dart';
-import 'package:greens_veges/screens/product_detail.dart';
+import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/product_card.dart';
 import 'package:greens_veges/widgets/product_card_skeleton.dart';

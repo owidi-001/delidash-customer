@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/vendor.model.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
-import 'package:greens_veges/screens/vendor_product_list.dart';
+import 'package:greens_veges/screens/search_list/pages/vendor_product_list.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 

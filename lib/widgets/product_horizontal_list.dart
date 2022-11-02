@@ -1,7 +1,7 @@
 // Products card grid view
 import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/product.model.dart';
-import 'package:greens_veges/screens/product_detail.dart';
+import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/widgets/product_card.dart';
 
 Widget productHorizontalList({required List<Product> products}) {

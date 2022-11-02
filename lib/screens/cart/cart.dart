@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';

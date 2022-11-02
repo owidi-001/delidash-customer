@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:greens_veges/screens/cart.dart';
-import 'package:greens_veges/screens/profile.dart';
-import 'package:greens_veges/screens/dashboard.dart';
-import 'package:greens_veges/screens/products_list_screen.dart';
+import 'package:greens_veges/screens/cart/cart.dart';
+import 'package:greens_veges/screens/profile/profile.dart';
+import 'package:greens_veges/screens/dashboard/dashboard.dart';
+import 'package:greens_veges/screens/search_list/products_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -30,39 +30,38 @@ class _HomeState extends State<Home> {
     });
   }
 
+  final List<BottomNavigationBarItem> navItems = const [
+    BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
+    BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Foods"),
+    BottomNavigationBarItem(icon: CartIcon(), label: "Cart"),
+    BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppTheme.whiteColor,
         body: _screens[_currentIndex],
         bottomNavigationBar: Container(
           margin: const EdgeInsets.all(8.0),
           decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-                bottomLeft: Radius.circular(12.0),
-                bottomRight: Radius.circular(12.0),
-              ),
-              color: AppTheme.lightColor),
+            borderRadius: BorderRadius.all(
+              Radius.circular(12.0),
+            ),
+            color: AppTheme.lightColor,
+          ),
           child: BottomNavigationBar(
-              onTap: _updateIndex,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              currentIndex: _currentIndex,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: AppTheme.primaryColor,
-              unselectedItemColor: AppTheme.secondaryColor,
-              showUnselectedLabels: true,
-              selectedLabelStyle: const TextStyle(color: AppTheme.primaryColor),
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.dashboard), label: "Dashboard"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.list_alt), label: "Foods"),
-                BottomNavigationBarItem(icon: CartIcon(), label: "Cart"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline), label: "Profile"),
-              ]),
+            onTap: _updateIndex,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            currentIndex: _currentIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: AppTheme.primaryColor,
+            unselectedItemColor: AppTheme.secondaryColor,
+            showUnselectedLabels: true,
+            selectedLabelStyle: const TextStyle(color: AppTheme.primaryColor),
+            items: navItems,
+          ),
         ));
   }
 }

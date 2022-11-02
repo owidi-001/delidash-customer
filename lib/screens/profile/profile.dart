@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/app.provider.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
-import 'package:greens_veges/screens/login_screen.dart';
+import 'package:greens_veges/screens/auth/login_screen.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/order_card_horizontal.dart';
 import 'package:provider/provider.dart';
