@@ -19,3 +19,9 @@ enum AuthenticationStatus {
   authenticated,
   unAuthenticated
 }
+
+enum PaymentStatus {
+  success,
+  failed,
+  unknown
+}

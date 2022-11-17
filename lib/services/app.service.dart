@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:greens_veges/domain/exception.dart';
 import 'package:greens_veges/domain/order.model.dart';
@@ -40,4 +39,6 @@ class AppService {
       HttpClient.get2<List<OrderItem>>(ApiUrl.orderItems,
           der: (data) =>
               data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
+
+
 }

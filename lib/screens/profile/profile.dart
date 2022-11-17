@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
@@ -21,10 +20,7 @@ class _ProfileState extends State<Profile> {
     var user = context.watch<AuthenticationProvider>().user;
     var orders = Provider.of<OrderProvider>(context);
 
-    var userOrders = [];
-    if (orders.status == ServiceStatus.loading) {
-      userOrders = orders.getOrders();
-    }
+    var userOrders = orders.getOrders();
 
     return Scaffold(
       appBar: AppBar(
@@ -36,19 +32,6 @@ class _ProfileState extends State<Profile> {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: CircleAvatar(
-              backgroundColor: AppTheme.gradientColor,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: AppTheme.primaryColor,
-              ),
-            ),
-          ),
-        ),
         actions: [
           InkWell(
             onTap: () => {

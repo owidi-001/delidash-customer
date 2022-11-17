@@ -3,6 +3,7 @@ import 'package:greens_veges/domain/cart.model.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
+import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -89,7 +90,13 @@ class CartItemWidget extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        cartProvider.updateCart(item, item.quantity + 1);
+                        if (item.quantity < item.product.stock) {
+                          cartProvider.updateCart(item, item.quantity + 1);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              showMessage(false,
+                                  "Maximum available quantities reached!"));
+                        }
                       },
                       child: Image.asset(
                         "assets/images/add_icon.png",

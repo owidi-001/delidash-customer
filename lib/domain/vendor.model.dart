@@ -10,14 +10,15 @@ class Vendor extends Equatable {
   final int user;
   final String brand;
   final String tagline;
-  final String? logo;
+  final String logo;
 
+    
   const Vendor(
       {required this.id,
       required this.user,
       required this.brand,
       required this.tagline,
-      this.logo});
+      required this.logo});
 
   factory Vendor.fromJson(Map<String, dynamic> json) {
     return Vendor(

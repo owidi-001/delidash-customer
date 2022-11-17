@@ -121,7 +121,7 @@ class _OrderCardState extends State<OrderCard> {
       child: ListTile(
         onTap: () => _showModalSheet(_items),
         leading: Text(
-          "# ${widget.order.id}:",
+          "${widget.order.id}:",
           style: const TextStyle(
               color: AppTheme.primaryColor,
               fontSize: 18,
@@ -132,11 +132,11 @@ class _OrderCardState extends State<OrderCard> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             widget.order.location != null
-                ? "To: ${widget.order.location!.name}"
+                ? "${widget.order.location!.name}"
                 : "Unamed",
             maxLines: 1,
             style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.clip,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: AppTheme.secondaryColor),
@@ -189,5 +189,5 @@ String convertDate(String date) {
     'Nov',
     'Dec'
   ];
-  return "${months[dateConverted.month + 1]} ${dateConverted.day.toString()}/${dateConverted.year.toString()}";
+  return "${months[dateConverted.month - 1]} ${dateConverted.day.toString()}/${dateConverted.year.toString()}";
 }

@@ -1,17 +1,41 @@
-# greens_veges
+# Meal-IO App
 
-Veges shop
+This is a mobile fast food delivery application.
+##
+The user base for this app is the food customer.
+##
+It works to the convenience of the user by giving a simple and user friendly interface.
+##
+The app is masked by the following features which will be demostrated in the video demo below: 
 
-## Getting Started
+- User auth screens 
+    - Login and registrations screens
+- User dashboard
+    - A home screen where the user can browser the food vendors and as well navigate ti other pages
+- All foods
+    - This screens provides food filter functionality
+- Cart
+    - Cart details and item lists
+    - Location details and find location links
+    - Payment phone number
+- Profile Screen
+    - User details
+    - Edit profile
+    - Order history
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Cloning for set up
+Follow the following instructions to set this up locally if you're willing to fork or use for study
 
+### Flutter docs 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# green_veges
+### Install dependencies
+### Server/API link
+Will update this soon once deployed
+## Closing
+Leave a comment/review or reach me out for collaboration or any other activity using the following contacts:
+-  Phone: +254791381653
+- Email: kevinalex846@gmail.com
+- Linkedin: [Kevin Owidi](https://www.linkedin.com/in/kevin-owidi-08b275149/)

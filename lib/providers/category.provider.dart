@@ -19,7 +19,7 @@ class CategoryProvider with ChangeNotifier {
       /// pass
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
-      data = data;
+      this.data = data;
       status = ServiceStatus.loadingSuccess;
     });
     notifyListeners();

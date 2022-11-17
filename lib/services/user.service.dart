@@ -7,7 +7,7 @@ class UserService {
   // login
   Future<HttpResult<User>> login({required Map<String, String> data}) =>
       HttpClient.post2<User>(
-        ApiUrl.register,
+        ApiUrl.login,
         data: data,
         der: (data) => User.fromJson(data),
       );

@@ -99,7 +99,7 @@ class RegistrationScreen extends StatelessWidget {
 
         final res = await UserService().register(data: {
           "email": _emailController.text,
-          "phone": _phoneController.text,
+          "phone_number": _phoneController.text,
           "password": _passwordConfirmController.text
         });
 

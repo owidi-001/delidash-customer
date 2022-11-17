@@ -4,7 +4,9 @@ import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/screens/cart/pages/payment_done.dart';
 import 'package:greens_veges/services/cart.service.dart';
+import 'package:greens_veges/services/payment.service.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/validators.dart';
 import 'package:greens_veges/widgets/cart_item.dart';
@@ -39,20 +41,6 @@ class _CartScreenState extends State<CartScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: const Padding(
-            padding: EdgeInsets.only(left: 16),
-            child: CircleAvatar(
-              backgroundColor: AppTheme.gradientColor,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: AppTheme.primaryColor,
-                size: 20.0,
-              ),
-            ),
-          ),
-        ),
         actions: [
           InkWell(
             onTap: () {
@@ -388,40 +376,17 @@ class _CartScreenState extends State<CartScreen> {
               const SliverPadding(padding: EdgeInsets.all(8.0)),
               // Checkout button
               SliverToBoxAdapter(
-                child: submitButton("Make Payment", () {
-                  if (cartProvider.items.isEmpty) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(showMessage(false, "Your cart is empty"));
-                    return;
-                  } else {
-                    // show processing till response is received
-                    Future.doWhile(() {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(showMessage(true, "Please wait ..."));
-
-                      Future<Map<String, dynamic>> data = CartService()
-                          .saveCart(
-                              LocationProvider.instance.location,
-                              cartProvider.items,
-                              cartProvider.totalPrice,
-                              paymentPhoneNumber);
-
-                      data.then((value) {
-                        if (value["status"]) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              showMessage(
-                                  true, "Your order placed successfully"));
-                          Navigator.pushReplacementNamed(
-                              context, AppRoute.profile);
-                          return true;
-                        } else {
-                          return false;
-                        }
-                      });
-                      return false;
-                    });
-                  }
-                }),
+                child: submitButton(
+                    "Make Payment",
+                    () => {
+                          if (cartProvider.items.isEmpty)
+                            {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  showMessage(false, "Your cart is empty"))
+                            }
+                          else
+                            {payHandle(cartProvider)}
+                        }),
               ),
             ],
           ),
@@ -511,5 +476,49 @@ class _CartScreenState extends State<CartScreen> {
             ),
           );
         });
+  }
+
+  // payment handle
+  Future<void> payHandle(cartProvider) async {
+    ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(true, "Please wait."));
+
+    final res =
+        await PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
+
+    res.when(error: (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(false, error.message));
+    }, success: (data) async {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(true, "Payment approved."));
+
+      // Now save order
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(showMessage(true, "Saving order."));
+
+      Map<String, dynamic> apiBodyData = {
+        "location": LocationProvider.instance.location,
+        "items": cartProvider.items,
+        "total": cartProvider.totalPrice,
+        "phone": paymentPhoneNumber
+      };
+
+      var res2 = await CartService().saveOrder(data: apiBodyData);
+
+      res2.when(error: (error) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showMessage(false, "Failed to save order"));
+      }, success: ((data) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showMessage(true, "Your order placed successfully"));
+        // Show order placed confirmation
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: ((context) => const PaymentDone()),
+            ));
+      }));
+    });
   }
 }

@@ -29,19 +29,6 @@ class ProductListScreen extends StatelessWidget {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: const Padding(
-            padding: EdgeInsets.only(left: 16),
-            child: CircleAvatar(
-              backgroundColor: AppTheme.gradientColor,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: AppTheme.primaryColor,
-              ),
-            ),
-          ),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

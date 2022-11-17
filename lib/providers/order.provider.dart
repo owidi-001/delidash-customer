@@ -33,6 +33,9 @@ class OrderProvider with ChangeNotifier {
     res.when(error: (error) {
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
+      // if (kDebugMode) {
+      //   print(data);
+      // }
       setOrders(data);
       status = ServiceStatus.loadingSuccess;
     });

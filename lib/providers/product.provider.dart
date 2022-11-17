@@ -21,7 +21,7 @@ class ProductProvider with ChangeNotifier {
     res.when(error: (error) {
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
-      data = data;
+      this.data = data;
       status = ServiceStatus.loadingSuccess;
     });
 

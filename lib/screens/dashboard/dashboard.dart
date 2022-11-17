@@ -9,8 +9,6 @@ import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/greetings.utility.dart';
-import 'package:greens_veges/widgets/product_card.dart';
-import 'package:greens_veges/widgets/product_card_skeleton.dart';
 import 'package:greens_veges/widgets/vendor_card.dart';
 import 'package:greens_veges/widgets/vendor_card_skeleton.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +21,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  static List<String> browsables = ["Vendors", "Products"];
-
-  String chosenValue = browsables[0];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var vendors = context.watch<VendorProvider>();
 
     // Banner product
-    Product? product=Product.empty();
+    Product? product = Product.empty();
     if (products.data.isNotEmpty) {
       product = (products.data..shuffle()).first;
     }
@@ -265,143 +260,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 const Text(
-                  "Browse By:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  "Browse by",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  decoration: const BoxDecoration(
-                      color: AppTheme.lightColor,
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  child: DropdownButton<String>(
-                    focusColor: AppTheme.whiteColor,
-                    value: chosenValue,
-                    style: const TextStyle(color: Colors.white),
-                    underline: Container(),
-                    items: browsables
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: const TextStyle(color: AppTheme.darkColor),
-                        ),
-                      );
-                    }).toList(),
-                    hint: Text(
-                      browsables[0],
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onChanged: ((value) => {
-                          setState(() {
-                            chosenValue = value!;
-                          })
-                        }),
-                  ),
-                )
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    decoration: const BoxDecoration(
+                        color: AppTheme.lightColor,
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    child: const Text(
+                      "Vendors",
+                      style: TextStyle(color: AppTheme.secondaryColor),
+                    ))
               ],
             ),
           ),
         ),
 
-        // Check for the chosen browser
-        chosenValue == browsables[0]
-            ? vendors.status == ServiceStatus.loadingSuccess
-                ? vendors.data.isNotEmpty
-                    ? SliverList(
-                        delegate: SliverChildBuilderDelegate(((
-                          context,
-                          index,
-                        ) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: VendorCard(
-                              vendor: vendors.data[index],
-                            ),
-                          );
-                        }), childCount: vendors.data.length),
-                      )
-                    : const SliverPadding(
-                        padding: EdgeInsets.all(16.0),
-                        sliver: SliverToBoxAdapter(
-                          child: Text(
-                            "No vendors saved yet",
-                            style: TextStyle(
-                                color: AppTheme.secondaryColor, fontSize: 18),
-                          ),
-                        ),
-                      )
-                : SliverList(
+        vendors.status == ServiceStatus.loadingSuccess
+            ? vendors.data.isNotEmpty
+                ? SliverList(
                     delegate: SliverChildBuilderDelegate(((
                       context,
                       index,
                     ) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: VendorCardSkeleton(),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: VendorCard(
+                          vendor: vendors.data[index],
+                        ),
                       );
-                    }), childCount: 6),
+                    }), childCount: vendors.data.length),
                   )
-            :
-
-            // Now for products
-            products.status == ServiceStatus.loadingSuccess
-                ? products.data.isNotEmpty
-                    ? SliverGrid(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return ProductCardWidget(
-                              product: products.data[index],
-                              onTapCallback: (() => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: ((context) =>
-                                          ProductDetailScreen(
-                                            product: products.data[index],
-                                          )),
-                                    ),
-                                  )),
-                            );
-                          },
-                          childCount: products.data.length,
-                        ),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 1.0,
-                        ),
-                      )
-                    : const SliverToBoxAdapter(
-                        child: Text(
-                          "No Products saved yet",
-                          style: TextStyle(
-                              color: AppTheme.secondaryColor, fontSize: 18),
-                        ),
-                      )
-                : SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    sliver: SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return productSkeletonLoader();
-                        },
-                        childCount: 8,
-                      ),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1.0,
+                : const SliverPadding(
+                    padding: EdgeInsets.all(16.0),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        "No vendors saved yet",
+                        style: TextStyle(
+                            color: AppTheme.secondaryColor, fontSize: 18),
                       ),
                     ),
-                  ),
+                  )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(((
+                  context,
+                  index,
+                ) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: VendorCardSkeleton(),
+                  );
+                }), childCount: 6),
+              )
       ],
     );
   }

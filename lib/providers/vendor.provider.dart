@@ -8,7 +8,6 @@ class VendorProvider with ChangeNotifier {
   ServiceStatus status = ServiceStatus.initial;
 
   VendorProvider() {
-    status = ServiceStatus.initial;
     _init();
   }
 
@@ -21,7 +20,7 @@ class VendorProvider with ChangeNotifier {
       }
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
-      data = data;
+      this.data = data;
       status = ServiceStatus.loadingSuccess;
     });
     notifyListeners();

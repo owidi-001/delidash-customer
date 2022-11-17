@@ -10,7 +10,6 @@ class User extends Equatable {
   final String lastName;
   final String phoneNumber;
   final String email;
-  final bool isVendor;
   final String token;
 
   const User({
@@ -18,7 +17,6 @@ class User extends Equatable {
     required this.lastName,
     required this.phoneNumber,
     required this.email,
-    required this.isVendor,
     required this.token,
   });
 
@@ -28,7 +26,6 @@ class User extends Equatable {
       firstName: json["first_name"],
       phoneNumber: (json["phone_number"] as String).replaceAll("+254", "0"),
       email: json["email"],
-      isVendor: json["is_vendor"],
       token: json["token"],
     );
   }
@@ -38,7 +35,6 @@ class User extends Equatable {
         "first_name": user.firstName,
         "phone_number": user.phoneNumber,
         "email": user.email,
-        "is_vendor": user.isVendor,
         "token": user.token
       };
 
@@ -47,7 +43,6 @@ class User extends Equatable {
         "first_name": firstName,
         "phone_number": phoneNumber,
         "email": email,
-        "is_vendor": isVendor,
         "token": token
       };
 
@@ -57,7 +52,6 @@ class User extends Equatable {
         lastName,
         email,
         phoneNumber,
-        isVendor,
         token,
       ];
 
@@ -73,6 +67,5 @@ class User extends Equatable {
       lastName: "anonymous",
       email: "anonymous",
       phoneNumber: "anonymous",
-      token: "anonymous",
-      isVendor: false);
+      token: "anonymous");
 }
