@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/exception.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/routes/app_router.dart';
@@ -15,9 +16,13 @@ class CartService {
   //     );
 
   Future<HttpResult<List<OrderItem>>> saveOrder(
-          {required Map<String, dynamic> data}) =>
-      HttpClient.post2<List<OrderItem>>(ApiUrl.orders,
-          data: data,
-          der: (data) =>
-              data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
+      {required Map<String, dynamic> apiBody}) {
+    // if (kDebugMode) {
+    //   print("Service Called $apiBody ");
+    // }
+    return HttpClient.post2<List<OrderItem>>(ApiUrl.orders,
+        data: apiBody,
+        der: (data) =>
+            data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
+  }
 }

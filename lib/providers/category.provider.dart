@@ -4,7 +4,7 @@ import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/services/app.service.dart';
 
 class CategoryProvider with ChangeNotifier {
-  List<ProductCategory> data = [];
+  List<ProductCategory> data = [ProductCategory.empty()];
   ServiceStatus status = ServiceStatus.initial;
 
   CategoryProvider() {
@@ -19,7 +19,7 @@ class CategoryProvider with ChangeNotifier {
       /// pass
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
-      this.data = data;
+      this.data += data;
       status = ServiceStatus.loadingSuccess;
     });
     notifyListeners();

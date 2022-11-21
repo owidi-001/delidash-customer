@@ -481,44 +481,50 @@ class _CartScreenState extends State<CartScreen> {
   // payment handle
   Future<void> payHandle(cartProvider) async {
     ScaffoldMessenger.of(context)
-          .showSnackBar(showMessage(true, "Please wait."));
+        .showSnackBar(showMessage(true, "Please wait."));
 
-    final res =
-        await PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
+    // final res =
+    //     await PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
 
-    res.when(error: (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(showMessage(false, error.message));
-    }, success: (data) async {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(showMessage(true, "Payment approved."));
+    // res.when(error: (error) {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(showMessage(false, error.message));
+    // }, success: (data) async {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(showMessage(true, "Payment approved."));
 
-      // Now save order
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(showMessage(true, "Saving order."));
+    //   // Now save order
+    //   // ScaffoldMessenger.of(context)
+    //   //     .showSnackBar(showMessage(true, "Saving order."));
+    // });
 
-      Map<String, dynamic> apiBodyData = {
-        "location": LocationProvider.instance.location,
-        "items": cartProvider.items,
-        "total": cartProvider.totalPrice,
-        "phone": paymentPhoneNumber
-      };
+    // Bypassed payment wait to save order
+    // PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
 
-      var res2 = await CartService().saveOrder(data: apiBodyData);
+    Map<String, dynamic> apiBodyData = {
+      "location": LocationProvider.instance.location,
+      "items": cartProvider.items,
+      "total": cartProvider.totalPrice,
+      "phone": paymentPhoneNumber
+    };
+    var res2 = await CartService().saveOrder(apiBody: apiBodyData);
 
-      res2.when(error: (error) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(showMessage(false, "Failed to save order"));
-      }, success: ((data) {
+    res2.when(
+      error: (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            showMessage(false, "Failed to save order, ${error.message} ${error.statusCode}"));
+      },
+      success: ((data) {
         ScaffoldMessenger.of(context)
             .showSnackBar(showMessage(true, "Your order placed successfully"));
         // Show order placed confirmation
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: ((context) => const PaymentDone()),
-            ));
-      }));
-    });
+          context,
+          MaterialPageRoute(
+            builder: ((context) => const PaymentDone()),
+          ),
+        );
+      }),
+    );
   }
 }

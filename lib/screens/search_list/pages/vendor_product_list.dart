@@ -14,6 +14,7 @@ class VendorProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     var products = Provider.of<ProductProvider>(context);
     var vendorProducts = products.fetchVendorProducts(vendor);
 

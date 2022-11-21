@@ -55,7 +55,7 @@ class _MealioState extends State<Mealio> {
           AppRoute.home: (context) => const Home(),
           AppRoute.dashboard: ((context) => const DashboardScreen()),
           AppRoute.location: (context) => const SearchLocation(),
-          AppRoute.productList: (context) => const ProductListScreen(),
+          AppRoute.productList: (context) => ProductListScreen(),
           AppRoute.cart: (context) => const CartScreen(),
           AppRoute.profile: (context) => const Profile(),
           AppRoute.profileEdit: (context) => const ProfileEdit(),

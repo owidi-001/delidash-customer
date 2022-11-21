@@ -51,5 +51,5 @@ class ApiUrl {
   static const String feedback = "$baseURL/orders/feedback";
 
   // Vendors
-  static const String listVendors = "$baseURL/vendors/vendors";
+  static const String listVendors = "$baseURL/vendors/";
 }

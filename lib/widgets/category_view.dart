@@ -8,6 +8,11 @@ import 'menu_minimal_view.dart';
 
 // Tabbed category list views
 Widget categoryCardListView(List<ProductCategory> categories) {
+  var catIds=categories.map((e) => e.id).toList();
+  if (!catIds.contains(0)) {
+    categories.insert(0, ProductCategory.empty());
+  }
+
   return ListView.builder(
     scrollDirection: Axis.horizontal,
     shrinkWrap: true,
@@ -16,7 +21,7 @@ Widget categoryCardListView(List<ProductCategory> categories) {
     itemBuilder: (BuildContext context, int index) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: categoryCardView(categories[index].icon, categories[index].name),
+        child: categoryCardView(categories[index].icon, categories[index].name,false),
       );
     },
   );
@@ -31,11 +36,10 @@ Widget categoryView(Map<String, List<Product>> categoricalFoods) {
 
       return Column(
         children: [
-          seeAllView(context, category, categoricalFoods[category] ),
+          seeAllView(context, category, categoricalFoods[category]),
           const SizedBox(
             height: 24,
           ),
-          
           SizedBox(
             height: 200,
             width: double.maxFinite,

@@ -84,4 +84,11 @@ class ProductCategory {
       icon: json["icon"],
     );
   }
+
+  factory ProductCategory.empty() =>
+      ProductCategory(id: -1, icon: "assets/images/app_logo.png", name: "All");
+
+  bool equals(ProductCategory productCategory) {
+    return this.id == productCategory.id;
+  }
 }
