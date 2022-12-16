@@ -35,7 +35,7 @@ class VendorCard extends StatelessWidget {
                   child: Image.network(
                     "$baseURL${vendor.logo}",
                   ),
-                )),
+                ),),
             const SizedBox(
               width: 10,
             ),

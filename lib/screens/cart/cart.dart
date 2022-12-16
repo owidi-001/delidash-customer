@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:greens_veges/domain/cart.model.dart';
+import 'package:greens_veges/domain/location.model.dart';
+import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
@@ -384,6 +390,10 @@ class _CartScreenState extends State<CartScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   showMessage(false, "Your cart is empty"))
                             }
+                          else if(locationProvider.location == null){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                  showMessage(false, "Set your delivery location"))
+                          }
                           else
                             {payHandle(cartProvider)}
                         }),
@@ -481,50 +491,39 @@ class _CartScreenState extends State<CartScreen> {
   // payment handle
   Future<void> payHandle(cartProvider) async {
     ScaffoldMessenger.of(context)
-        .showSnackBar(showMessage(true, "Please wait."));
-
-    // final res =
-    //     await PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
-
-    // res.when(error: (error) {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(showMessage(false, error.message));
-    // }, success: (data) async {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(showMessage(true, "Payment approved."));
-
-    //   // Now save order
-    //   // ScaffoldMessenger.of(context)
-    //   //     .showSnackBar(showMessage(true, "Saving order."));
-    // });
+        .showSnackBar(showMessage(true, "Please follow mpesa prompt!"));
 
     // Bypassed payment wait to save order
-    // PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
+    PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
 
     Map<String, dynamic> apiBodyData = {
-      "location": LocationProvider.instance.location,
-      "items": cartProvider.items,
+      "location": Location.toMap(LocationProvider.instance.location),
+      "items": cartProvider.items.map<Map<String,dynamic>>((json) => CartItemModel.toMap(json)).toList(),
       "total": cartProvider.totalPrice,
       "phone": paymentPhoneNumber
     };
-    var res2 = await CartService().saveOrder(apiBody: apiBodyData);
+    // var response = await CartService().saveOrder(apiBodyData);
 
-    res2.when(
-      error: (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            showMessage(false, "Failed to save order, ${error.message} ${error.statusCode}"));
-      },
-      success: ((data) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(showMessage(true, "Your order placed successfully"));
+    final Future response = CartService().saveOrder(apiBodyData);
+
+    response.then((value) {
+      if (value['status']) {
         // Show order placed confirmation
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: ((context) => const PaymentDone()),
           ),
         );
-      }),
-    );
+
+        // Clear Cart
+        cartProvider.resetCart();
+        
+
+      } else {
+        ScaffoldMessenger.of(context)
+          .showSnackBar(showMessage(false, value["message"]));
+      }
+    });
   }
 }

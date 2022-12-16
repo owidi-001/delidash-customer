@@ -75,4 +75,9 @@ class CartProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void resetCart() {
+    _items = [];
+    notifyListeners();
+  }
 }

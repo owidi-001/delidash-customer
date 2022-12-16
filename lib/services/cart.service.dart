@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:greens_veges/domain/exception.dart';
-import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/routes/app_router.dart';
-import 'package:greens_veges/services/http_client.dart';
 
 import 'dart:async';
+
+import 'package:greens_veges/utility/shared_preference.dart';
+import 'package:http/http.dart';
 
 class CartService {
   // Future<HttpResult<Payment>> makePayment(
@@ -15,14 +17,79 @@ class CartService {
   //       der: (data) => Payment.fromJson(data),
   //     );
 
-  Future<HttpResult<List<OrderItem>>> saveOrder(
-      {required Map<String, dynamic> apiBody}) {
-    // if (kDebugMode) {
-    //   print("Service Called $apiBody ");
-    // }
-    return HttpClient.post2<List<OrderItem>>(ApiUrl.orders,
-        data: apiBody,
-        der: (data) =>
-            data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
+  Future<Map<String, dynamic>> saveOrder(Map<String, dynamic> payload) async {
+    String token = await UserPreferences().getToken();
+
+    Map<String, dynamic> result;
+
+    // return await post(Uri.parse(ApiUrl.orders),
+    //     body: json.encode(payload),
+    //     headers: {
+    //       "Authorization": "Token $token",
+    //       'Content-Type': 'application/json'
+    //     }).then(onValue).catchError(onError);
+
+    Response response = await post(Uri.parse(ApiUrl.orders),
+        body: json.encode(payload),
+        headers: {
+          "Authorization": "Token $token",
+          'Content-Type': 'application/json'
+        });
+
+    if (response.statusCode == 201) {
+      if (kDebugMode) {
+        print(response.statusCode);
+      }
+
+      result = {
+        'status': true,
+        'message': 'Order successfully placed'
+      };
+    } else {
+      result = {
+        'status': false,
+        'message':
+            'Failed to save order ${response.statusCode} ${response.body}'
+      };
+    }
+
+    return result;
   }
+
+  // static Future<Map<String, dynamic>> onValue(Response response) async {
+  //   Map<String, dynamic> result;
+  //   final Map<String, dynamic> responseData = json.decode(response.body);
+
+  //   if (kDebugMode) {
+  //     print(responseData);
+  //   }
+
+  //   if (response.statusCode == 201) {
+  //     if (kDebugMode) {
+  //       print(response.statusCode);
+  //     }
+
+  //     result = {
+  //       'status': true,
+  //       'message': 'Order successfully placed',
+  //       // 'data': items
+  //     };
+  //   } else {
+  //     result = {
+  //       'status': false,
+  //       'message':
+  //           'Failed to save order ${response.statusCode} ${response.body}',
+  //       // 'data': responseData
+  //     };
+  //   }
+
+  //   return result;
+  // }
+
+  // static onError(error) {
+  //   if (kDebugMode) {
+  //     print("the error is $error.detail");
+  //   }
+  //   return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+  // }
 }

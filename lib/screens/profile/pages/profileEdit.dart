@@ -107,19 +107,26 @@ class _ProfileEditState extends State<ProfileEdit> {
           ),
           elevation: 0,
           backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: CircleAvatar(
-                backgroundColor: AppTheme.lightColor,
-                child: Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: AppTheme.primaryColor,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: InkWell(
+                onTap: (() {
+                  Navigator.pop(context);
+                }),
+                child: const CircleAvatar(
+                  backgroundColor: AppTheme.lightColor,
+                  child: Icon(
+                    Icons.close_rounded,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
               ),
             ),
-          ),
+            const SizedBox(
+              width: 16.0,
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           // form fields with details

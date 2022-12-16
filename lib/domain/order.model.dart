@@ -1,29 +1,61 @@
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
 
+// Sample data format received
+var x = """
+{
+
+    "id": 1,
+    "cart": 1,
+    "quantity": 2,
+    "product": {
+        "id": 2,
+        "label": "Tomatoes",
+        "unit": "kg",
+        "unit_price": "50.00",
+        "image": "/media/product/2022/12/16/tomatoes.png",
+        "description": "We have a varieties of tomato breeds. Come get your and give us your feedback.",
+        "stock": 5,
+        "created_at": "2022-12-16T13:13:51.618354Z",
+        "category": 1,
+        "vendor": 1
+    },
+    "status": "Pending",
+    "time": "13:39:48.860035",
+    "date": "2022-12-16T13:39:48.859981Z"
+
+},
+""";
 
 class OrderItem {
   final int? id;
   final int? order;
   final int quantity;
   Product product;
+  final String status;
+  final String orderDate;
+  final String orderTime;
 
-  OrderItem({
-    this.id,
-    this.order,
-    required this.product,
-    required this.quantity,
-  });
+  OrderItem(
+      {this.id,
+      this.order,
+      required this.product,
+      required this.quantity,
+      required this.status,
+      required this.orderDate,
+      required this.orderTime});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     Product product = Product.fromJson(json["product"]);
 
     return OrderItem(
-      id: json["id"],
-      order: json["cart"],
-      product: product,
-      quantity: json["quantity"],
-    );
+        id: json["id"],
+        order: json["cart"],
+        product: product,
+        quantity: json["quantity"],
+        status: json["status"],
+        orderDate: json["date"].toString(),
+        orderTime: json["time"].toString());
   }
 
   static Map<String, dynamic> toMap(OrderItem item) {
@@ -31,7 +63,10 @@ class OrderItem {
       "id": item.id,
       "cart": item.order,
       "quantity": item.quantity,
-      "product": Product.toMap(item.product)
+      "product": Product.toMap(item.product),
+      "date": item.orderDate,
+      "time": item.orderTime,
+      "status": item.status
     };
 
     return data;

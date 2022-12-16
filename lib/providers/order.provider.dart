@@ -47,8 +47,15 @@ class OrderProvider with ChangeNotifier {
     final res = await AppService().fetchOrderItems();
     res.when(error: (error) {
       itemStatus = ServiceStatus.loadingFailure;
+      if (kDebugMode) {
+        print("Failed to fetch items");
+      }
     }, success: (data) {
       _orderItems = data;
+      if (kDebugMode) {
+        print("Order items loaded");
+        print(data);
+      }
       itemStatus = ServiceStatus.loadingSuccess;
     });
     notifyListeners();
@@ -65,13 +72,28 @@ class OrderProvider with ChangeNotifier {
   }
 
   // Categorise order with their items
-  List<OrderItem> getOrderItems(Order order) {
-    List<OrderItem> results = [];
-    for (var item in _orderItems) {
-      if (item.order == order.id) {
-        results.add(item);
-      }
-    }
-    return results;
+  // List<OrderItem> getOrderItems(Order order) {
+  //   List<OrderItem> results = [];
+  //   for (var item in _orderItems) {
+  //     if (item.order == order.id) {
+  //       results.add(item);
+  //     }
+  //   }
+  //   return results;
+  // }
+
+  List<OrderItem> getOrderItems() {
+    return _orderItems;
+  }
+
+  void addOrderItems(List<OrderItem> orders) async {
+    _orderItems.addAll(orders);
+
+    notifyListeners();
+  }
+
+  // refresh
+  void refresh() {
+    _initItems();
   }
 }

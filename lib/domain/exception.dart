@@ -16,7 +16,8 @@ Failure getException(error) {
   if (error is DioError) {
     if (error.response != null) {
       return Failure(error.message, error.response!.statusCode ?? 0,
-          extra: error.response!.data);
+          extra: error.response!.data
+          );
     }
   }
   if (error is Exception) {

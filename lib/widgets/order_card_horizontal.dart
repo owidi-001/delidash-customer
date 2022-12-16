@@ -1,15 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:greens_veges/constants/status.dart';
 import 'package:greens_veges/domain/order.model.dart';
-import 'package:greens_veges/providers/order.provider.dart';
-import 'package:greens_veges/routes/app_router.dart';
+import 'package:greens_veges/screens/profile/pages/order_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
-import 'package:provider/provider.dart';
 
 class OrderCard extends StatefulWidget {
-  final Order order;
-  OrderCard({super.key, required this.order});
+  final OrderItem item;
+  OrderCard({super.key, required this.item});
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -23,94 +19,8 @@ class _OrderCardState extends State<OrderCard> {
     "Processing": AppTheme.darkColor
   };
 
-  // order detail view
-  void _showModalSheet(List<OrderItem> items) {
-    if (kDebugMode) {
-      print(items.length);
-    }
-    showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Container(
-            color: AppTheme.gradientColor,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: 60,
-                    width: MediaQuery.of(context).size.width,
-                    color: AppTheme.whiteColor,
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Order Items",
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryColor),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: items.length,
-                      itemBuilder: ((context, index) {
-                        return Card(
-                          color: AppTheme.whiteColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          elevation: 0,
-                          child: ListTile(
-                            leading: Image.network(
-                              "$baseURL${items[index].product.image}",
-                            ),
-                            title: Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                items[index].product.label,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.secondaryColor),
-                              ),
-                            ),
-                            trailing: Text(
-                              "@ ${items[index].quantity * items[index].product.unitPrice}",
-                              style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.secondaryColor),
-                            ),
-                            selectedTileColor: AppTheme.primaryColor,
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var orders = Provider.of<OrderProvider>(context);
-    List<OrderItem> _items = [];
-    if (orders.status == ServiceStatus.loadingSuccess &&
-        orders.getOrders().isNotEmpty) {
-      _items = orders.getOrderItems(widget.order);
-    }
 
     return Card(
       color: AppTheme.whiteColor,
@@ -119,21 +29,33 @@ class _OrderCardState extends State<OrderCard> {
       ),
       elevation: 0,
       child: ListTile(
-        onTap: () => _showModalSheet(_items),
-        leading: Text(
-          "${widget.order.id}:",
-          style: const TextStyle(
-              color: AppTheme.primaryColor,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => OrderDetail(item: widget.item)),
+          ),
+        ),
+        leading: Container(
+          clipBehavior: Clip.antiAlias,
+          height: 100,
+          width: 80,
+          decoration: const BoxDecoration(
+              color: AppTheme.lightColor,
+              borderRadius: BorderRadius.all(Radius.circular(12))),
+          alignment: Alignment.center,
+          child: Image.asset(
+            "assets/images/app_logo.png",
+            fit: BoxFit.fill,
+          ),
+          // child: Image.network(
+          //   "$baseURL${vendor.logo}",
+          // ),
         ),
         title: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            widget.order.location != null
-                ? "${widget.order.location!.name}"
-                : "Unamed",
+            widget.item.product.label,
             maxLines: 1,
             style: const TextStyle(
                 overflow: TextOverflow.clip,
@@ -142,32 +64,34 @@ class _OrderCardState extends State<OrderCard> {
                 color: AppTheme.secondaryColor),
           ),
         ),
-        subtitle: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            "On: ${convertDate(widget.order.dateOrdered)}",
-            style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.secondaryColor),
-          ),
+        subtitle: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("${widget.item.quantity} items"),
+            Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: statusColor[widget.item.status]!,
+                ),
+                child: Text(
+                  widget.item.status,
+                  style: const TextStyle(color: AppTheme.lightColor),
+                ))
+          ],
         ),
-        trailing: Container(
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            border:
-                Border.all(color: statusColor[widget.order.status]!, width: 2),
-          ),
-          child: Icon(
-            Icons.circle,
-            color: statusColor[widget.order.status],
-            size: 15,
-          ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              convertDate(widget.item.orderDate),
+              style: const TextStyle(color: AppTheme.secondaryColor),
+            )
+          ],
         ),
-        selectedTileColor: AppTheme.primaryColor,
       ),
     );
   }
