@@ -17,7 +17,6 @@ class Location extends Equatable {
     );
   }
 
-
   static Map<String, dynamic> toMap(Location location) {
     Map<String, dynamic> data = {
       "name": location.name,
@@ -34,4 +33,9 @@ class Location extends Equatable {
 
   factory Location.empty() => Location(
       name: "Unknown", blockName: "Unknown", floor: "0", roomNumber: "0");
+
+  @override
+  String toString() {
+    return name ?? "Location unknown";
+  }
 }

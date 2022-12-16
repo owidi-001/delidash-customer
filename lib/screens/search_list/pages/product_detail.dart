@@ -45,7 +45,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: CircleAvatar(
               backgroundColor: AppTheme.gradientColor,
               child: Icon(
-                Icons.arrow_back_ios_new_rounded,
+                Icons.arrow_back_rounded,
                 color: AppTheme.primaryColor,
               ),
             ),

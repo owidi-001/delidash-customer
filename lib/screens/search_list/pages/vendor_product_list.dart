@@ -31,7 +31,7 @@ class VendorProductList extends StatelessWidget {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back_rounded,
             color: AppTheme.primaryColor,
           ),
           iconSize: 24,

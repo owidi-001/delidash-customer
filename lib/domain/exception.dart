@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class Failure {
   final String message;
@@ -15,9 +16,11 @@ class Failure {
 Failure getException(error) {
   if (error is DioError) {
     if (error.response != null) {
+      if (kDebugMode) {
+        print(error.message);
+      }
       return Failure(error.message, error.response!.statusCode ?? 0,
-          extra: error.response!.data
-          );
+          extra: error.response!.data);
     }
   }
   if (error is Exception) {

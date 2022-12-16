@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/exception.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/utility/shared_preference.dart';
@@ -33,7 +34,7 @@ class HttpClient {
     T Function(dynamic data)? der,
   }) async {
     try {
-      final results = await HttpClient.post(    
+      final results = await HttpClient.post(
         url,
         data,
       );
@@ -58,6 +59,9 @@ class HttpClient {
         der != null ? der(results.data) : results.data,
       );
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       return HttpResult.error(getException(e));
     }
   }

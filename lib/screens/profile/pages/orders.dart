@@ -14,7 +14,6 @@ class UserOrders extends StatefulWidget {
 class _UserOrdersState extends State<UserOrders> {
   @override
   Widget build(BuildContext context) {
-    
     var orders = Provider.of<ItemsProvider>(context);
     var items = orders.getItems();
 
@@ -24,15 +23,23 @@ class _UserOrdersState extends State<UserOrders> {
         backgroundColor: AppTheme.primaryColor,
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          // List Item
-          return OrderCard(
-            item: items[index],
-          );
+      body: RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), () {
+            orders.refresh();
+          });
         },
+        // onRefresh: orders.refresh(),
+        child: ListView.builder(
+          itemCount: items.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            // List Item
+            return OrderCard(
+              item: items[index],
+            );
+          },
+        ),
       ),
     );
   }

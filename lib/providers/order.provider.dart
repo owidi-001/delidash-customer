@@ -1,20 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:greens_veges/constants/status.dart';
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/services/app.service.dart';
 
 class OrderProvider with ChangeNotifier {
   List<Order> _orders = [];
-  List<OrderItem> _orderItems = [];
+
   ServiceStatus status = ServiceStatus.initial;
-  ServiceStatus itemStatus = ServiceStatus.initial;
 
   OrderProvider() {
     status = ServiceStatus.initial;
-    itemStatus = ServiceStatus.initial;
 
     _initOrders();
-    _initItems();
   }
 
   List<Order> getOrders() {
@@ -43,24 +41,6 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _initItems() async {
-    final res = await AppService().fetchOrderItems();
-    res.when(error: (error) {
-      itemStatus = ServiceStatus.loadingFailure;
-      if (kDebugMode) {
-        print("Failed to fetch items");
-      }
-    }, success: (data) {
-      _orderItems = data;
-      if (kDebugMode) {
-        print("Order items loaded");
-        print(data);
-      }
-      itemStatus = ServiceStatus.loadingSuccess;
-    });
-    notifyListeners();
-  }
-
   // Add order to orders list
   void addOrder(Order order) async {
     var orders = getOrders();
@@ -82,18 +62,15 @@ class OrderProvider with ChangeNotifier {
   //   return results;
   // }
 
-  List<OrderItem> getOrderItems() {
-    return _orderItems;
-  }
+  // get item order
+  String getItemOrderLocation(OrderItem item) {
+    String location = "Location Unknown";
 
-  void addOrderItems(List<OrderItem> orders) async {
-    _orderItems.addAll(orders);
-
-    notifyListeners();
-  }
-
-  // refresh
-  void refresh() {
-    _initItems();
+    for (var order in _orders) {
+      if (order.id == item.order) {
+        location = order.location.toString();
+      }
+    }
+    return location;
   }
 }

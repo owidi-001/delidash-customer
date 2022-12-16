@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
+import 'package:http/retry.dart';
 
 // Sample data format received
 var x = """
@@ -33,8 +35,8 @@ class OrderItem {
   final int quantity;
   Product product;
   final String status;
-  final String orderDate;
-  final String orderTime;
+  final String date;
+  final String time;
 
   OrderItem(
       {this.id,
@@ -42,8 +44,8 @@ class OrderItem {
       required this.product,
       required this.quantity,
       required this.status,
-      required this.orderDate,
-      required this.orderTime});
+      required this.date,
+      required this.time});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     Product product = Product.fromJson(json["product"]);
@@ -54,8 +56,8 @@ class OrderItem {
         product: product,
         quantity: json["quantity"],
         status: json["status"],
-        orderDate: json["date"].toString(),
-        orderTime: json["time"].toString());
+        date: json["date"],
+        time: json["time"]);
   }
 
   static Map<String, dynamic> toMap(OrderItem item) {
@@ -64,8 +66,8 @@ class OrderItem {
       "cart": item.order,
       "quantity": item.quantity,
       "product": Product.toMap(item.product),
-      "date": item.orderDate,
-      "time": item.orderTime,
+      "date": item.date,
+      "time": item.time,
       "status": item.status
     };
 

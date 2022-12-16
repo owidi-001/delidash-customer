@@ -48,7 +48,7 @@ class ItemsProvider with ChangeNotifier {
   }
 
   // refresh
-  void refresh() {
-    _initItems();
+  void refresh() async {
+    await _initItems();
   }
 }

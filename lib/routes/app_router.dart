@@ -4,7 +4,6 @@
 // kevoh ip 192.168.4.16
 const String baseURL = "http://192.168.0.102:8000";
 
-
 // Routes for app
 class AppRoute {
   static const String splash = "/";

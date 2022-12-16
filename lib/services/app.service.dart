@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/exception.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
@@ -6,6 +9,9 @@ import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/services/http_client.dart';
 
 import 'dart:async';
+
+import 'package:greens_veges/utility/shared_preference.dart';
+import 'package:http/http.dart';
 
 class AppService {
   // Fetch products
@@ -38,4 +44,6 @@ class AppService {
       HttpClient.get2<List<OrderItem>>(ApiUrl.orderItems,
           der: (data) =>
               data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
+
+
 }

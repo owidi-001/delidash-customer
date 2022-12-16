@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
-import 'package:greens_veges/screens/auth/login_screen.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
