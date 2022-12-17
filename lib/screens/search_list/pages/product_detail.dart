@@ -42,12 +42,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           onTap: () => Navigator.pop(context),
           child: const Padding(
             padding: EdgeInsets.only(left: 16),
-            child: CircleAvatar(
-              backgroundColor: AppTheme.gradientColor,
-              child: Icon(
-                Icons.arrow_back_rounded,
-                color: AppTheme.primaryColor,
-              ),
+            child: Icon(
+              Icons.arrow_back_rounded,
+              color: AppTheme.primaryColor,
             ),
           ),
         ),

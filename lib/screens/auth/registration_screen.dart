@@ -104,8 +104,16 @@ class RegistrationScreen extends StatelessWidget {
         });
 
         res.when(error: (error) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(showMessage(false, error.message));
+          if (error.statusCode == 400) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showMessage(false, "Error! Check your details"));
+          } else if (error.statusCode == 500) {
+            ScaffoldMessenger.of(context).showSnackBar(showMessage(false,
+                "Could not authenticate! \nThe error is on our side solving it ASAP!"));
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showMessage(false, error.message));
+          }
         }, success: (data) {
           ScaffoldMessenger.of(context)
               .showSnackBar(showMessage(true, "Registration successful"));
@@ -216,7 +224,12 @@ class RegistrationScreen extends StatelessWidget {
                     height: 32,
                   ),
                   authProvider.status == AuthenticationStatus.authenticating
-                      ? const ButtonLoading(title: "Register")
+                      ? ButtonLoading(
+                          title: "Register",
+                          function: () {
+                            return doRegister(context);
+                          },
+                        )
                       : submitButton("Register", () => doRegister(context)),
                   const SizedBox(
                     height: 24,

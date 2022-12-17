@@ -1,15 +1,26 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/providers/product.provider.dart';
 import 'package:greens_veges/screens/search_list/components/body.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/product_card.dart';
+import 'package:provider/provider.dart';
+
+// Set global for filters
+List<Product> products = [];
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    products = Provider.of<ProductProvider>(context).data;
+    if (kDebugMode) {
+      print(products);
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -67,7 +78,7 @@ class ProductListScreen extends StatelessWidget {
 // Custom search delegate
 
 class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms =ProductProvider().data.map((e) => e.label).toList();
+  List<String> searchTerms = products.map((e) => e.label).toList();
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -86,15 +97,15 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: (() {
           close(context, null);
         }),
-        icon: const Icon(Icons.arrow_back));
+        icon: const Icon(Icons.arrow_back,color:  AppTheme.primaryColor,));
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
+    List<Product> matchQuery = [];
 
-    for (var product in searchTerms) {
-      if (product.toLowerCase().contains(query.toLowerCase())) {
+    for (var product in products) {
+      if (product.label.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(product);
       }
     }
@@ -111,12 +122,12 @@ class CustomSearchDelegate extends SearchDelegate {
             childAspectRatio: 0.75,
           ),
           itemBuilder: (context, index) => ProductCardWidget(
-            product: ProductProvider().findByName(matchQuery[index])!,
+            product: matchQuery[index],
             onTapCallback: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ProductDetailScreen(
-                  product: ProductProvider().findByName(matchQuery[index])!,
+                  product: matchQuery[index],
                 ),
               ),
             ),
@@ -128,10 +139,10 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
+    List<Product> matchQuery = [];
 
-    for (var product in searchTerms) {
-      if (product.toLowerCase().contains(query.toLowerCase())) {
+    for (var product in products) {
+      if (product.label.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(product);
       }
     }
@@ -148,13 +159,12 @@ class CustomSearchDelegate extends SearchDelegate {
               childAspectRatio: 0.75,
             ),
             itemBuilder: (context, index) => ProductCardWidget(
-                  product: ProductProvider().findByName(matchQuery[index])!,
+                  product: matchQuery[index],
                   onTapCallback: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ProductDetailScreen(
-                          product:
-                              ProductProvider().findByName(matchQuery[index])!,
+                          product: matchQuery[index],
                         ),
                       )),
                 )),

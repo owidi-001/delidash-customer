@@ -290,10 +290,10 @@ class _SearchLocationState extends State<SearchLocation> {
                 // Set location name to the future instance string value
                 address.then((value) => location_name = value);
 
-                // Test if location is saved
-                if (kDebugMode) {
-                  print("The location detected is: $location_name");
-                }
+                // // Test if location is saved
+                // if (kDebugMode) {
+                //   print("The location detected is: $location_name");
+                // }
                 // Show modal
                 _showModalForm();
               },

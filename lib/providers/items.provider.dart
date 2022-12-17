@@ -31,9 +31,9 @@ class ItemsProvider with ChangeNotifier {
     res.when(error: (error) {
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
-      if (kDebugMode) {
-        print(data);
-      }
+      // if (kDebugMode) {
+      //   print(data);
+      // }
       setItems(data);
       status = ServiceStatus.loadingSuccess;
     });

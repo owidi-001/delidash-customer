@@ -15,9 +15,9 @@ class VendorProvider with ChangeNotifier {
     final res = await AppService().fetchVendors();
 
     res.when(error: (error) {
-      if (kDebugMode) {
-        print(error);
-      }
+      // if (kDebugMode) {
+      //   print(error);
+      // }
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
       this.data = data;

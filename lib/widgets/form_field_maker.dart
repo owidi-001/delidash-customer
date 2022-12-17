@@ -33,7 +33,8 @@ Material submitButton(String title, Function() function) {
 
 class ButtonLoading extends StatelessWidget {
   final String title;
-  const ButtonLoading({super.key,required this.title});
+  final Function() function;
+  const ButtonLoading({super.key, required this.title, required this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class ButtonLoading extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       color: AppTheme.primaryColor,
       child: MaterialButton(
-          onPressed: () {},
+          onPressed: function,
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: double.infinity,
           child: Row(
@@ -56,7 +57,9 @@ class ButtonLoading extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
               ),
-              const CircularProgressIndicator(color: AppTheme.whiteColor,),
+              const CircularProgressIndicator(
+                color: AppTheme.whiteColor,
+              ),
             ],
           )),
     );

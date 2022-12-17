@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:greens_veges/domain/location.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
+import 'package:greens_veges/providers/location.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,13 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     var userProvider = context.watch<AuthenticationProvider>();
     var user = context.watch<AuthenticationProvider>().user;
+
+    Location location = Location.empty();
+    var locationProvider = context.watch<LocationProvider>();
+
+    setState(() {
+      location = locationProvider.location;
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -234,9 +243,11 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primaryColor),
                 ),
-                subtitle: const Text(
-                  "Home",
-                  style: TextStyle(color: AppTheme.secondaryColor),
+                subtitle: Text(
+                  location.name!.isNotEmpty
+                      ? location.name!.split(" ")[0]
+                      : "home",
+                  style: const TextStyle(color: AppTheme.secondaryColor),
                 ),
                 trailing: TextButton(
                   onPressed: (() =>

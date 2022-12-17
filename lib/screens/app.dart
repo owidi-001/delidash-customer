@@ -22,6 +22,7 @@ import 'package:greens_veges/screens/auth/registration_screen.dart';
 import 'package:greens_veges/screens/cart/pages/search_locations.dart';
 import 'package:greens_veges/screens/auth/splash.dart';
 import 'package:greens_veges/screens/auth/welcome.dart';
+import 'package:greens_veges/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class Mealio extends StatefulWidget {
@@ -49,7 +50,10 @@ class _MealioState extends State<Mealio> {
       ],
       child: MaterialApp(
         title: 'Meal-io',
-        theme: ThemeData(fontFamily: GoogleFonts.lato().fontFamily),
+        theme: ThemeData(
+          primaryColor: AppTheme.primaryColor,
+          primarySwatch: Colors.green,
+          fontFamily: GoogleFonts.lato().fontFamily),
         initialRoute: AppRoute.splash,
         routes: {
           AppRoute.splash: (context) => const SplashScreen(),

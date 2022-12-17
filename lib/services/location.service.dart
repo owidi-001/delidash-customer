@@ -33,10 +33,10 @@ class LocationService {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    if (kDebugMode) {
-      print("The placemarks are: ");
-      print(placemarks[0].name);
-    }
+    // if (kDebugMode) {
+    //   print("The placemarks are: ");
+    //   print(placemarks[0].name);
+    // }
 
     Placemark place = placemarks[0];
     String address =

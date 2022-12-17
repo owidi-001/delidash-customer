@@ -28,10 +28,10 @@ class PaymentProvider with ChangeNotifier {
 
     res.when(
         error: (error) {
-          // An error occured
-          if (kDebugMode) {
-            print(error.message);
-          }
+          // // An error occured
+          // if (kDebugMode) {
+          //   print(error.message);
+          // }
           status = PaymentStatus.failed;
         },
         success: (data) {

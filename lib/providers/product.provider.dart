@@ -37,11 +37,10 @@ class ProductProvider with ChangeNotifier {
     List<Product> results = [];
 
     for (var product in data) {
-      if (vendor.id == product.vendor) {
+      if (product.vendor == vendor.id) {
         results.add(product);
       }
     }
-
     return results;
   }
 

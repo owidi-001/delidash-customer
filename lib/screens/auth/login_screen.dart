@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
       onSaved: (value) {
         _passwordController.value;
       },
-      // validator: (value) => validPassword(_passwordController.text),
+      validator: (value) => validPassword(_passwordController.text),
       textInputAction: TextInputAction.done,
       decoration: buildInputDecoration("Password", Icons.lock),
     );
@@ -111,7 +111,8 @@ class LoginScreen extends StatelessWidget {
                   height: 32,
                 ),
                 authProvider.status == AuthenticationStatus.authenticating
-                    ? const ButtonLoading(title: "Login")
+                    ? ButtonLoading(
+                        title: "Login", function: () => login(context))
                     : submitButton("Login", () => login(context)),
                 const SizedBox(
                   height: 24,
@@ -167,9 +168,16 @@ class LoginScreen extends StatelessWidget {
       });
       res.when(
         error: (error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            showMessage(false, error.message),
-          );
+          if (error.statusCode == 400) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showMessage(false, "Error! Check your details"));
+          } else if (error.statusCode == 500) {
+            ScaffoldMessenger.of(context).showSnackBar(showMessage(false,
+                "Could not authenticate! \nThe error is on our side solving it ASAP!"));
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(showMessage(false, error.message));
+          }
         },
         success: (data) {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -17,10 +17,10 @@ class LocationProvider extends ChangeNotifier {
           roomNumber: "0");
 
   void setLocation(Location location) {
-    if (kDebugMode) {
-      /// proven works
-      print("Location provider called with value ${location.toString()}");
-    }
+    // if (kDebugMode) {
+    //   /// proven works
+    //   // print("Location provider called with value ${location.toString()}");
+    // }
     _location = location;
     locationStatus = LocationStatus.loaded;
     notifyListeners();
