@@ -1,32 +1,33 @@
 import 'package:equatable/equatable.dart';
 
-class Product extends Equatable {
+class Item extends Equatable {
   final int id;
-  final String label;
-  final String? unit;
+  final String name;
+  final String unit;
   final double unitPrice;
   final String image;
   final String description;
   final int stock;
-  final int? category;
+  final ItemCategory category;
   final int vendor;
 
   // constructor
-  Product(
+  Item(
       {required this.id,
-      required this.label,
-      this.unit,
+      required this.name,
+      required this.unit,
       required this.unitPrice,
       required this.image,
       required this.description,
       required this.stock,
-      this.category,
+      required this.category,
       required this.vendor});
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(
         id: json["id"],
-        label: json["label"],
+        name: json["name"],
+        unit: json["unit"],
         unitPrice: double.parse(json["unit_price"]),
         image: json["image"],
         description: json["description"],
@@ -35,60 +36,75 @@ class Product extends Equatable {
         vendor: json["vendor"]);
   }
 
-  static Map<String, dynamic> toMap(Product product) {
-    Map<String, dynamic> data = {
-      "id": product.id,
-      "label": product.label,
-      "unit": product.unit,
-      "unit_price": product.unitPrice,
-      "image": product.image,
-      "description": product.description,
-      "stock": product.stock,
-      "category": product.category,
-      "vendor": product.vendor
+  static Map<String, dynamic> toMap(Item item) {
+    return {
+      "id": item.id,
+      "name": item.name,
+      "unit": item.unit,
+      "unit_price": item.unitPrice,
+      "image": item.image,
+      "description": item.description,
+      "stock": item.stock,
+      "category": ItemCategory.toMap(item.category),
+      "vendor": item.vendor
     };
-
-    return data;
   }
 
   @override
   List<Object?> get props =>
-      [id, label, unit, unitPrice, image, description, stock, category, vendor];
+      [id, name, unit, unitPrice, image, description, stock, category, vendor];
 
-  factory Product.empty() => Product(
+  factory Item.empty() => Item(
       id: 1,
-      label: "dummy",
+      name: "dummy",
+      unit: "kg",
       unitPrice: 0.00,
       image: "assets/images/banner.png",
       description: "",
       stock: 0,
-      vendor: 0);
+      vendor: 0,
+      category: ItemCategory.empty());
 }
 
-class ProductCategory {
+class ItemCategory {
   final int id;
   final String name;
   final String icon;
+  final String dateCreated;
 
   // constructor
-  ProductCategory({
-    required this.id,
-    required this.name,
-    required this.icon,
-  });
+  ItemCategory(
+      {required this.id,
+      required this.name,
+      required this.icon,
+      required this.dateCreated});
 
-  factory ProductCategory.fromJson(Map<String, dynamic> json) {
-    return ProductCategory(
-      id: json["id"],
-      name: json["name"],
-      icon: json["icon"],
-    );
+  // Factory toJson
+  factory ItemCategory.fromJson(Map<String, dynamic> json) {
+    return ItemCategory(
+        id: json["id"],
+        name: json["name"],
+        icon: json["icon"],
+        dateCreated: json["date_created"]);
   }
 
-  factory ProductCategory.empty() =>
-      ProductCategory(id: -1, icon: "assets/images/app_logo.png", name: "All");
+  // toMap
+  static toMap(ItemCategory category) {
+    return {
+      "id": category.id,
+      "name": category.name,
+      "icon": category.icon,
+      "date_created": category.dateCreated
+    };
+  }
 
-  bool equals(ProductCategory productCategory) {
-    return this.id == productCategory.id;
+  factory ItemCategory.empty() => ItemCategory(
+      id: -1,
+      icon: "assets/images/app_logo.png",
+      name: "All",
+      dateCreated: "2022-12-23T14:03:55Z");
+
+  bool equals(ItemCategory itemCategory) {
+    return id == itemCategory.id;
   }
 }

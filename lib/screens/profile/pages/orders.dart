@@ -1,4 +1,4 @@
-import 'package:greens_veges/providers/items.provider.dart';
+import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/widgets/order_card_horizontal.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +14,8 @@ class UserOrders extends StatefulWidget {
 class _UserOrdersState extends State<UserOrders> {
   @override
   Widget build(BuildContext context) {
-    var orders = Provider.of<ItemsProvider>(context);
-    var items = orders.getItems();
+    var orderProvider = Provider.of<OrderProvider>(context);
+    var orders = orderProvider.getOrders();
 
     return Scaffold(
       appBar: AppBar(
@@ -26,17 +26,17 @@ class _UserOrdersState extends State<UserOrders> {
       body: RefreshIndicator(
         onRefresh: () {
           return Future.delayed(const Duration(seconds: 1), () {
-            orders.refresh();
+            orderProvider.refresh();
           });
         },
         // onRefresh: orders.refresh(),
         child: ListView.builder(
-          itemCount: items.length,
+          itemCount: orders.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
             // List Item
             return OrderCard(
-              item: items[index],
+              order: orders[index],
             );
           },
         ),

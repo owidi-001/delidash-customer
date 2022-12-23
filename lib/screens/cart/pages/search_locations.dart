@@ -186,11 +186,15 @@ class _SearchLocationState extends State<SearchLocation> {
     if (form!.validate()) {
       form.save();
 
-      Location location = Location(
-          name: location_name,
-          blockName: _blockNameController.text,
+      Address location = Address(
+          id: -1,
+          placemark: location_name,
+          country: location_name,
+          city: location_name,
+          street: location_name,
+          block: _blockNameController.text,
           floor: _floorNumberController.text,
-          roomNumber: _roomNumberController.text);
+          room: _roomNumberController.text);
 
       // Save location to provider
       LocationProvider.instance.setLocation(location);
@@ -199,7 +203,7 @@ class _SearchLocationState extends State<SearchLocation> {
 
       // Navigate back to the last screen
       Navigator.of(context).pop(); // Closes the bottom sheet
-      
+
       // Show confirmation message
       ScaffoldMessenger.of(context)
           .showSnackBar(showMessage(true, 'Delivery location set!'));

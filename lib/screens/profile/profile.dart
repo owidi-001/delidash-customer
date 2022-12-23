@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
     var userProvider = context.watch<AuthenticationProvider>();
     var user = context.watch<AuthenticationProvider>().user;
 
-    Location location = Location.empty();
+    Address location = Address.empty();
     var locationProvider = context.watch<LocationProvider>();
 
     setState(() {
@@ -69,9 +69,9 @@ class _ProfileState extends State<Profile> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
-                          user.firstName.isEmpty
+                          user.name.isEmpty
                               ? user.email.split("@")[0]
-                              : "${user.firstName} ${user.lastName}",
+                              : user.name,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 20,
@@ -244,8 +244,8 @@ class _ProfileState extends State<Profile> {
                       color: AppTheme.primaryColor),
                 ),
                 subtitle: Text(
-                  location.name!.isNotEmpty
-                      ? location.name!.split(" ")[0]
+                  location.placemark.isNotEmpty
+                      ? location.placemark.split(" ")[0]
                       : "home",
                   style: const TextStyle(color: AppTheme.secondaryColor),
                 ),
@@ -284,23 +284,23 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(children: [
-                      const Icon(
-                        Icons.person_pin_rounded,
-                        size: 28,
-                        color: AppTheme.secondaryColor,
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRoute.profileEdit);
-                          },
-                          child: const Text(
-                            "Update Profile",
-                            style: TextStyle(
-                                color: AppTheme.primaryColor,
-                                fontWeight: FontWeight.w600),
-                          ))
-                    ]),
+                    // Row(children: [
+                    //   const Icon(
+                    //     Icons.person_pin_rounded,
+                    //     size: 28,
+                    //     color: AppTheme.secondaryColor,
+                    //   ),
+                    //   TextButton(
+                    //       onPressed: () {
+                    //         Navigator.pushNamed(context, AppRoute.profileEdit);
+                    //       },
+                    //       child: const Text(
+                    //         "Update Profile",
+                    //         style: TextStyle(
+                    //             color: AppTheme.primaryColor,
+                    //             fontWeight: FontWeight.w600),
+                    //       ))
+                    // ]),
                     Row(children: [
                       const Icon(
                         Icons.logout,

@@ -17,7 +17,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    List<Product> products = Provider.of<ProductProvider>(context).data;
+    List<Item> products = Provider.of<ProductProvider>(context).data;
     return Expanded(
       child: GridView.builder(
           itemCount: products.length,

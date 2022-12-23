@@ -4,7 +4,7 @@ import 'package:greens_veges/domain/product.model.dart';
 import 'package:greens_veges/screens/search_list/pages/product_detail.dart';
 import 'package:greens_veges/widgets/product_card.dart';
 
-Widget productHorizontalList({required List<Product> products}) {
+Widget productHorizontalList({required List<Item> products}) {
   return ListView.builder(
     shrinkWrap: true,
     scrollDirection: Axis.horizontal,

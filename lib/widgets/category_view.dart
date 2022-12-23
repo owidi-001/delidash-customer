@@ -7,10 +7,10 @@ import 'column_builder.dart';
 import 'menu_minimal_view.dart';
 
 // Tabbed category list views
-Widget categoryCardListView(List<ProductCategory> categories) {
-  var catIds=categories.map((e) => e.id).toList();
+Widget categoryCardListView(List<ItemCategory> categories) {
+  var catIds = categories.map((e) => e.id).toList();
   if (!catIds.contains(0)) {
-    categories.insert(0, ProductCategory.empty());
+    categories.insert(0, ItemCategory.empty());
   }
 
   return ListView.builder(
@@ -21,14 +21,15 @@ Widget categoryCardListView(List<ProductCategory> categories) {
     itemBuilder: (BuildContext context, int index) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: categoryCardView(categories[index].icon, categories[index].name,false),
+        child: categoryCardView(
+            categories[index].icon, categories[index].name, false),
       );
     },
   );
 }
 
 // Product per category view
-Widget categoryView(Map<String, List<Product>> categoricalFoods) {
+Widget categoryView(Map<String, List<Item>> categoricalFoods) {
   return ColumnBuilder(
     itemCount: categoricalFoods.keys.length,
     itemBuilder: (BuildContext context, int index) {

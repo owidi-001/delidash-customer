@@ -4,11 +4,10 @@ import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/screens/profile/pages/order_detail.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/date_converter.dart';
-import 'package:greens_veges/utility/time_converter.dart';
 
 class OrderCard extends StatefulWidget {
-  final OrderItem item;
-  OrderCard({super.key, required this.item});
+  final Order order;
+  OrderCard({super.key, required this.order});
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -31,7 +30,7 @@ class _OrderCardState extends State<OrderCard> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (((context) => OrderDetail(item: widget.item))),
+                builder: (((context) => OrderDetail(order: widget.order))),
               ));
         }),
         child: Card(
@@ -47,7 +46,7 @@ class _OrderCardState extends State<OrderCard> {
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +61,7 @@ class _OrderCardState extends State<OrderCard> {
                         width: 100,
                         height: 100,
                         child: Image.network(
-                          "$baseURL${widget.item.product.image}",
+                          "$baseURL${widget.order.item.image}",
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -75,9 +74,10 @@ class _OrderCardState extends State<OrderCard> {
                         children: [
                           Container(
                             alignment: Alignment.centerLeft,
+                            width: 100,
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Text(
-                              widget.item.product.label,
+                              widget.order.item.name,
                               maxLines: 1,
                               style: const TextStyle(
                                   overflow: TextOverflow.clip,
@@ -86,7 +86,7 @@ class _OrderCardState extends State<OrderCard> {
                                   color: AppTheme.secondaryColor),
                             ),
                           ),
-                          Text("${widget.item.quantity} items"),
+                          Text("${widget.order.quantity} items"),
                           const SizedBox(
                             height: 8,
                           ),
@@ -95,10 +95,10 @@ class _OrderCardState extends State<OrderCard> {
                                   horizontal: 8.0, vertical: 2.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color: statusColor[widget.item.status]!,
+                                color: statusColor[widget.order.status]!,
                               ),
                               child: Text(
-                                widget.item.status,
+                                widget.order.status,
                                 style:
                                     const TextStyle(color: AppTheme.lightColor),
                               ))
@@ -106,22 +106,22 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                     ],
                   ),
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          convertDate(widget.item.date),
+                          convertDate(widget.order.dateOrdered),
                           style:
                               const TextStyle(color: AppTheme.secondaryColor),
                         ),
-                        Text(
-                          convertTime(widget.item.time),
-                          style:
-                              const TextStyle(color: AppTheme.secondaryColor),
-                        )
+                        // Text(
+                        //   convertTime(widget.order.time),
+                        //   style:
+                        //       const TextStyle(color: AppTheme.secondaryColor),
+                        // )
                       ],
                     ),
                   ),

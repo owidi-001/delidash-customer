@@ -5,7 +5,7 @@ import 'package:greens_veges/routes/app_router.dart';
 
 import '../theme/app_theme.dart';
 
-Widget seeAllView(BuildContext context, String name, List<Product>? products) {
+Widget seeAllView(BuildContext context, String name, List<Item>? products) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

@@ -21,7 +21,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   @override
   Widget build(BuildContext context) {
     var greetings = greetingMessage();
@@ -34,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var vendors = context.watch<VendorProvider>();
 
     // Banner product
-    Product? product = Product.empty();
+    Item? product = Item.empty();
     if (products.data.isNotEmpty) {
       product = (products.data..shuffle()).first;
     }
@@ -90,9 +89,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               height: 4,
                             ),
                             Text(
-                              user.firstName.isEmpty
+                              user.name.isEmpty
                                   ? user.email.split("@")[0]
-                                  : user.firstName,
+                                  : user.name,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -189,7 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 fontWeight: FontWeight.normal),
                           ),
                           Text(
-                            product.label,
+                            product.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(

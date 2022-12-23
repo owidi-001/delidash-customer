@@ -8,7 +8,7 @@ import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final Product product;
+  final Item product;
   final VoidCallback onTapCallback;
 
   const ProductCardWidget(
@@ -50,7 +50,7 @@ class ProductCardWidget extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    product.label,
+                    product.name,
                     maxLines: 1,
                     style: const TextStyle(
                         overflow: TextOverflow.ellipsis,
@@ -74,7 +74,7 @@ class ProductCardWidget extends StatelessWidget {
                             onTap: (() {
                               // check if item in cart
                               showMessage(
-                                  true, "${product.label} already in cart");
+                                  true, "${product.name} already in cart");
                               // add item
                             }),
                             child: Image.asset(
@@ -89,7 +89,7 @@ class ProductCardWidget extends StatelessWidget {
                               cartProvider.add(
                                   CartItemModel(product: product, quantity: 1));
                               showMessage(
-                                  true, "${product.label} added to cart");
+                                  true, "${product.name} added to cart");
                               // add item
                             }),
                             child: Image.asset(

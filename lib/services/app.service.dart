@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:greens_veges/domain/exception.dart';
 import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/domain/product.model.dart';
@@ -10,21 +7,17 @@ import 'package:greens_veges/services/http_client.dart';
 
 import 'dart:async';
 
-import 'package:greens_veges/utility/shared_preference.dart';
-import 'package:http/http.dart';
-
 class AppService {
   // Fetch products
-  Future<HttpResult<List<Product>>> fetchProducts() =>
-      HttpClient.get2<List<Product>>(ApiUrl.listProducts,
-          der: (data) =>
-              data.map<Product>((json) => Product.fromJson(json)).toList());
+  Future<HttpResult<List<Item>>> fetchProducts() => HttpClient.get2<List<Item>>(
+      ApiUrl.listProducts,
+      der: (data) => data.map<Item>((json) => Item.fromJson(json)).toList());
 
   // Fetch product categories
-  Future<HttpResult<List<ProductCategory>>> fetchCategories() =>
-      HttpClient.get2<List<ProductCategory>>(ApiUrl.listCategories,
+  Future<HttpResult<List<ItemCategory>>> fetchCategories() =>
+      HttpClient.get2<List<ItemCategory>>(ApiUrl.listCategories,
           der: (data) => data
-              .map<ProductCategory>((json) => ProductCategory.fromJson(json))
+              .map<ItemCategory>((json) => ItemCategory.fromJson(json))
               .toList());
 
   // Fetch vendors
@@ -34,16 +27,13 @@ class AppService {
               data.map<Vendor>((json) => Vendor.fromJson(json)).toList());
 
   // Fetch orders
-  Future<HttpResult<List<Order>>> fetchOrders() => HttpClient.get2<List<Order>>(
-        ApiUrl.orders,
-        der: (data) => data.map<Order>((json) => Order.fromJson(json)).toList(),
-      );
+  // Future<HttpResult<List<Order>>> fetchOrders() => HttpClient.get2<List<Order>>(
+  //       ApiUrl.orders,
+  //       der: (data) => data.map<Order>((json) => Order.fromJson(json)).toList(),
+  //     );
 
   // Fetch order items
-  Future<HttpResult<List<OrderItem>>> fetchOrderItems() =>
-      HttpClient.get2<List<OrderItem>>(ApiUrl.orderItems,
-          der: (data) =>
-              data.map<OrderItem>((json) => OrderItem.fromJson(json)).toList());
-
-
+  Future<HttpResult<List<Order>>> fetchOrders() => HttpClient.get2<List<Order>>(
+      ApiUrl.orders,
+      der: (data) => data.map<Order>((json) => Order.fromJson(json)).toList());
 }

@@ -9,7 +9,7 @@ import 'package:greens_veges/widgets/product_card.dart';
 import 'package:provider/provider.dart';
 
 // Set global for filters
-List<Product> products = [];
+List<Item> products = [];
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({super.key});
@@ -76,9 +76,8 @@ class ProductListScreen extends StatelessWidget {
 }
 
 // Custom search delegate
-
 class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = products.map((e) => e.label).toList();
+  List<String> searchTerms = products.map((e) => e.name).toList();
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -102,10 +101,10 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<Product> matchQuery = [];
+    List<Item> matchQuery = [];
 
     for (var product in products) {
-      if (product.label.toLowerCase().contains(query.toLowerCase())) {
+      if (product.name.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(product);
       }
     }
@@ -139,10 +138,10 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<Product> matchQuery = [];
+    List<Item> matchQuery = [];
 
     for (var product in products) {
-      if (product.label.toLowerCase().contains(query.toLowerCase())) {
+      if (product.name.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(product);
       }
     }

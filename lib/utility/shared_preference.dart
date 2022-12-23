@@ -57,21 +57,21 @@ class LocationPreferences {
   static Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 
 // Load location data
-  Future<Location?> loadLocationData() async {
+  Future<Address?> loadLocationData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? location = prefs.getString(LOCATION);
 
     if (location != null) {
-      return Location.fromJson(json.decode(location));
+      return Address.fromJson(json.decode(location));
     }
     return null;
   }
 
   // Store location
-  void storeLocationData(Location data) async {
+  void storeLocationData(Address data) async {
     await SharedPreferences.getInstance().then((pref) {
-      pref.setString(LOCATION, jsonEncode(Location.toMap(data)));
+      pref.setString(LOCATION, jsonEncode(Address.toMap(data)));
     });
   }
 

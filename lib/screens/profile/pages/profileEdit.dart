@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/services/user.service.dart';
@@ -263,10 +264,14 @@ class _ProfileEditState extends State<ProfileEdit> {
 
       res.when(error: (error) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(showMessage(false, error.message));
+            .showSnackBar(showMessage(false, "Could not update details"));
+
+        if (kDebugMode) {
+          print(error.message);
+        }
       }, success: (success) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(showMessage(true, "Profile updated!"));
+            .showSnackBar(showMessage(true, "Profile updated successfully!"));
       });
     } else {
       ScaffoldMessenger.of(context)

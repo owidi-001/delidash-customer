@@ -9,13 +9,13 @@ import 'package:greens_veges/utility/time_converter.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetail extends StatelessWidget {
-  final OrderItem item;
-  const OrderDetail({super.key, required this.item});
+  final Order order;
+  const OrderDetail({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
     var user = context.watch<AuthenticationProvider>().user;
-    var orders = Provider.of<OrderProvider>(context);
+    var orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -83,9 +83,7 @@ class OrderDetail extends StatelessWidget {
                             SizedBox(
                               width: 180.0,
                               child: Text(
-                                orders.getItemOrderLocation(item).isEmpty
-                                    ? "Location Not Loaded Location Not Loaded"
-                                    : orders.getItemOrderLocation(item),
+                                order.deliveryAddress.placemark,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -108,8 +106,8 @@ class OrderDetail extends StatelessWidget {
                               width: 16,
                             ),
                             Text(
-                              user.firstName.isNotEmpty
-                                  ? "${user.firstName} ${user.lastName}"
+                              user.name.isNotEmpty
+                                  ? user.name
                                   : user.email.split("@")[0],
                               style: const TextStyle(
                                   fontSize: 16,
@@ -156,8 +154,8 @@ class OrderDetail extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    Text(convertTime(item.time)),
-                    Text(convertDate(item.date)),
+                    Text(convertTime(order.dateOrdered)),
+                    Text(convertDate(order.dateDispatched)),
                   ],
                 ),
               ),
@@ -177,7 +175,7 @@ class OrderDetail extends StatelessWidget {
                             width: 50,
                             height: 50,
                             child:
-                                Image.network("$baseURL${item.product.image}")),
+                                Image.network("$baseURL${order.item.image}")),
                         const SizedBox(
                           width: 12,
                         ),
@@ -186,7 +184,7 @@ class OrderDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.product.label,
+                              order.item.name,
                               style: const TextStyle(
                                   color: AppTheme.darkColor,
                                   fontSize: 16,
@@ -198,7 +196,7 @@ class OrderDetail extends StatelessWidget {
                             SizedBox(
                                 width: 250,
                                 child: Text(
-                                  item.product.description,
+                                  order.item.description,
                                   style: const TextStyle(
                                       color: AppTheme.secondaryColor),
                                 )),
@@ -218,7 +216,7 @@ class OrderDetail extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          item.status,
+                          order.status,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -230,12 +228,12 @@ class OrderDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Subtotal(${item.quantity} items)",
+                          "Subtotal(${order.quantity} items)",
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          "KES ${item.quantity * item.product.unitPrice}",
+                          "KES ${order.quantity * order.item.unitPrice}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -271,7 +269,7 @@ class OrderDetail extends StatelessWidget {
                               color: AppTheme.primaryColor),
                         ),
                         Text(
-                          "KES ${item.quantity * item.product.unitPrice + 50}",
+                          "KES ${order.quantity * order.item.unitPrice + 50}",
                           style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

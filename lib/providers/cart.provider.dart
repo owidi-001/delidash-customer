@@ -64,7 +64,7 @@ class CartProvider extends ChangeNotifier {
   }
 
   // remove item from cart
-  void removeFromCart(Product product) {
+  void removeFromCart(Item product) {
     for (var item in _items) {
       if (item.product.id == product.id) {
         // pop it

@@ -1,8 +1,6 @@
 // API URL
 // const String baseURL = "http://owidi.pythonanywhere.com";
-// const String baseURL = "http://192.168.0.101:8000";
-// kevoh ip 192.168.4.16
-const String baseURL = "http://192.168.0.102:8000";
+const String baseURL = "http://192.168.1.157:8000";
 
 // Routes for app
 class AppRoute {
@@ -42,12 +40,11 @@ class ApiUrl {
   // static const String userAddress = "$baseURL/orders/address"; // Not USED
 
   // products
-  static const String listProducts = "$baseURL/products/products/";
+  static const String listProducts = "$baseURL/products/";
   static const String listCategories = "$baseURL/products/categories/";
 
   // orders
   static const String orders = "$baseURL/orders/";
-  static const String orderItems = "$baseURL/orders/items";
   static const String payment = "$baseURL/mpesa/payment";
 
   // feedback

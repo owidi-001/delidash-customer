@@ -299,7 +299,7 @@ class _CartScreenState extends State<CartScreen> {
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: Text(
-                                "${LocationProvider.instance.location.name}",
+                                LocationProvider.instance.location.placemark,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               )),
@@ -390,10 +390,12 @@ class _CartScreenState extends State<CartScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   showMessage(false, "Your cart is empty"))
                             }
-                          else if(locationProvider.location == null){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                  showMessage(false, "Set your delivery location"))
-                          }
+                          else if (locationProvider.location == null)
+                            {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  showMessage(
+                                      false, "Set your delivery location"))
+                            }
                           else
                             {payHandle(cartProvider)}
                         }),
@@ -497,8 +499,10 @@ class _CartScreenState extends State<CartScreen> {
     PaymentService().makePayment(data: {"phone": paymentPhoneNumber});
 
     Map<String, dynamic> apiBodyData = {
-      "location": Location.toMap(LocationProvider.instance.location),
-      "items": cartProvider.items.map<Map<String,dynamic>>((json) => CartItemModel.toMap(json)).toList(),
+      "location": Address.toMap(LocationProvider.instance.location),
+      "items": cartProvider.items
+          .map<Map<String, dynamic>>((json) => CartItemModel.toMap(json))
+          .toList(),
       "total": cartProvider.totalPrice,
       "phone": paymentPhoneNumber
     };
@@ -518,11 +522,9 @@ class _CartScreenState extends State<CartScreen> {
 
         // Clear Cart
         cartProvider.resetCart();
-        
-
       } else {
         ScaffoldMessenger.of(context)
-          .showSnackBar(showMessage(false, value["message"]));
+            .showSnackBar(showMessage(false, value["message"]));
       }
     });
   }

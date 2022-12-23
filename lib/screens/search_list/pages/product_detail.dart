@@ -8,7 +8,7 @@ import 'package:greens_veges/widgets/message_snack.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final Product product;
+  final Item product;
   const ProductDetailScreen({Key? key, required this.product})
       : super(key: key);
 
@@ -91,7 +91,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          widget.product.label,
+                          widget.product.name,
                           style: const TextStyle(
                               color: AppTheme.secondaryColor,
                               fontSize: 20,
@@ -169,7 +169,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "About ${widget.product.label}",
+                      "About ${widget.product.name}",
                       style: const TextStyle(
                           color: AppTheme.darkColor,
                           fontSize: 20,

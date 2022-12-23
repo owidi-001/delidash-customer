@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> initializeApp() async {
     LoginData? data = await UserPreferences().loadUserData();
-    Location? location = await LocationPreferences().loadLocationData();
+    Address? location = await LocationPreferences().loadLocationData();
 
     if (!mounted) {
       return;

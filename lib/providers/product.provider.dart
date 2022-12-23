@@ -7,7 +7,7 @@ import 'package:greens_veges/services/app.service.dart';
 class ProductProvider with ChangeNotifier {
   ServiceStatus status = ServiceStatus.initial;
 
-  List<Product> data = [];
+  List<Item> data = [];
 
   ProductProvider() {
     status = ServiceStatus.initial;
@@ -33,8 +33,8 @@ class ProductProvider with ChangeNotifier {
   }
 
   // Load vendor products
-  List<Product> fetchVendorProducts(Vendor vendor) {
-    List<Product> results = [];
+  List<Item> fetchVendorProducts(Vendor vendor) {
+    List<Item> results = [];
 
     for (var product in data) {
       if (product.vendor == vendor.id) {
@@ -44,11 +44,11 @@ class ProductProvider with ChangeNotifier {
     return results;
   }
 
-  List<Product> fetchCategoryProducts(ProductCategory category) {
-    List<Product> results = [];
+  List<Item> fetchCategoryProducts(ItemCategory category) {
+    List<Item> results = [];
 
     for (var product in data) {
-      if (category.id == product.category) {
+      if (category.id == product.category.id) {
         results.add(product);
       }
     }
@@ -56,9 +56,9 @@ class ProductProvider with ChangeNotifier {
     return results;
   }
 
-  Product? findByName(String name) {
+  Item? findByName(String name) {
     for (var product in data) {
-      if (product.label == name) {
+      if (product.name == name) {
         return product;
       }
     }
