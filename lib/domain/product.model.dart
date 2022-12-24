@@ -12,7 +12,7 @@ class Item extends Equatable {
   final int vendor;
 
   // constructor
-  Item(
+  const Item(
       {required this.id,
       required this.name,
       required this.unit,
@@ -32,12 +32,12 @@ class Item extends Equatable {
         image: json["image"],
         description: json["description"],
         stock: json["stock"],
-        category: json["category"],
+        category: ItemCategory.fromJson(json["category"]),
         vendor: json["vendor"]);
   }
 
   static Map<String, dynamic> toMap(Item item) {
-    return {
+    Map<String, dynamic> data = {
       "id": item.id,
       "name": item.name,
       "unit": item.unit,
@@ -48,6 +48,7 @@ class Item extends Equatable {
       "category": ItemCategory.toMap(item.category),
       "vendor": item.vendor
     };
+    return data;
   }
 
   @override
@@ -89,13 +90,14 @@ class ItemCategory {
   }
 
   // toMap
-  static toMap(ItemCategory category) {
-    return {
+  static Map<String, dynamic> toMap(ItemCategory category) {
+    Map<String, dynamic> data = {
       "id": category.id,
       "name": category.name,
       "icon": category.icon,
       "date_created": category.dateCreated
     };
+    return data;
   }
 
   factory ItemCategory.empty() => ItemCategory(

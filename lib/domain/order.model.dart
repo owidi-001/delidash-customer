@@ -58,7 +58,7 @@ var x = """
         }
     }
 
-]
+
 """;
 
 class Order {

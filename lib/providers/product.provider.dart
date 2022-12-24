@@ -5,9 +5,9 @@ import 'package:greens_veges/domain/vendor.model.dart';
 import 'package:greens_veges/services/app.service.dart';
 
 class ProductProvider with ChangeNotifier {
-  ServiceStatus status = ServiceStatus.initial;
-
   List<Item> data = [];
+
+  ServiceStatus status = ServiceStatus.initial;
 
   ProductProvider() {
     status = ServiceStatus.initial;
@@ -25,6 +25,9 @@ class ProductProvider with ChangeNotifier {
     res.when(error: (error) {
       status = ServiceStatus.loadingFailure;
     }, success: (data) {
+      if (kDebugMode) {
+        print(data);
+      }
       this.data = data;
       status = ServiceStatus.loadingSuccess;
     });

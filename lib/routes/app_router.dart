@@ -40,7 +40,7 @@ class ApiUrl {
   // static const String userAddress = "$baseURL/orders/address"; // Not USED
 
   // products
-  static const String listProducts = "$baseURL/products/";
+  static const String products = "$baseURL/products";
   static const String listCategories = "$baseURL/products/categories/";
 
   // orders

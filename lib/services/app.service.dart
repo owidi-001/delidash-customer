@@ -8,9 +8,9 @@ import 'package:greens_veges/services/http_client.dart';
 import 'dart:async';
 
 class AppService {
-  // Fetch products
+  // Fetch all products for the customer
   Future<HttpResult<List<Item>>> fetchProducts() => HttpClient.get2<List<Item>>(
-      ApiUrl.listProducts,
+      ApiUrl.products,
       der: (data) => data.map<Item>((json) => Item.fromJson(json)).toList());
 
   // Fetch product categories
@@ -20,7 +20,7 @@ class AppService {
               .map<ItemCategory>((json) => ItemCategory.fromJson(json))
               .toList());
 
-  // Fetch vendors
+  // Fetch all vendors
   Future<HttpResult<List<Vendor>>> fetchVendors() =>
       HttpClient.get2<List<Vendor>>(ApiUrl.listVendors,
           der: (data) =>
@@ -32,7 +32,7 @@ class AppService {
   //       der: (data) => data.map<Order>((json) => Order.fromJson(json)).toList(),
   //     );
 
-  // Fetch order items
+  // Fetch order
   Future<HttpResult<List<Order>>> fetchOrders() => HttpClient.get2<List<Order>>(
       ApiUrl.orders,
       der: (data) => data.map<Order>((json) => Order.fromJson(json)).toList());
