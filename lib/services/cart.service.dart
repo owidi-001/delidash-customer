@@ -22,13 +22,6 @@ class CartService {
 
     Map<String, dynamic> result;
 
-    // return await post(Uri.parse(ApiUrl.orders),
-    //     body: json.encode(payload),
-    //     headers: {
-    //       "Authorization": "Token $token",
-    //       'Content-Type': 'application/json'
-    //     }).then(onValue).catchError(onError);
-
     Response response = await post(Uri.parse(ApiUrl.orders),
         body: json.encode(payload),
         headers: {
@@ -55,41 +48,4 @@ class CartService {
 
     return result;
   }
-
-  // static Future<Map<String, dynamic>> onValue(Response response) async {
-  //   Map<String, dynamic> result;
-  //   final Map<String, dynamic> responseData = json.decode(response.body);
-
-  //   if (kDebugMode) {
-  //     print(responseData);
-  //   }
-
-  //   if (response.statusCode == 201) {
-  //     if (kDebugMode) {
-  //       print(response.statusCode);
-  //     }
-
-  //     result = {
-  //       'status': true,
-  //       'message': 'Order successfully placed',
-  //       // 'data': items
-  //     };
-  //   } else {
-  //     result = {
-  //       'status': false,
-  //       'message':
-  //           'Failed to save order ${response.statusCode} ${response.body}',
-  //       // 'data': responseData
-  //     };
-  //   }
-
-  //   return result;
-  // }
-
-  // static onError(error) {
-  //   if (kDebugMode) {
-  //     print("the error is $error.detail");
-  //   }
-  //   return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
-  // }
 }

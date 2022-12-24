@@ -189,9 +189,6 @@ class _SearchLocationState extends State<SearchLocation> {
       Address location = Address(
           id: -1,
           placemark: location_name,
-          country: location_name,
-          city: location_name,
-          street: location_name,
           block: _blockNameController.text,
           floor: _floorNumberController.text,
           room: _roomNumberController.text);

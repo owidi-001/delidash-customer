@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greens_veges/domain/cart.model.dart';
 import 'package:greens_veges/domain/location.model.dart';
-import 'package:greens_veges/domain/order.model.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/location.provider.dart';
@@ -29,6 +28,8 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   String paymentPhoneNumber = AuthenticationProvider.instance.user.phoneNumber;
+  // editing controllers
+  final TextEditingController _noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,20 @@ class _CartScreenState extends State<CartScreen> {
     final locationProvider = Provider.of<LocationProvider>(context);
 
     double deliveryFee = cartProvider.items.isEmpty ? 0 : 50;
+
+    // note field
+    final noteField = TextFormField(
+      autofocus: false,
+      controller: _noteController,
+      keyboardType: TextInputType.multiline,
+      onSaved: (value) {
+        _noteController.value;
+      },
+      validator: ((value) => validEmail(_noteController.text)),
+      textInputAction: TextInputAction.next,
+      decoration:
+          buildInputDecoration("Leave a note", Icons.document_scanner_rounded),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -378,6 +393,25 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ),
 
+              const SliverToBoxAdapter(
+                  child: Text(
+                "Note",
+                style: TextStyle(
+                  color: AppTheme.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              )),
+              const SliverPadding(padding: EdgeInsets.symmetric(vertical: 5)),
+              const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 10,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: noteField,
+              ),
+
               // spacer
               const SliverPadding(padding: EdgeInsets.all(8.0)),
               // Checkout button
@@ -436,9 +470,10 @@ class _CartScreenState extends State<CartScreen> {
         context: context,
         builder: (builder) {
           return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Container(
               color: AppTheme.gradientColor,
-              height: MediaQuery.of(context).size.height * 0.4,
+              // height: MediaQuery.of(context).size.height * 0.4,
               child: Form(
                 key: _formkey,
                 child: Padding(
@@ -447,6 +482,9 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
                       const Text(
                         "Payment Number",
                         style: TextStyle(
@@ -457,7 +495,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       phoneField,
                       const SizedBox(
-                        height: 32,
+                        height: 20,
                       ),
                       submitButton("Set number", (() {
                         final form = _formkey.currentState;
@@ -504,7 +542,8 @@ class _CartScreenState extends State<CartScreen> {
           .map<Map<String, dynamic>>((json) => CartItemModel.toMap(json))
           .toList(),
       "total": cartProvider.totalPrice,
-      "phone": paymentPhoneNumber
+      "phone": paymentPhoneNumber,
+      "note": _noteController.text
     };
     // var response = await CartService().saveOrder(apiBodyData);
 
