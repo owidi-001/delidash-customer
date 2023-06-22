@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:greens_veges/domain/auto_complete_prediction.dart';
 
 class PlaceAutoCompleteResponse {

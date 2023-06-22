@@ -1,5 +1,6 @@
 String convertDate(String date) {
   DateTime dateConverted = DateTime.parse(date);
+
   List months = [
     'Jan',
     'Feb',
@@ -14,5 +15,5 @@ String convertDate(String date) {
     'Nov',
     'Dec'
   ];
-  return "${months[dateConverted.month - 1]} ${dateConverted.day.toString()}/${dateConverted.year.toString()}";
+  return "${months[dateConverted.month - 1]} ${dateConverted.day.toString()}/${dateConverted.year.toString()} at ${dateConverted.hour}:${dateConverted.minute}";
 }

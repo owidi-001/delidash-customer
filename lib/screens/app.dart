@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:greens_veges/providers/auth.provider.dart';
 import 'package:greens_veges/providers/cart.provider.dart';
 import 'package:greens_veges/providers/category.provider.dart';
@@ -51,7 +50,8 @@ class _MealioState extends State<Mealio> {
         theme: ThemeData(
           primaryColor: AppTheme.primaryColor,
           primarySwatch: Colors.green,
-          fontFamily: GoogleFonts.lato().fontFamily),
+          // fontFamily: GoogleFonts.lato().fontFamily,
+        ),
         initialRoute: AppRoute.splash,
         routes: {
           AppRoute.splash: (context) => const SplashScreen(),

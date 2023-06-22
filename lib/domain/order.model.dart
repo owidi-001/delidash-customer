@@ -66,11 +66,11 @@ class Order {
   final Item item;
   final Address deliveryAddress;
   final String dateOrdered;
-  final String dateDispatched;
-  final String dateDelivered;
+  final String? dateDispatched;
+  final String? dateDelivered;
   final int quantity;
   final String status;
-  final Rider rider;
+  final Rider? rider;
 
   // constructor
   Order(
@@ -78,10 +78,10 @@ class Order {
       required this.item,
       required this.deliveryAddress,
       required this.dateOrdered,
-      required this.dateDispatched,
-      required this.dateDelivered,
+      this.dateDispatched,
+      this.dateDelivered,
       required this.quantity,
-      required this.rider,
+      this.rider,
       required this.status});
 
   // factory fromJson
@@ -94,7 +94,7 @@ class Order {
         dateDispatched: json["date_dispatched"],
         dateDelivered: json["date_delivered"],
         quantity: json["quantity"],
-        rider: Rider.fromJson(json["rider"]),
+        rider: json["rider"] != null ? Rider.fromJson(json["rider"]) : null,
         status: json["status"]);
   }
 

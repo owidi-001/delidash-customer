@@ -18,7 +18,7 @@ class _OrderCardState extends State<OrderCard> {
     "Completed": AppTheme.primaryColor,
     "Cancelled": AppTheme.redColor,
     "Pending": Colors.yellow.shade700,
-    "On Transit": AppTheme.darkColor
+    "Dispatched": AppTheme.darkColor
   };
 
   @override
@@ -113,15 +113,15 @@ class _OrderCardState extends State<OrderCard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          convertDate(widget.order.dateOrdered),
+                          convertDate(widget.order.dateOrdered).split("at")[0],
                           style:
                               const TextStyle(color: AppTheme.secondaryColor),
                         ),
-                        // Text(
-                        //   convertTime(widget.order.time),
-                        //   style:
-                        //       const TextStyle(color: AppTheme.secondaryColor),
-                        // )
+                        Text(
+                          convertDate(widget.order.dateOrdered).split("at")[1],
+                          style:
+                              const TextStyle(color: AppTheme.secondaryColor),
+                        ),
                       ],
                     ),
                   ),

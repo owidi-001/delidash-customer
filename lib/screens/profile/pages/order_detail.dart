@@ -5,7 +5,6 @@ import 'package:greens_veges/providers/order.provider.dart';
 import 'package:greens_veges/routes/app_router.dart';
 import 'package:greens_veges/theme/app_theme.dart';
 import 'package:greens_veges/utility/date_converter.dart';
-import 'package:greens_veges/utility/time_converter.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetail extends StatelessWidget {
@@ -150,15 +149,48 @@ class OrderDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Order Time",
+                      "Ordered",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    Text(convertTime(order.dateOrdered)),
-                    Text(convertDate(order.dateDispatched)),
+                    Text(convertDate(order.dateOrdered)),
                   ],
                 ),
               ),
+              order.dateDispatched != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 18.0, horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Ordered",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          Text(convertDate(order.dateDispatched!)),
+                        ],
+                      ),
+                    )
+                  : Container(),
+              order.dateDelivered != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 18.0, horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Ordered",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          Text(convertDate(order.dateDelivered!)),
+                        ],
+                      ),
+                    )
+                  : Container(),
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
         _noteController.value;
       },
       validator: ((value) => validEmail(_noteController.text)),
-      textInputAction: TextInputAction.next,
+      textInputAction: TextInputAction.done,
       decoration:
           buildInputDecoration("Leave a note", Icons.document_scanner_rounded),
     );

@@ -117,8 +117,13 @@ class _SearchLocationState extends State<SearchLocation> {
         builder: (builder) {
           return SingleChildScrollView(
             child: Container(
+              padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  // this will prevent the soft keyboard from covering the text fields
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 120),
               color: AppTheme.gradientColor,
-              height: MediaQuery.of(context).size.height * 0.6,
               child: Form(
                 key: _formkey,
                 child: Padding(
